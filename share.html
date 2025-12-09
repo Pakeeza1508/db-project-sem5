@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Trip - Wanderly</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planner-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-wrapper { max-width: 1100px; margin: 0 auto; padding: 30px 20px 60px; }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+        .section-title { color: var(--text); margin: 0 0 6px; }
+        .muted { color: var(--text-muted); }
+        .list { display: grid; gap: 8px; }
+        .pill { padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--text); font-size: 0.9rem; }
+        .comment-box { margin-top: 16px; }
+        .comment-box textarea { width: 100%; min-height: 80px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: var(--text); }
+        .comment { padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: grid; gap: 4px; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="planner-container">
+        <header class="planner-header">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-plane-departure"></i>
+                    <span>Wanderly</span>
+                </a>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-home"></i> Home</a>
+                    <a href="planner.html" class="nav-link"><i class="fa-solid fa-plus"></i> New Trip</a>
+                    <a href="browse.html" class="nav-link"><i class="fa-solid fa-search"></i> Browse</a>
+                    <a href="my-trips.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> My Trips</a>
+                    <a href="analytics.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                    <a href="compare.html" class="nav-link"><i class="fa-solid fa-balance-scale"></i> Compare</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="page-wrapper">
+            <section class="card" id="trip-card">
+                <h1 class="section-title"><i class="fa-solid fa-link"></i> Shared Trip</h1>
+                <p class="muted" id="trip-meta">Loading...</p>
+            </section>
+
+            <section class="card">
+                <h2 class="section-title">Itinerary</h2>
+                <div class="list" id="itinerary-list"></div>
+            </section>
+
+            <section class="card">
+                <h2 class="section-title">Hotels</h2>
+                <div class="list" id="hotels-list"></div>
+            </section>
+
+            <section class="card">
+                <h2 class="section-title">Comments</h2>
+                <div id="comments"></div>
+                <div class="comment-box">
+                    <input id="comment-name" type="text" placeholder="Your name" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--text);margin-bottom:8px;" />
+                    <textarea id="comment-message" placeholder="Say something nice..."></textarea>
+                    <button class="btn btn-primary" style="margin-top:8px;" onclick="postComment()"><i class="fa-solid fa-paper-plane"></i> Post</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/share.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Trips - Wanderly</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planner-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-wrapper { max-width: 1400px; margin: 0 auto; padding: 40px 20px 60px; }
+        .grid { display: grid; gap: 16px; }
+        .trip-list { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; }
+        .card h3 { margin: 0 0 8px; color: var(--text); display: flex; gap: 10px; align-items: center; }
+        .muted { color: var(--text-muted); }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--text); font-size: 0.85rem; }
+        .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+        .btn-primary { background: var(--primary); color: #fff; border: none; border-radius: 10px; padding: 12px 18px; cursor: pointer; font-weight: 700; }
+        .btn-secondary { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 18px; cursor: pointer; }
+        .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 20px; }
+        .compare-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 16px; display: grid; gap: 10px; }
+        .compare-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .stat-row { display: flex; justify-content: space-between; color: var(--text); }
+        .stat-row .label { color: var(--text-muted); }
+        .highlight-good { color: #22c55e; font-weight: 700; }
+        .highlight-bad { color: #ef4444; font-weight: 700; }
+        .section-title { margin: 0 0 6px; color: var(--text); }
+        .list { display: grid; gap: 6px; }
+        .badge { padding: 4px 8px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--text); font-size: 0.8rem; }
+        .compare-summary { position: sticky; top: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+        .overlap { color: var(--text); font-size: 0.9rem; }
+        .checkbox-row { display: flex; gap: 8px; align-items: center; }
+        .search-input { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.06); color: var(--text); min-width: 260px; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="planner-container">
+        <header class="planner-header">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-plane-departure"></i>
+                    <span>Wanderly</span>
+                </a>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-home"></i> Home</a>
+                    <a href="planner.html" class="nav-link"><i class="fa-solid fa-plus"></i> New Trip</a>
+                    <a href="browse.html" class="nav-link"><i class="fa-solid fa-search"></i> Browse</a>
+                    <a href="my-trips.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> My Trips</a>
+                    <a href="analytics.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                    <a href="share.html" class="nav-link"><i class="fa-solid fa-link"></i> Shared Trip</a>
+                    <a href="compare.html" class="nav-link" style="color: var(--primary);"><i class="fa-solid fa-balance-scale"></i> Compare</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="page-wrapper">
+            <div class="controls">
+                <input id="search-input" class="search-input" placeholder="Search destination..." />
+                <button id="compare-btn" class="btn-primary" disabled>
+                    <i class="fa-solid fa-balance-scale"></i> Compare Selected
+                </button>
+                <button id="clear-btn" class="btn-secondary">
+                    Clear Selection
+                </button>
+                <button id="export-csv" class="btn-secondary">
+                    <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+                <button id="export-pdf" class="btn-secondary">
+                    <i class="fa-solid fa-file-pdf"></i> Export PDF
+                </button>
+            </div>
+
+            <div class="grid trip-list" id="trip-list"></div>
+
+            <div id="compare-section" style="margin-top: 28px; display: none;">
+                <h2 style="color: var(--text);">Comparison</h2>
+                <div id="comparison-summary" class="compare-summary" style="display:none;"></div>
+                <div class="compare-grid" id="compare-grid"></div>
+            </div>
+        </main>
+    </div>
+    <script src="js/compare.js"></script>
+</body>
+</html>

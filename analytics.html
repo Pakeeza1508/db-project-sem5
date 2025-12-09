@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Wanderly</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planner-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-wrapper { max-width: 1400px; margin: 0 auto; padding: 40px 20px 60px; }
+        .section { margin-bottom: 28px; }
+        .section h2 { margin: 0 0 10px; color: var(--text); }
+        .muted { color: var(--text-muted); }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+        .card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; }
+        .card h3 { margin: 0 0 6px; color: var(--text); }
+        .value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .bar-list { display: grid; gap: 10px; }
+        .bar-item { display: grid; gap: 4px; }
+        .bar-label { display: flex; justify-content: space-between; color: var(--text); font-size: 0.95rem; }
+        .bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,0.08); overflow: hidden; }
+        .bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
+        .list { display: grid; gap: 8px; }
+        .list-item { padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .badge { background: rgba(255,255,255,0.08); padding: 6px 10px; border-radius: 12px; color: var(--text-muted); }
+        .timeline { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+        .timeline-card { padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); }
+        .section-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="planner-container">
+        <header class="planner-header">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-plane-departure"></i>
+                    <span>Wanderly</span>
+                </a>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-home"></i> Home</a>
+                    <a href="planner.html" class="nav-link"><i class="fa-solid fa-plus"></i> New Trip</a>
+                    <a href="browse.html" class="nav-link"><i class="fa-solid fa-search"></i> Browse</a>
+                    <a href="my-trips.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> My Trips</a>
+                    <a href="analytics.html" class="nav-link" style="color: var(--primary);"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                    <a href="share.html" class="nav-link"><i class="fa-solid fa-link"></i> Shared Trip</a>
+                    <a href="compare.html" class="nav-link"><i class="fa-solid fa-balance-scale"></i> Compare</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="page-wrapper">
+            <section class="section">
+                <h1><i class="fa-solid fa-chart-pie"></i> Trip Analytics</h1>
+                <p class="muted">Database-driven insights: totals, top destinations, budget/style mix, timelines.</p>
+                <div class="section-actions">
+                    <button class="btn btn-primary" onclick="exportStatsJSON()"><i class="fa-solid fa-download"></i> Export JSON</button>
+                    <button class="btn btn-secondary" onclick="exportStatsCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                    <button class="btn btn-secondary" onclick="exportStatsPDF()"><i class="fa-solid fa-file-pdf"></i> Export PDF</button>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="cards" id="overview-cards"></div>
+            </section>
+
+            <section class="section">
+                <h2>Top Destinations</h2>
+                <div class="list" id="top-destinations"></div>
+            </section>
+
+            <section class="section">
+                <h2>Budget Breakdown</h2>
+                <div class="bar-list" id="budget-bars"></div>
+            </section>
+
+            <section class="section">
+                <h2>Travel Styles</h2>
+                <div class="bar-list" id="style-bars"></div>
+            </section>
+
+            <section class="section">
+                <h2>Durations</h2>
+                <div class="bar-list" id="duration-bars"></div>
+            </section>
+
+            <section class="section">
+                <h2>Timeline (last 12 months)</h2>
+                <div class="timeline" id="timeline-cards"></div>
+            </section>
+
+            <section class="section">
+                <h2>Recent Trips</h2>
+                <div class="list" id="recent-trips"></div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/analytics.js"></script>
+</body>
+</html>
