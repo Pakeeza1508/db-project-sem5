@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Travel Assistant - Wanderly</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planner-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .chat-page-wrapper {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+
+        .chat-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .chat-section h1 {
+            font-size: 2.2rem;
+            color: var(--text);
+            margin: 0 0 1rem 0;
+            font-weight: 800;
+        }
+
+        .chat-section p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin: 0 0 2rem 0;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+            max-width: 800px;
+        }
+
+        .feature-card {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+            color: #111827;
+        }
+
+        .feature-card i {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 0.5rem 0;
+            color: #0f172a;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .feature-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #1f2937;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .btn-open-chat {
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-open-chat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="planner-header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-map-pin"></i>
+                <span>Wanderly</span>
+            </div>
+            <div class="header-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="planner.html" class="nav-link">Plan Trip</a>
+                <a href="my-trips.html" class="nav-link">My Trips</a>
+                <a href="browse.html" class="nav-link">Browse</a>
+                <a href="analytics.html" class="nav-link">Analytics</a>
+                <a href="chat.html" class="nav-link active">AI Chat</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="chat-page-wrapper">
+        <div class="chat-section">
+            <div class="chat-icon">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+            <h1>AI Travel Assistant</h1>
+            <p>Click below to open the AI chatbot in a new tab.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fa-solid fa-map"></i>
+                    <h3>Destination Tips</h3>
+                    <p>Get recommendations and insider tips for any destination</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-wallet"></i>
+                    <h3>Budget Planning</h3>
+                    <p>Plan your trip budget and find cost-saving tips</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-calendar"></i>
+                    <h3>Itinerary Help</h3>
+                    <p>Get help creating the perfect travel itinerary</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fa-solid fa-umbrella"></i>
+                    <h3>Travel Advice</h3>
+                    <p>Get personalized travel tips and advice</p>
+                </div>
+            </div>
+
+            <a class="btn-open-chat" href="https://mindtrip.ai/chat/3657680" target="_blank" rel="noopener">
+                <i class="fa-solid fa-comments"></i>
+                Open AI Chatbot
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+
