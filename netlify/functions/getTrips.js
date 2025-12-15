@@ -1,6 +1,9 @@
 // Get all saved trip plans from MongoDB
 const { getDb } = require('./_mongo');
 const { ObjectId } = require('mongodb');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'wanderly-secret-key-change-in-production';
 
 exports.handler = async function (event, context) {
     context.callbackWaitsForEmptyEventLoop = false;
@@ -14,11 +17,32 @@ exports.handler = async function (event, context) {
 
     try {
         const db = await getDb();
-        const { userId, destination, budget, style, limit, sort } = event.queryStringParameters || {};
+        const { userId, destination, budget, style, limit, sort, myTrips } = event.queryStringParameters || {};
+
+        // Extract userId from JWT token if provided
+        let authenticatedUserId = null;
+        const authHeader = event.headers.authorization || event.headers.Authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            try {
+                const token = authHeader.substring(7);
+                const decoded = jwt.verify(token, JWT_SECRET);
+                authenticatedUserId = decoded.userId;
+            } catch (err) {
+                console.log('Invalid token in getTrips');
+            }
+        }
 
         // Build query filter
         let filter = {};
-        if (userId) filter.userId = userId;
+        
+        // If myTrips=true, filter by authenticated user's trips only
+        if (myTrips === 'true' && authenticatedUserId) {
+            filter.userId = authenticatedUserId;
+        } else if (userId) {
+            // Legacy support for userId parameter
+            filter.userId = userId;
+        }
+        
         if (destination) filter.destination = new RegExp(destination, 'i'); // Case-insensitive search
         if (budget) filter.budget = budget;
         if (style) filter.travelStyle = style;

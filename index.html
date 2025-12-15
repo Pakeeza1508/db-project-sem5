@@ -1,104 +1,1242 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Wanderly - Next Gen Travel Planner</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/planner-styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/planner-styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
 
-<body>
+  <body>
     <div class="bg-animation"></div>
-    <img id="bg-image" class="bg-image"
-        src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
-        alt="Background">
+    <img
+      id="bg-image"
+      class="bg-image"
+      src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop"
+      alt="Background"
+    />
 
     <!-- Navigation Bar -->
     <header class="planner-header">
-        <div class="header-content">
-            <a href="index.html" class="logo">
-                <i class="fa-solid fa-plane-departure"></i>
-                <span>Wanderly</span>
-            </a>
-            <nav class="header-nav">
-                <a href="index.html" class="nav-link" style="color: var(--primary);"><i class="fa-solid fa-home"></i> Home</a>
-                <a href="planner.html" class="nav-link"><i class="fa-solid fa-plus"></i> New Trip</a>
-                <a href="browse.html" class="nav-link"><i class="fa-solid fa-search"></i> Browse</a>
-                <a href="my-trips.html" class="nav-link"><i class="fa-solid fa-bookmark"></i> My Trips</a>
-                <a href="analytics.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a>
-                <a href="chat.html" class="nav-link"><i class="fa-solid fa-robot"></i> AI Chat</a>
-                <a href="share.html" class="nav-link"><i class="fa-solid fa-link"></i> Shared Trip</a>
-                <a href="compare.html" class="nav-link"><i class="fa-solid fa-balance-scale"></i> Compare</a>
-            </nav>
-        </div>
+      <div class="header-content">
+        <a href="index.html" class="logo">
+          <i class="fa-solid fa-plane-departure"></i>
+          <span>Wanderly</span>
+        </a>
+        <nav class="header-nav">
+          <a href="index.html" class="nav-link" style="color: var(--primary)"
+            ><i class="fa-solid fa-home"></i> Home</a
+          >
+          <a href="planner.html" class="nav-link"
+            ><i class="fa-solid fa-plus"></i> New Trip</a
+          >
+          <a href="browse.html" class="nav-link"
+            ><i class="fa-solid fa-search"></i> Browse</a
+          >
+          <a href="my-trips.html" class="nav-link"
+            ><i class="fa-solid fa-bookmark"></i> My Trips</a
+          >
+          <a href="analytics.html" class="nav-link"
+            ><i class="fa-solid fa-chart-line"></i> Analytics</a
+          >
+          <a href="chat.html" class="nav-link"
+            ><i class="fa-solid fa-robot"></i> AI Chat</a
+          >
+          <a href="share.html" class="nav-link"
+            ><i class="fa-solid fa-link"></i> Shared Trip</a
+          >
+          <a href="compare.html" class="nav-link"
+            ><i class="fa-solid fa-balance-scale"></i> Compare</a
+          >
+        </nav>
+      </div>
     </header>
 
     <div class="landing-container">
-        <div class="glass hero-content" style="padding: 60px; border-radius: 32px;">
-            <h1>Plan Your Dream Trip<br>with AI Precision</h1>
-            <p class="hero-subtitle">Experience the future of travel. Smart itineraries, real-time weather, and
-                personalized suggestions.</p>
+      <div
+        class="glass hero-content"
+        style="padding: 60px; border-radius: 32px"
+      >
+        <h1>Plan Your Dream Trip<br />with AI Precision</h1>
+        <p class="hero-subtitle">
+          Experience the future of travel. Smart itineraries, real-time weather,
+          and personalized suggestions.
+        </p>
 
-            <div style="display: flex; gap: 20px; justify-content: center; margin-top: 30px;">
-                <a href="planner.html" class="btn btn-primary">
-                    <i class="fa-solid fa-rocket" style="margin-right: 10px;"></i> Start Planning
-                </a>
-            </div>
-
-            <div
-                style="margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; color: var(--text-muted); max-width: 600px; margin-left: auto; margin-right: auto;">
-                <div style="text-align: center;">
-                    <i class="fa-solid fa-brain fa-2x" style="margin-bottom: 10px; color: var(--secondary);"></i>
-                    <p>AI Powered</p>
-                </div>
-                <div style="text-align: center;">
-                    <i class="fa-solid fa-cloud-sun fa-2x" style="margin-bottom: 10px; color: var(--accent);"></i>
-                    <p>Real-time Weather</p>
-                </div>
-                <div style="text-align: center;">
-                    <i class="fa-solid fa-coins fa-2x" style="margin-bottom: 10px; color: var(--primary);"></i>
-                    <p>Budget Optimization</p>
-                </div>
-            </div>
+        <div
+          style="
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+          "
+        >
+          <a href="planner.html" class="btn btn-primary">
+            <i class="fa-solid fa-rocket" style="margin-right: 10px"></i> Start
+            Planning
+          </a>
         </div>
+
+        <div
+          style="
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          <div style="text-align: center">
+            <i
+              class="fa-solid fa-brain fa-2x"
+              style="margin-bottom: 10px; color: var(--secondary)"
+            ></i>
+            <p>AI Powered</p>
+          </div>
+          <div style="text-align: center">
+            <i
+              class="fa-solid fa-cloud-sun fa-2x"
+              style="margin-bottom: 10px; color: var(--accent)"
+            ></i>
+            <p>Real-time Weather</p>
+          </div>
+          <div style="text-align: center">
+            <i
+              class="fa-solid fa-coins fa-2x"
+              style="margin-bottom: 10px; color: var(--primary)"
+            ></i>
+            <p>Budget Optimization</p>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- HOW IT WORKS SECTION -->
+    <section class="how-it-works glass">
+      <h2 class="how-title">How It Works</h2>
+      <p class="how-subtitle">
+        Your travel planning becomes effortless with AI-powered automation in
+        three simple steps.
+      </p>
+
+      <div class="how-grid">
+        <div class="how-step glass">
+          <i class="fa-solid fa-map-location-dot icon-step"></i>
+          <h3>1. Enter Your Trip Details</h3>
+          <p>Choose destination, dates, budget, and travel style.</p>
+        </div>
+
+        <div class="how-step glass">
+          <i class="fa-solid fa-wand-magic-sparkles icon-step"></i>
+          <h3>2. AI Creates Your Plan</h3>
+          <p>Get optimized itineraries, weather insights, and activities.</p>
+        </div>
+
+        <div class="how-step glass">
+          <i class="fa-solid fa-passport icon-step"></i>
+          <h3>3. Customize & Explore</h3>
+          <p>Add places, edit schedules, and save/share your perfect trip.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SMART FEATURES SECTION -->
+    <section class="features-section">
+      <h2 class="features-title">Smart Features That Make Travel Effortless</h2>
+      <p class="features-subtitle">
+        Powered by AI, designed for travelers — experience next-generation trip
+        planning.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card glass">
+          <i class="fa-solid fa-brain feature-icon"></i>
+          <h3>AI-Optimized Itineraries</h3>
+          <p>
+            Get perfectly structured plans based on your interests, season, and
+            budget instantly.
+          </p>
+        </div>
+
+        <div class="feature-card glass">
+          <i class="fa-solid fa-cloud-sun feature-icon"></i>
+          <h3>Real-Time Weather</h3>
+          <p>
+            Updates weather data dynamically and adjusts trip plans
+            intelligently.
+          </p>
+        </div>
+
+        <div class="feature-card glass">
+          <i class="fa-solid fa-wallet feature-icon"></i>
+          <h3>Smart Budgeting</h3>
+          <p>
+            Optimize hotels, transport, and food spending with AI budget
+            control.
+          </p>
+        </div>
+
+        <div class="feature-card glass">
+          <i class="fa-solid fa-map feature-icon"></i>
+          <h3>Interactive Maps</h3>
+          <p>
+            View routes, distances, and travel times visually on a modern map
+            interface.
+          </p>
+        </div>
+
+        <div class="feature-card glass">
+          <i class="fa-solid fa-bell feature-icon"></i>
+          <h3>Live Alerts</h3>
+          <p>
+            Receive smart notifications for delays, closures, weather warnings,
+            and updates.
+          </p>
+        </div>
+
+        <div class="feature-card glass">
+          <i class="fa-solid fa-share-nodes feature-icon"></i>
+          <h3>Instant Sharing</h3>
+          <p>
+            Share trips with friends in one click — sync changes in real time.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Divider Line -->
+    <div class="section-divider"></div>
+    <!-- TRENDING DESTINATIONS -->
+    <section
+      class="trending-section glass"
+      style="
+        padding: 50px 20px;
+        border-radius: 28px;
+        max-width: 1200px;
+        margin: 80px auto;
+      "
+    >
+      <h2
+        class="section-title"
+        style="text-align: center; font-size: 2.3rem; margin-bottom: 12px"
+      >
+        Trending Destinations
+      </h2>
+      <p
+        class="section-subtitle"
+        style="
+          text-align: center;
+          color: var(--muted);
+          max-width: 700px;
+          margin: 0 auto 36px;
+        "
+      >
+        Explore the most popular places travelers are visiting this season.
+      </p>
+
+      <div class="trend-carousel">
+        <button class="carousel-btn prev">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="trend-track">
+          <!-- Paris -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g187147-Paris_Ile_de_France-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80"
+              alt="Paris"
+            />
+            <div class="trend-overlay">
+              <h3>Paris</h3>
+              <p>France</p>
+            </div>
+          </a>
+
+          <!-- Tokyo -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g298184-Tokyo_Tokyo_Prefecture_Kanto-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad?q=80"
+              alt="Tokyo"
+            />
+            <div class="trend-overlay">
+              <h3>Tokyo</h3>
+              <p>Japan</p>
+            </div>
+          </a>
+
+          <!-- New York -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g60763-New_York_City_New_York-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://plus.unsplash.com/premium_photo-1661954654458-c673671d4a08?fm=jpg&q=60&w=3000"
+              alt="New York"
+            />
+            <div class="trend-overlay">
+              <h3>New York</h3>
+              <p>USA</p>
+            </div>
+          </a>
+
+          <!-- Dubai -->
+          <a
+            href="https://www.tripadvisor.com/Attractions-g295424-Activities-Dubai_Emirate_of_Dubai.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://plus.unsplash.com/premium_photo-1697729914552-368899dc4757?fm=jpg&q=60&w=3000"
+              alt="Dubai"
+            />
+            <div class="trend-overlay">
+              <h3>Dubai</h3>
+              <p>UAE</p>
+            </div>
+          </a>
+
+          <!-- Bali -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g294226-Bali-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://plus.unsplash.com/premium_photo-1661955632358-85564b2810b2?fm=jpg&q=60&w=3000"
+              alt="Bali"
+            />
+            <div class="trend-overlay">
+              <h3>Bali</h3>
+              <p>Indonesia</p>
+            </div>
+          </a>
+
+          <!-- London -->
+          <a
+            href="https://www.tripadvisor.com/Attractions-g186338-Activities-London_England.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsiZdKRc2vMZAr_S5C_zXVmpiKTRBURQq2ww&s"
+              alt="London"
+            />
+            <div class="trend-overlay">
+              <h3>London</h3>
+              <p>UK</p>
+            </div>
+          </a>
+
+          <!-- Barcelona -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g187497-Barcelona_Catalonia-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1578912996078-305d92249aa6?fm=jpg&q=60&w=3000"
+              alt="Barcelona"
+            />
+            <div class="trend-overlay">
+              <h3>Barcelona</h3>
+              <p>Spain</p>
+            </div>
+          </a>
+
+          <!-- Istanbul -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g293974-Istanbul-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?fm=jpg&q=60&w=3000"
+              alt="Istanbul"
+            />
+            <div class="trend-overlay">
+              <h3>Istanbul</h3>
+              <p>Turkey</p>
+            </div>
+          </a>
+
+          <!-- Rome -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g187791-Rome_Lazio-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSEGU0dziDhooaTJthNzNiQ_Rp9k9FZK2whQ&s"
+              alt="Rome"
+            />
+            <div class="trend-overlay">
+              <h3>Rome</h3>
+              <p>Italy</p>
+            </div>
+          </a>
+
+          <!-- Sydney -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g255060-Sydney_New_South_Wales-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1528072164453-f4e8ef0d475a?fm=jpg&q=60&w=3000"
+              alt="Sydney"
+            />
+            <div class="trend-overlay">
+              <h3>Sydney</h3>
+              <p>Australia</p>
+            </div>
+          </a>
+
+          <!-- Singapore -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g294265-Singapore-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1600664356348-10686526af4f?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2luZ2Fwb3JlfGVufDB8fDB8fHww"
+              alt="Singapore"
+            />
+            <div class="trend-overlay">
+              <h3>Singapore</h3>
+              <p>Singapore</p>
+            </div>
+          </a>
+
+          <!-- Machu Picchu -->
+          <a
+            href="https://www.tripadvisor.com/Attraction_Review-g294318-d668949-Reviews-Machu_Picchu-Machu_Picchu_Sacred_Valley_Cusco_Region.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8sLTFyhhLoVyPM62fyX9jpBdSaBVpVaEx_Q&s"
+              alt="Machu Picchu"
+            />
+            <div class="trend-overlay">
+              <h3>Machu Picchu</h3>
+              <p>Peru</p>
+            </div>
+          </a>
+
+          <!-- Santorini -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g189430-Santorini_Cyclades-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQAaCi8_kq0f98yP3YNtRr5Zj8j9pdlU6SbQ&s"
+              alt="Santorini"
+            />
+            <div class="trend-overlay">
+              <h3>Santorini</h3>
+              <p>Greece</p>
+            </div>
+          </a>
+
+          <!-- Rio de Janeiro -->
+          <a
+            href="https://www.tripadvisor.com/Tourism-g303506-Rio_de_Janeiro_State_of_Rio_de_Janeiro-Vacations.html"
+            target="_blank"
+            class="trend-card"
+          >
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkpP0R5zgM14jbr_wejEHU_zcT8DSSsXiCHA&s"
+              alt="Rio de Janeiro"
+            />
+            <div class="trend-overlay">
+              <h3>Rio de Janeiro</h3>
+              <p>Brazil</p>
+            </div>
+          </a>
+        </div>
+
+        <button class="carousel-btn next">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials-section">
+      <h2 class="section-title">What Our Travelers Say</h2>
+      <p class="section-subtitle">
+        Real experiences shared by our happy explorers
+      </p>
+
+      <div class="testimonial-carousel">
+        <button class="carousel-btn prev">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="testimonial-track">
+          <!-- Sample testimonial -->
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/women/32.jpg"
+              alt="Alice"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "Wanderly made planning my Europe trip effortless! Loved the AI
+              recommendations."
+            </p>
+            <h4 class="testimonial-name">Alice M.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i
+                class="fa-solid fa-star-half-stroke"
+                style="color: #facc15"
+              ></i>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/women/45.jpg"
+              alt="Sophia"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "Absolutely loved the AI itinerary! Everything was so
+              well-organized."
+            </p>
+            <h4 class="testimonial-name">Sophia L.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/men/52.jpg"
+              alt="Michael"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "Saved so much time planning our trip. The recommendations were
+              spot on!"
+            </p>
+            <h4 class="testimonial-name">Michael P.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-regular fa-star" style="color: #facc15"></i>
+              <i class="fa-regular fa-star" style="color: #facc15"></i>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/women/22.jpg"
+              alt="Emma"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "The AI travel planner gave me exactly what I wanted. Highly
+              recommend!"
+            </p>
+            <h4 class="testimonial-name">Emma K.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i
+                class="fa-solid fa-star-half-stroke"
+                style="color: #facc15"
+              ></i>
+              <i class="fa-regular fa-star" style="color: #facc15"></i>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/men/33.jpg"
+              alt="David"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "Loved the suggested attractions and the seamless itinerary.
+              Perfect!"
+            </p>
+            <h4 class="testimonial-name">David R.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-regular fa-star" style="color: #facc15"></i>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/women/28.jpg"
+              alt="Olivia"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "This travel planner is a game-changer! The AI suggestions were
+              amazing."
+            </p>
+            <h4 class="testimonial-name">Olivia W.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i
+                class="fa-solid fa-star-half-stroke"
+                style="color: #facc15"
+              ></i>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <img
+              src="https://randomuser.me/api/portraits/men/41.jpg"
+              alt="John"
+              class="avatar"
+            />
+            <p class="testimonial-text">
+              "The itineraries were perfect and saved me hours of planning.
+              Highly recommend!"
+            </p>
+            <h4 class="testimonial-name">John D.</h4>
+            <div class="testimonial-rating">
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-solid fa-star" style="color: #facc15"></i>
+              <i class="fa-regular fa-star" style="color: #facc15"></i>
+            </div>
+          </div>
+
+          <!-- More testimonials can be dynamically added here -->
+        </div>
+
+        <button class="carousel-btn next">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div style="text-align: center; margin-top: 30px">
+        <button id="add-testimonial-btn" class="btn btn-primary">
+          Add Your Testimonial
+        </button>
+      </div>
+
+      <!-- Hidden Form Modal -->
+      <div id="testimonial-modal" class="testimonial-modal">
+        <div class="modal-content glass">
+          <span class="close-modal">&times;</span>
+          <h3>Add Your Testimonial</h3>
+          <form id="testimonial-form">
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input
+              type="url"
+              name="avatar"
+              placeholder="Avatar Image URL (optional)"
+            />
+            <textarea
+              name="text"
+              placeholder="Your testimonial"
+              required
+            ></textarea>
+            <select name="rating">
+              <option value="5">★★★★★ 5 Stars</option>
+              <option value="4">★★★★ 4 Stars</option>
+              <option value="3">★★★ 3 Stars</option>
+              <option value="2">★★ 2 Stars</option>
+              <option value="1">★ 1 Star</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- JOURNEY INSPIRATIONS SECTION -->
+    <section class="journey-section glass">
+      <div class="container">
+        <h2 class="section-title">Journey Inspirations from Travelers</h2>
+        <p class="section-subtitle">
+          Dive into unique trip itineraries crafted by our global travelers.
+          Find your next adventure and share your own journey with fellow
+          explorers.
+        </p>
+
+        <div class="journey-wrapper">
+          <!-- Left Column -->
+          <div class="journey-col">
+            <!-- Card 1: Tokyo (Standard Height) -->
+            <div class="journey-card">
+              <img
+                src="https://media.istockphoto.com/id/484915982/photo/akihabara-tokyo.jpg?s=612x612&w=0&k=20&c=kbCRYJS5vZuF4jLB3y4-apNebcCEkWnDbKPpxXdf9Cg="
+                alt="Tokyo"
+                class="card-bg"
+              />
+              <div class="card-overlay"></div>
+
+              <!-- User Badge -->
+              <div class="user-badge">
+                <img src="https://i.pravatar.cc/150?img=11" alt="User" />
+                <span>Ivanner Mora</span>
+              </div>
+
+              <div class="journey-content">
+                <h3>Trip to Tokyo</h3>
+                <p>
+                  Join me on an exciting 10-day journey through Tokyo, visiting
+                  iconic landmarks.
+                </p>
+                <a
+                  href="https://layla.ai/trip/tokyo-adventure%3A-5-days-of-exploration/01JJX0510Q9HMDZA89AM9T5749?force=render"
+                  class="btn-text"
+                  >Read More <i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </div>
+
+            <!-- Card 2: Dubai (Tall Height) -->
+            <div class="journey-card tall-card">
+              <img
+                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZHViYWl8ZW58MHx8MHx8fDA%3D"
+                alt="Dubai"
+                class="card-bg"
+              />
+              <div class="card-overlay"></div>
+
+              <div class="user-badge">
+                <img src="https://i.pravatar.cc/150?img=33" alt="User" />
+                <span>John Mathew</span>
+              </div>
+
+              <div class="journey-content">
+                <h3>Trip to Dubai</h3>
+                <p>
+                  Embark on a thrilling 6-day journey through Dubai. Explore
+                  vibrant souks and iconic landmarks.
+                </p>
+                <a
+                  href="https://layla.ai/trip/adventure-in-dubai/01JGKA79B7G71A73X9VKCXZ2N6?force=render"
+                  class="btn-text"
+                  >Read More <i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="journey-col">
+            <!-- Card 3: New York (Tall Height) -->
+            <div class="journey-card tall-card">
+              <img
+                src="https://w0.peakpx.com/wallpaper/821/485/HD-wallpaper-new-york-streets.jpg"
+                alt="New York"
+                class="card-bg"
+              />
+              <div class="card-overlay"></div>
+
+              <div class="user-badge">
+                <img src="https://i.pravatar.cc/150?img=59" alt="User" />
+                <span>Pablo Guzman</span>
+              </div>
+
+              <div class="journey-content">
+                <h3>Trip to New York</h3>
+                <p>
+                  Experience the best of New York City in just 7 days!
+                  Landmarks, meals, and city life.
+                </p>
+                <a
+                  href="https://layla.ai/trip/new-york-city-adventure/01JH873TDSTFJKQA8ABHDSR92A?force=render"
+                  class="btn-text"
+                  >Read More <i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </div>
+
+            <!-- Card 4: Rome (Standard Height) -->
+            <div class="journey-card">
+              <img
+                src="https://i.pinimg.com/736x/f1/50/0e/f1500e307fce360ec8877b7d4ca14483.jpg"
+                alt="Rome"
+                class="card-bg"
+              />
+              <div class="card-overlay"></div>
+
+              <div class="user-badge">
+                <img src="https://i.pravatar.cc/150?img=44" alt="User" />
+                <span>Rosarinho Alves</span>
+              </div>
+
+              <div class="journey-content">
+                <h3>Trip to Rome</h3>
+                <p>
+                  Join me on a thrilling 5-day adventure in Rome, exploring
+                  ancient ruins and architecture.
+                </p>
+                <a
+                  href="https://layla.ai/trip/rome%3A-a-festive-journey-through-history/01JBC35NJKZVPFB2B6WQHRZ1TS?force=render"
+                  class="btn-text"
+                  >Read More <i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <p class="section-subtitle">
+        Everything you need to know about planning your next adventure.
+      </p>
+
+      <div class="faq-container">
+        <!-- Item 1 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            How does the AI itinerary planning work?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Our AI analyzes your destination, dates, preferences, and budget
+              to create a personalized day-by-day itinerary. It optimizes routes
+              to save you travel time.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I edit my trip after generation?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Absolutely. The AI gives you a starting point. You can
+              drag-and-drop activities, add your own stops, or regenerate
+              specific days at any time.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            Is my personal data secure?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>
+              Yes, we use bank-level encryption for all data. We never share
+              your personal travel plans with third parties without your
+              explicit permission.
+            </p>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="faq-item">
+          <button class="faq-question">
+            Is this free to use?
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>
+              We offer a generous free tier that allows you to plan unlimited
+              trips. Premium features like collaborative planning and offline
+              maps are available on the Pro plan.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <!-- TOP SECTION: Left (Text) and Right (Image) -->
+        <div class="footer-top">
+          <!-- LEFT SIDE: Text Content -->
+          <div class="footer-left">
+            <div class="footer-brand">
+              <a href="#" class="logo">
+                <i class="fas fa-globe"></i> <span>TravelPlanner</span>
+              </a>
+              <p>Your ultimate trip planning companion.</p>
+            </div>
+
+            <div class="footer-links">
+              <div class="link-group">
+                <h4>Company</h4>
+                <ul>
+                  <li><a href="#">About Us</a></li>
+                  <li><a href="#">Careers</a></li>
+                  <li><a href="#">Blog</a></li>
+                </ul>
+              </div>
+              <div class="link-group">
+                <h4>Support</h4>
+                <ul>
+                  <li><a href="#">Help Center</a></li>
+                  <li><a href="#">FAQs</a></li>
+                  <li><a href="#">Contact</a></li>
+                </ul>
+              </div>
+              <div class="link-group">
+                <h4>Legal</h4>
+                <ul>
+                  <li><a href="#">Privacy Policy</a></li>
+                  <li><a href="#">Terms of Service</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="footer-social">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDE: Image -->
+          <div class="footer-right">
+            <img
+              src="https://www.ytravelblog.com/wp-content/uploads/2018/11/planning-a-trip-tips-and-challenges-2.jpg"
+              alt="Travel illustration"
+            />
+          </div>
+        </div>
+        <!-- End Footer Top -->
+
+        <!-- BOTTOM SECTION: Copyright -->
+        <div class="footer-bottom">
+          <p>&copy; 2025 TravelPlanner. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
     <script>
-        // Simple background rotation script
-        const images = [
-            'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=2070&auto=format&fit=crop'
-        ];
+      // --- 1. BACKGROUND ROTATION ---
+      const images = [
+        "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=2073&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?q=80&w=2070&auto=format&fit=crop",
+      ];
 
-        let currentImage = 0;
-        const bgImage = document.getElementById('bg-image');
+      let currentImage = 0;
+      const bgImage = document.getElementById("bg-image");
 
+      if (bgImage) {
         setInterval(() => {
-            currentImage = (currentImage + 1) % images.length;
-            bgImage.style.opacity = 0;
-            setTimeout(() => {
-                bgImage.src = images[currentImage];
-                bgImage.onload = () => {
-                    bgImage.style.opacity = 0.4;
-                };
-            }, 1000);
+          currentImage = (currentImage + 1) % images.length;
+          bgImage.style.opacity = 0;
+          setTimeout(() => {
+            bgImage.src = images[currentImage];
+            bgImage.onload = () => {
+              bgImage.style.opacity = 0.4;
+            };
+          }, 1000);
         }, 8000);
+      }
 
-        async function loadStats() {
-    const res = await fetch('/.netlify/functions/getStats');
-    const data = await res.json();
-    console.log("Database Analytics:", data);
-    // Render this data to a chart or table
-}
+      // --- 2. TRENDING DESTINATIONS CAROUSEL + DATABASE ---
+      const track = document.querySelector(".trend-track");
+      const prevBtn = document.querySelector(".carousel-btn.prev");
+      const nextBtn = document.querySelector(".carousel-btn.next");
+      let index = 0;
+      let cards = document.querySelectorAll(".trend-card");
+
+      // Fetch trending destinations from database
+      async function loadTrendingDestinations() {
+        try {
+          const response = await fetch('/.netlify/functions/getTrendingDestinations');
+          if (!response.ok) throw new Error('Failed to fetch trending destinations');
+          
+          const { destinations } = await response.json();
+          
+          // Clear existing hardcoded destinations
+          track.innerHTML = '';
+          
+          // Add destinations from database
+          destinations.forEach(dest => {
+            const card = document.createElement("a");
+            card.className = "trend-card";
+            card.href = dest.tripadvisorUrl || "https://www.tripadvisor.com/";
+            card.target = "_blank";
+            
+            card.innerHTML = `
+              <img src="${dest.imageUrl}" alt="${dest.name}"/>
+              <div class="trend-overlay">
+                <h3>${dest.name}</h3>
+                <p>${dest.country}</p>
+              </div>
+            `;
+            track.appendChild(card);
+          });
+          
+          // Refresh cards reference
+          cards = document.querySelectorAll(".trend-card");
+          index = 0;
+        } catch (error) {
+          console.error('Error loading trending destinations:', error);
+        }
+      }
+
+      function updateTrendCarousel() {
+        if (cards.length === 0) return;
+        const cardWidth = cards[0].offsetWidth + 18; // card width + gap
+        track.style.transform = `translateX(${-index * cardWidth}px)`;
+      }
+
+      if (track) {
+        // Load trending destinations from database
+        loadTrendingDestinations();
+        
+        // Set up carousel navigation
+        nextBtn.addEventListener("click", () => {
+          if (index < cards.length - 1) {
+            index++;
+            updateTrendCarousel();
+          }
+        });
+
+        prevBtn.addEventListener("click", () => {
+          if (index > 0) {
+            index--;
+            updateTrendCarousel();
+          }
+        });
+
+        // Auto-slide every 4s
+        setInterval(() => {
+          if (cards.length > 0) {
+            index = (index + 1) % cards.length;
+            updateTrendCarousel();
+          }
+        }, 4000);
+      }
+
+      // --- 3. TESTIMONIALS CAROUSEL + DATABASE ---
+      const tTrack = document.querySelector(".testimonial-track");
+      let tCards = document.querySelectorAll(".testimonial-card");
+      const tPrev = document.querySelector(".testimonial-carousel .prev");
+      const tNext = document.querySelector(".testimonial-carousel .next");
+      let tIndex = 0;
+
+      // Fetch testimonials from database on page load
+      async function loadTestimonials() {
+        try {
+          const response = await fetch('/.netlify/functions/getTestimonials');
+          if (!response.ok) throw new Error('Failed to fetch testimonials');
+          
+          const { testimonials } = await response.json();
+          
+          // Clear existing sample testimonials
+          tTrack.innerHTML = '';
+          
+          // Add testimonials from database
+          testimonials.forEach(test => {
+            const card = document.createElement("div");
+            card.className = "testimonial-card";
+            
+            // Generate star rating HTML
+            let starsHTML = "";
+            for (let i = 1; i <= 5; i++) {
+              starsHTML +=
+                i <= test.rating
+                  ? `<i class="fa-solid fa-star" style="color: #facc15"></i>`
+                  : `<i class="fa-regular fa-star" style="color: #facc15"></i>`;
+            }
+            
+            card.innerHTML = `
+              <img src="${test.avatar}" alt="${test.name}" class="avatar"/>
+              <p class="testimonial-text">"${test.text}"</p>
+              <h4 class="testimonial-name">${test.name}</h4>
+              <div class="testimonial-rating">${starsHTML}</div>
+            `;
+            tTrack.appendChild(card);
+          });
+          
+          // Refresh cards reference
+          tCards = document.querySelectorAll(".testimonial-card");
+          tIndex = 0;
+        } catch (error) {
+          console.error('Error loading testimonials:', error);
+        }
+      }
+
+      function updateCarousel() {
+        if (tCards.length === 0) return;
+        const cardWidth = tCards[0].offsetWidth + 20;
+        tTrack.style.transform = `translateX(${-tIndex * cardWidth}px)`;
+      }
+
+      if (tTrack) {
+        // Load testimonials from database
+        loadTestimonials();
+        
+        // Set up carousel navigation
+        tNext.addEventListener("click", () => {
+          if (tIndex < tCards.length - 1) {
+            tIndex++;
+            updateCarousel();
+          }
+        });
+        tPrev.addEventListener("click", () => {
+          if (tIndex > 0) {
+            tIndex--;
+            updateCarousel();
+          }
+        });
+      }
+
+      // --- 4. MODAL LOGIC ---
+      const modal = document.getElementById("testimonial-modal");
+      const openBtn = document.getElementById("add-testimonial-btn");
+      const closeBtn = document.querySelector(".close-modal");
+
+      if (modal && openBtn) {
+        openBtn.onclick = () => (modal.style.display = "flex");
+        closeBtn.onclick = () => (modal.style.display = "none");
+        window.onclick = (e) => {
+          if (e.target == modal) modal.style.display = "none";
+        };
+
+        const form = document.getElementById("testimonial-form");
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          const name = form.name.value;
+          const avatar = form.avatar.value || "https://randomuser.me/api/portraits/lego/1.jpg";
+          const text = form.text.value;
+          const rating = form.rating.value;
+
+          try {
+            // Save to database
+            const response = await fetch('/.netlify/functions/addTestimonial', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, avatar, text, rating })
+            });
+
+            if (!response.ok) throw new Error('Failed to save testimonial');
+
+            // Create and display the card immediately
+            const card = document.createElement("div");
+            card.className = "testimonial-card";
+            let starsHTML = "";
+            for (let i = 1; i <= 5; i++) {
+              starsHTML +=
+                i <= rating
+                  ? `<i class="fa-solid fa-star" style="color: #facc15"></i>`
+                  : `<i class="fa-regular fa-star" style="color: #facc15"></i>`;
+            }
+            card.innerHTML = `
+              <img src="${avatar}" alt="${name}" class="avatar"/>
+              <p class="testimonial-text">"${text}"</p>
+              <h4 class="testimonial-name">${name}</h4>
+              <div class="testimonial-rating">${starsHTML}</div>
+            `;
+            
+            tTrack.appendChild(card);
+            tCards = document.querySelectorAll(".testimonial-card");
+            tIndex = tCards.length - 1;
+            updateCarousel();
+            
+            // Close modal and reset form
+            modal.style.display = "none";
+            form.reset();
+            
+            console.log('✅ Testimonial saved to database!');
+          } catch (error) {
+            console.error('Error saving testimonial:', error);
+            alert('Failed to save testimonial. Please try again.');
+          }
+        });
+      }
+
+      // --- 5. FAQ LOGIC (CRASH PROOF) ---
+      document.addEventListener("DOMContentLoaded", () => {
+        const faqItems = document.querySelectorAll(".faq-item");
+
+        faqItems.forEach((item) => {
+          const question = item.querySelector(".faq-question");
+          const answer = item.querySelector(".faq-answer");
+
+          // CRITICAL: If HTML is broken, skip to next item
+          if (!question || !answer) {
+            return;
+          }
+
+          question.addEventListener("click", () => {
+            const isActive = item.classList.contains("active");
+
+            // 1. Close ALL items (Accordion effect)
+            faqItems.forEach((otherItem) => {
+              const otherAnswer = otherItem.querySelector(".faq-answer");
+              if (otherAnswer) {
+                otherItem.classList.remove("active");
+                otherAnswer.style.maxHeight = "0";
+              }
+            });
+
+            // 2. Open clicked item if it wasn't already open
+            if (!isActive) {
+              item.classList.add("active");
+              answer.style.maxHeight = answer.scrollHeight + "px";
+            }
+          });
+        });
+      });
+
+      // ❌ DELETED: "Journey Carousel" script
+      // (Because we changed Journey to a Grid layout, that script was crashing the page)
     </script>
-</body>
-
+    <script src="js/auth.js"></script>
+  </body>
 </html>

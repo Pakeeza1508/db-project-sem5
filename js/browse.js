@@ -208,6 +208,10 @@ function renderResults(trips) {
         const emoji = getDestinationEmoji(trip.destination);
         const ratingValue = trip.rating ? parseFloat(trip.rating).toFixed(1) : 'N/A';
         const costText = trip.costs?.total ? `$${trip.costs.total.toLocaleString()}` : 'Price TBA';
+        
+        // Show "Save to My Trips" button if user is logged in
+        const user = getUser ? getUser() : null;
+        const saveButton = user ? `<button onclick="saveToMyTrips('${trip._id}', '${trip.destination}')" title="Save this trip to your collection" style="flex: 1; padding: 8px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-bookmark"></i> Save to My Trips</button>` : '';
 
         card.innerHTML = `
             <div class="trip-card-image">
@@ -235,9 +239,12 @@ function renderResults(trips) {
                     <div class="trip-cost-value">${costText}</div>
                 </div>
 
-                <div class="trip-actions">
-                    <a href="manage-trip.html?id=${trip._id}" title="Manage this trip"><i class="fa-solid fa-list-check"></i> Manage</a>
-                    <a href="#" onclick="copyTripId('${trip._id}'); return false;" title="Copy trip ID"><i class="fa-solid fa-copy"></i> Copy ID</a>
+                <div class="trip-actions" style="flex-direction: column; gap: 10px;">
+                    <div style="display: flex; gap: 8px;">
+                        <a href="manage-trip.html?id=${trip._id}" title="Manage this trip" style="flex: 1;"><i class="fa-solid fa-list-check"></i> Manage</a>
+                        <a href="#" onclick="copyTripId('${trip._id}'); return false;" title="Copy trip ID" style="flex: 1;"><i class="fa-solid fa-copy"></i> Copy ID</a>
+                    </div>
+                    ${saveButton}
                 </div>
             </div>
         `;
@@ -275,6 +282,50 @@ function getDestinationEmoji(destination) {
 function copyTripId(tripId) {
     navigator.clipboard.writeText(tripId);
     showToast('📋 Trip ID copied to clipboard!', 'info');
+}
+
+// Save trip from Browse to My Trips
+async function saveToMyTrips(tripId, destination) {
+    const user = getUser ? getUser() : null;
+    
+    if (!user) {
+        alert('Please login first to save trips to your collection!');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    try {
+        // Fetch the complete trip data
+        const response = await fetch(`/.netlify/functions/getTripById?id=${tripId}`);
+        if (!response.ok) throw new Error('Failed to load trip');
+        
+        const { trip } = await response.json();
+        
+        // Get auth token
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        
+        // Save trip to user's collection
+        const saveResponse = await fetch('/.netlify/functions/savePlan', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(trip)
+        });
+        
+        if (saveResponse.ok) {
+            showToast(`✅ "${destination}" saved to your My Trips!`, 'success');
+        } else {
+            throw new Error('Failed to save trip');
+        }
+    } catch (error) {
+        console.error('Error saving trip:', error);
+        showToast('❌ Failed to save trip. Please try again.', 'error');
+    }
 }
 
 function updateResultsMeta(pagination) {

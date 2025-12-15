@@ -1,5 +1,8 @@
 // Save trip plan to MongoDB
 const { getDb } = require('./_mongo');
+const jwt = require('jsonwebtoken');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'wanderly-secret-key-change-in-production';
 
 exports.handler = async function (event, context) {
     // Set serverless function timeout context
@@ -16,6 +19,19 @@ exports.handler = async function (event, context) {
         const db = await getDb();
         const body = JSON.parse(event.body);
         
+        // Extract userId from JWT token (if provided)
+        let userId = null;
+        const authHeader = event.headers.authorization || event.headers.Authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            try {
+                const token = authHeader.substring(7);
+                const decoded = jwt.verify(token, JWT_SECRET);
+                userId = decoded.userId;
+            } catch (err) {
+                console.log('Invalid token, saving without userId');
+            }
+        }
+        
         // Validate required fields
         if (!body.destination || !body.itinerary) {
             return {
@@ -29,7 +45,7 @@ exports.handler = async function (event, context) {
         // Prepare document - store the full result directly
         const planDocument = {
             ...body,
-            userId: body.userId || null,
+            userId: userId, // Attach userId from JWT token
             title: body.title || `${body.destination} Trip Plan`,
             favorite: body.favorite || false,
             rating: body.rating || 0,

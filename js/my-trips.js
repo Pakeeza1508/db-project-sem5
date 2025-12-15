@@ -32,7 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function loadTrips() {
     try {
-        const response = await fetch('/.netlify/functions/getTrips');
+        const token = localStorage.getItem('token');
+        const headers = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        
+        // Add myTrips=true parameter to filter by authenticated user
+        const response = await fetch('/.netlify/functions/getTrips?myTrips=true', {
+            headers: headers
+        });
         
         if (!response.ok) {
             throw new Error('Failed to load trips');

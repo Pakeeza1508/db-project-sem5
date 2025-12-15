@@ -519,6 +519,51 @@ function renderAllSections(result) {
     updateCosts(result.costs);
     renderPackingList(result.packing);
     renderTravelTips(result.tips);
+    
+    // Fetch and display real destination images and attractions
+    const destination = fullTripResult.destination.split(',')[0].trim();
+    fetchDestinationImages(destination);
+    fetchAndDisplayAttractions(destination);
+    
+    // NOTE: Removed auto-save - users now manually save trips with full authentication
+}
+
+// Auto-save trip to database (for Browse tab display)
+async function autoSaveTripToDatabase() {
+    if (!fullTripResult || editMode) return; // Don't auto-save in edit mode
+    
+    try {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        
+        const response = await fetch('/.netlify/functions/savePlan', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(fullTripResult)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('✅ Trip auto-saved to database for browsing:', result.id);
+            
+            // Mark as saved so user can't duplicate save
+            const saveBtn = document.getElementById('save-trip-btn');
+            if (saveBtn) {
+                saveBtn.dataset.saved = 'true';
+                saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Saved';
+                saveBtn.style.opacity = '0.6';
+                saveBtn.style.cursor = 'not-allowed';
+                saveBtn.disabled = true;
+            }
+        }
+    } catch (error) {
+        console.log('Auto-save to database failed (non-critical):', error);
+    }
 }
 
 function renderItinerary(itinerary) {
@@ -663,33 +708,32 @@ async function handleSaveTrip() {
     }
 
     const btn = document.getElementById('save-trip-btn');
-    
-    // Prevent duplicate saves - if already saved, warn user
-    if (btn.dataset.saved === 'true') {
-        alert('✅ This trip has already been saved!\n\nGenerate a new trip to save again.');
-        return;
-    }
-
     const originalHTML = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
     try {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+        
         const response = await fetch('/.netlify/functions/savePlan', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify(fullTripResult)
         });
 
         if (response.ok) {
             const result = await response.json();
-            alert(`✅ Trip saved successfully!\n\nPlan ID: ${result.id}`);
+            alert(`✅ Trip saved to My Trips!\n\nYou can view it in the "My Trips" section.`);
             
-            // Mark button as saved and disable permanently until new trip is generated
-            btn.dataset.saved = 'true';
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved';
-            btn.style.opacity = '0.6';
-            btn.style.cursor = 'not-allowed';
+            // Reset button for next trip
+            btn.innerHTML = '<i class="fa-solid fa-save"></i> Save to My Trips';
+            btn.disabled = false;
         } else {
             throw new Error('Failed to save');
         }
@@ -779,7 +823,118 @@ async function updateExistingTrip() {
     } catch (e) {
         console.error('Error updating trip:', error);
         alert('Error updating trip: ' + e.message);
-        btn.innerHTML = originalHTML;
-        btn.disabled = false;
     }
+}
+
+// Fetch and display destination images from Unsplash
+async function fetchDestinationImages(destination) {
+    try {
+        const response = await fetch(`/.netlify/functions/getDestinationImages?destination=${encodeURIComponent(destination)}&count=3`);
+        if (!response.ok) throw new Error('Failed to fetch images');
+        
+        const data = await response.json();
+        if (data.images && data.images.length > 0) {
+            displayDestinationImages(data.images);
+        }
+    } catch (error) {
+        console.error('Error fetching destination images:', error);
+    }
+}
+
+// Display destination images in a gallery section
+function displayDestinationImages(images) {
+    let gallery = document.getElementById('destination-gallery');
+    
+    if (!gallery) {
+        // Create gallery section if it doesn't exist
+        const hotelSection = document.getElementById('hotels-section');
+        if (hotelSection && hotelSection.parentNode) {
+            gallery = document.createElement('div');
+            gallery.id = 'destination-gallery';
+            gallery.className = 'section';
+            hotelSection.parentNode.insertBefore(gallery, hotelSection);
+        } else {
+            return;
+        }
+    }
+    
+    gallery.innerHTML = `
+        <h2 class="section-title">
+            <i class="fa-solid fa-images"></i> Destination Gallery
+        </h2>
+        <div class="gallery-grid">
+            ${images.map(img => `
+                <div class="gallery-item">
+                    <img src="${img.url}" alt="${img.alt}" loading="lazy">
+                    <div class="gallery-credit">
+                        <small>Photo by <a href="${img.link}" target="_blank">${img.photographer}</a></small>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+// Fetch and display real attractions from Google Places
+async function fetchAndDisplayAttractions(destination) {
+    try {
+        const response = await fetch(`/.netlify/functions/getAttractions?destination=${encodeURIComponent(destination)}`);
+        if (!response.ok) throw new Error('Failed to fetch attractions');
+        
+        const data = await response.json();
+        if (data.attractions && data.attractions.length > 0) {
+            displayAttractions(data.attractions);
+        }
+    } catch (error) {
+        console.error('Error fetching attractions:', error);
+    }
+}
+
+// Display attractions in a card layout
+function displayAttractions(attractions) {
+    let section = document.getElementById('attractions-section');
+    
+    if (!section) {
+        // Create attractions section if it doesn't exist
+        const resultsSection = document.getElementById('results-section');
+        if (resultsSection) {
+            section = document.createElement('div');
+            section.id = 'attractions-section';
+            section.className = 'section';
+            resultsSection.appendChild(section);
+        } else {
+            return;
+        }
+    }
+    
+    section.innerHTML = `
+        <h2 class="section-title">
+            <i class="fa-solid fa-map-location-dot"></i> Popular Attractions
+        </h2>
+        <div class="attractions-grid">
+            ${attractions.map(attr => `
+                <div class="attraction-card">
+                    ${attr.photo ? `<img src="${attr.photo}" alt="${attr.name}" class="attraction-image">` : ''}
+                    <div class="attraction-content">
+                        <h4 class="attraction-name">${attr.name}</h4>
+                        <p class="attraction-address">
+                            <i class="fa-solid fa-location-dot"></i>
+                            ${attr.address}
+                        </p>
+                        <div class="attraction-stats">
+                            <span class="rating">
+                                <i class="fa-solid fa-star"></i> ${typeof attr.rating === 'number' ? attr.rating.toFixed(1) : 'N/A'}
+                            </span>
+                            <span class="reviews">(${attr.reviews} reviews)</span>
+                        </div>
+                        ${attr.openNow !== null ? `
+                            <div class="open-status ${attr.openNow ? 'open' : 'closed'}">
+                                ${attr.openNow ? '<i class="fa-solid fa-circle"></i> Open Now' : '<i class="fa-solid fa-circle"></i> Closed'}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
 }
