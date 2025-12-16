@@ -11,6 +11,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const backBtn = document.getElementById('back-btn');
     const saveTripBtn = document.getElementById('save-trip-btn');
 
+    // Check for prefilled data from budget search
+    if (sessionStorage.getItem('fromBudgetSearch') === 'true') {
+        const destination = sessionStorage.getItem('prefilledDestination');
+        const days = sessionStorage.getItem('prefilledDays');
+        
+        if (destination) document.getElementById('destination').value = destination;
+        if (days) document.getElementById('days').value = days;
+        
+        // Clear flag
+        sessionStorage.removeItem('fromBudgetSearch');
+        
+        // Scroll to form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     // Check for edit mode
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('edit')) {
@@ -296,19 +311,35 @@ function updateOverview(destination, days, style, budget) {
 }
 
 async function generateTripPlan(city, country, days, style, budget, preferences, weather) {
+    // Get budget search context if available
+    const startingCity = sessionStorage.getItem('startingCity') || '';
+    const travelType = sessionStorage.getItem('travelType') || '';
+    const tripBudget = sessionStorage.getItem('tripBudget') || budget;
+    const budgetContext = startingCity ? `\n- Starting from: ${startingCity}\n- Travel Type: ${travelType}\n- Total Budget: ${tripBudget} PKR` : '';
+    
     const prompt = `You are an expert travel planner. Create a comprehensive ${days}-day trip plan for ${city}, ${country}.
 
 Trip Details:
 - Duration: ${days} days
 - Travel Style: ${style}
-- Budget: ${budget}
+- Budget: ${budget}${budgetContext}
 - Additional Preferences: ${preferences || 'None'}
 - Current Weather: ${weather.weather[0].description}, ${Math.round(weather.main.temp)}°C
+
+IMPORTANT SEASONAL GUIDANCE:
+- Check the current month and provide seasonal warnings if applicable
+- Mention best months to visit ${city}
+- Warn about monsoon season, extreme heat, or winter closures if relevant
 
 IMPORTANT: Respond ONLY with valid JSON. No markdown, no code blocks, just pure JSON.
 
 Provide this exact JSON structure:
 {
+    "seasonalInfo": {
+        "currentMonth": "Current month",
+        "bestMonths": ["Month1", "Month2"],
+        "warning": "Any seasonal warnings or recommendations"
+    },
   "itinerary": [
     {
       "day": "Day 1",

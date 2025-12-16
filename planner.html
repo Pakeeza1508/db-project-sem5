@@ -78,6 +78,9 @@
                     <a href="index.html" class="nav-link">
                         <i class="fa-solid fa-home"></i> Home
                     </a>
+                    <a href="budget-search.html" class="nav-link">
+                        <i class="fa-solid fa-wallet"></i> Budget Search
+                    </a>
                     <a href="browse.html" class="nav-link">
                         <i class="fa-solid fa-search"></i> Browse
                     </a>
@@ -87,6 +90,7 @@
                     <a href="compare.html" class="nav-link">
                         <i class="fa-solid fa-balance-scale"></i> Compare
                     </a>
+                    <!-- Auth placeholder - will be populated by auth.js -->
                 </nav>
             </div>
         </header>
@@ -375,6 +379,8 @@
     <script>
         // Protect this page - require login
         protectRoute();
+        // Update navbar with user info
+        updateNavbarAuth();
     </script>
     <script src="js/planner-app.js"></script>
     <script src="js/currency-converter.js"></script>

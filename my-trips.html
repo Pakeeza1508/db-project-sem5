@@ -271,6 +271,9 @@
                     <a href="index.html" class="nav-link">
                         <i class="fa-solid fa-home"></i> Home
                     </a>
+                    <a href="budget-search.html" class="nav-link">
+                        <i class="fa-solid fa-wallet"></i> Budget Search
+                    </a>
                     <a href="browse.html" class="nav-link">
                         <i class="fa-solid fa-search"></i> Browse
                     </a>
@@ -278,6 +281,7 @@
                         <i class="fa-solid fa-chart-line"></i> Analytics
                     </a>
                     <a href="compare.html" class="nav-link"><i class="fa-solid fa-balance-scale"></i> Compare</a>
+                    <!-- Auth placeholder - will be populated by auth.js -->
                 </nav>
             </div>
         </header>
@@ -372,6 +376,8 @@
     <script>
         // Protect this page - require login
         protectRoute();
+        // Update navbar with user info
+        updateNavbarAuth();
     </script>
     <script src="js/my-trips.js"></script>
     <script src="js/chat-widget.js"></script>

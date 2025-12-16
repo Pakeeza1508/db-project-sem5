@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Trip Finder - Wanderly</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planner-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .budget-hero {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .budget-hero h1 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .budget-hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .budget-form-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .budget-form-group {
+            margin-bottom: 25px;
+        }
+
+        .budget-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .budget-form-group input,
+        .budget-form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .budget-form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a0aec0' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 40px;
+        }
+
+        .budget-form-group select option {
+            background: #1e293b;
+            color: var(--text);
+            padding: 10px;
+        }
+
+        .budget-form-group input:focus,
+        .budget-form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .budget-info {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .budget-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .budget-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .budget-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            display: none;
+            padding: 40px 20px;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .results-title h2 {
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .destination-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .destination-header {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            padding: 20px;
+            color: white;
+        }
+
+        .destination-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .destination-region {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .destination-body {
+            padding: 20px;
+        }
+
+        .destination-info {
+            margin-bottom: 15px;
+        }
+
+        .destination-info-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 3px;
+        }
+
+        .destination-info-value {
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .package-options {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .package-option {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .package-option.unavailable {
+            opacity: 0.5;
+            filter: grayscale(50%);
+        }
+
+        .package-label {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .package-cost {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .package-cost.exceed {
+            color: #ef4444;
+        }
+
+        .destination-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-view-plan {
+            flex: 1;
+            padding: 10px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-view-plan:hover {
+            transform: scale(1.02);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="planner-container">
+        <header class="planner-header">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-plane-departure"></i>
+                    <span>Wanderly</span>
+                </a>
+                <nav class="header-nav">
+                    <a href="index.html" class="nav-link"><i class="fa-solid fa-home"></i> Home</a>
+                    <a href="budget-search.html" class="nav-link" style="color: var(--primary);"><i class="fa-solid fa-wallet"></i> Budget Search</a>
+                    <a href="browse.html" class="nav-link"><i class="fa-solid fa-search"></i> Browse</a>
+                    <a href="analytics.html" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                    <a href="compare.html" class="nav-link"><i class="fa-solid fa-balance-scale"></i> Compare</a>
+                    <!-- Auth placeholder - will be populated by auth.js -->
+                </nav>
+            </div>
+        </header>
+
+        <main class="planner-main">
+            <!-- Hero Section -->
+            <section class="budget-hero">
+                <h1><i class="fa-solid fa-wallet"></i> Budget-First Trip Finder</h1>
+                <p>Tell us your budget, and we'll find the perfect destination for you!</p>
+            </section>
+
+            <!-- Form Section -->
+            <section class="form-container glass" style="max-width: 1400px; margin: 0 auto; padding: 0;">
+                <div class="budget-form-wrapper">
+                    <form id="budget-form">
+                        <div class="budget-info">
+                            <i class="fa-solid fa-info-circle"></i> Enter your budget and we'll find 3 perfect destinations with different package options!
+                        </div>
+
+                        <div class="budget-form-group">
+                            <label for="total-budget">
+                                <i class="fa-solid fa-money-bill"></i> Total Budget (PKR)
+                            </label>
+                            <input type="number" id="total-budget" placeholder="e.g., 50000" min="10000" required>
+                        </div>
+
+                        <div class="budget-form-group">
+                            <label for="trip-days">
+                                <i class="fa-solid fa-calendar-days"></i> Number of Days
+                            </label>
+                            <select id="trip-days" required>
+                                <option value="">Select duration</option>
+                                <option value="1">1 day (weekend getaway)</option>
+                                <option value="2">2 days</option>
+                                <option value="3" selected>3 days</option>
+                                <option value="4">4 days</option>
+                                <option value="5">5 days</option>
+                                <option value="7">1 week (7 days)</option>
+                                <option value="10">10 days</option>
+                                <option value="14">2 weeks (14 days)</option>
+                            </select>
+                        </div>
+
+                        <div class="budget-form-group">
+                            <label for="starting-city">
+                                <i class="fa-solid fa-map-pin"></i> Starting City
+                            </label>
+                            <input type="text" id="starting-city" placeholder="e.g., Lahore, Karachi, Islamabad" required>
+                        </div>
+
+                        <div class="budget-form-group">
+                            <label for="travel-type">
+                                <i class="fa-solid fa-users"></i> Travel Type
+                            </label>
+                            <select id="travel-type" required>
+                                <option value="">Select travel type</option>
+                                <option value="Solo">Solo</option>
+                                <option value="Friends">Friends</option>
+                                <option value="Family">Family</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="budget-submit">
+                            <i class="fa-solid fa-search"></i> Find Destinations
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results-container" class="results-container">
+                    <div class="results-title">
+                        <h2 id="results-heading">Perfect Destinations Found!</h2>
+                        <p id="results-subtitle"></p>
+                    </div>
+
+                    <div id="results-grid" class="results-grid"></div>
+
+                    <div id="error-message" class="error-message" style="display: none;"></div>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 20px; color: var(--text-muted);">Finding your perfect destination...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Initialize auth on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateNavbarAuth();
+        });
+    </script>
+    <script src="js/budget-search.js"></script>
+    <script src="js/chat-widget.js"></script>
+</body>
+</html>

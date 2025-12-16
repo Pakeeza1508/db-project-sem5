@@ -38,6 +38,9 @@
           <a href="index.html" class="nav-link" style="color: var(--primary)"
             ><i class="fa-solid fa-home"></i> Home</a
           >
+          <a href="budget-search.html" class="nav-link"
+            ><i class="fa-solid fa-wallet"></i> Budget Search</a
+          >
           <a href="browse.html" class="nav-link"
             ><i class="fa-solid fa-search"></i> Browse</a
           >
@@ -47,6 +50,7 @@
           <a href="compare.html" class="nav-link"
             ><i class="fa-solid fa-balance-scale"></i> Compare</a
           >
+          <!-- Auth placeholder - will be populated by auth.js -->
         </nav>
       </div>
     </header>
@@ -70,7 +74,7 @@
             margin-top: 30px;
           "
         >
-          <a href="planner.html" class="btn btn-primary">
+          <a href="budget-search.html" class="btn btn-primary">
             <i class="fa-solid fa-rocket" style="margin-right: 10px"></i> Start
             Planning
           </a>
@@ -1226,6 +1230,12 @@
       // (Because we changed Journey to a Grid layout, that script was crashing the page)
     </script>
     <script src="js/auth.js"></script>
+    <script>
+      // Initialize auth on page load
+      document.addEventListener('DOMContentLoaded', () => {
+        updateNavbarAuth();
+      });
+    </script>
     <script src="js/chat-widget.js"></script>
   </body>
 </html>
