@@ -317,6 +317,13 @@ function createDestinationCard(destination, rank, inputData) {
         </div>
     `;
 
+    // Add "Explore Nearby" button after card is created
+    if (window.addNearbySuggestionsButton) {
+        setTimeout(() => {
+            addNearbySuggestionsButton(card, city, destination.coordinates?.lat, destination.coordinates?.lng);
+        }, 100);
+    }
+
     return card;
 }
 

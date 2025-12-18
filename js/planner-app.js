@@ -271,6 +271,25 @@ async function handleFormSubmit(e) {
         // Show cache status badges
         updateCacheBadges();
 
+        // Load nearby suggestions
+        if (window.fetchNearbyDestinations && window.displayNearbySuggestions) {
+            setTimeout(async () => {
+                try {
+                    const nearbyData = await fetchNearbyDestinations(name || destination, lat, lon);
+                    if (nearbyData && nearbyData.suggestions.length > 0) {
+                        displayNearbySuggestions(nearbyData, 'nearby-suggestions');
+                        // Show the nearby card
+                        const nearbyCard = document.querySelector('.nearby-card');
+                        if (nearbyCard) {
+                            nearbyCard.style.display = 'block';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to load nearby suggestions:', error);
+                }
+            }, 1000); // Load after main content
+        }
+
     } catch (error) {
         console.error('Error generating trip:', error);
         alert(`Failed to generate trip plan: ${error.message}`);

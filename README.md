@@ -18,6 +18,7 @@ LINK:- https://wanderly-ai.netlify.app/
 *   **🔔 Smart Alerts System**: Get notified when trip prices drop by 5% or more. Seasonal event alerts for festivals and best times to visit.
 *   **📊 Price Tracking**: Historical price data with trends, min/max pricing, and savings calculations.
 *   **🕐 Search History**: Track all searches (budget, planner, locations) with statistics and one-click re-run.
+*   **🧭 Nearby Suggestions**: Discover popular destinations near your selected location with smart ranking (proximity + popularity + preferences).
 *   **📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
 
 ## 🛠️ Tech Stack
