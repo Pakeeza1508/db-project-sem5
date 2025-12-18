@@ -55,9 +55,9 @@ LINK:- https://wanderly-ai.netlify.app/
     ```
     This will start a local server (usually at `http://localhost:8888`) where the frontend and backend functions work together.
 
-### Seed the Database (Required for Budget Search)
+### Seed the Database (Required for Budget Search & Currency Conversion)
 
-The budget search and seasonal alerts use seeded city cost data stored in MongoDB.
+The budget search uses seeded city cost data, and currency conversion uses exchange rates stored in MongoDB.
 
 1.  Create a `.env` in the project root:
     ```bash
@@ -68,11 +68,16 @@ The budget search and seasonal alerts use seeded city cost data stored in MongoD
     ```
     Alternatively, use your MongoDB Atlas connection string for `MONGODB_URI`.
 
-2.  With `netlify dev` running, open these URLs once to seed:
+2.  With `netlify dev` running, open these URLs **once** to seed:
     - Seed cities: `http://localhost:8888/.netlify/functions/seedCityCosts`
     - Seed trending destinations: `http://localhost:8888/.netlify/functions/seedTrendingDestinations`
+    - **Seed exchange rates**: `http://localhost:8888/.netlify/functions/seedExchangeRates` (NEW)
 
-If you see a message like “Cities already seeded”, your database is ready.
+If you see a message like "Cities already seeded", your database is ready.
+
+**Note**: Exchange rates are stored in MongoDB for easy management. You can update them anytime via:
+   - Manual update: `POST` to `/.netlify/functions/updateExchangeRates` with JSON payload
+   - Fetch current: `GET` `/.netlify/functions/getExchangeRates`
 
 ## ☁️ Deployment
 
@@ -86,9 +91,10 @@ This project is optimized for **Netlify**.
     *   `MONGODB_URI`: Your MongoDB connection string (Atlas recommended)
     *   `MONGODB_DB`: Database name (e.g., `wanderly`)
 
-4.  After deploy, run these once (replace with your site domain):
+3.  After deploy, run these once (replace with your site domain):
     - `https://<your-site>/.netlify/functions/seedCityCosts`
     - `https://<your-site>/.netlify/functions/seedTrendingDestinations`
+    - `https://<your-site>/.netlify/functions/seedExchangeRates` (NEW)
 
 ## 🔒 Security
 

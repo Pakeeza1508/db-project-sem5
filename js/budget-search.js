@@ -68,6 +68,13 @@ function displayResults(data) {
 
     // Show results container
     document.getElementById('results-container').classList.add('show');
+
+    // Initialize budget currency converter with exchange rates
+    setTimeout(() => {
+        if (window.initBudgetCurrencyConverter) {
+            window.initBudgetCurrencyConverter();
+        }
+    }, 500);
 }
 
 function createDestinationCard(destination, rank) {
@@ -142,7 +149,7 @@ function createDestinationCard(destination, rank) {
                         <div class="package-label">🟢 Cheap</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted);">Transport+Food+Local (lean)</div>
                     </div>
-                    <div class="package-cost ${!availablePackages.cheap ? 'exceed' : ''}">
+                    <div class="package-cost ${!availablePackages.cheap ? 'exceed' : ''}" data-usd-cost="${(cheap.totalCost / 278.5).toFixed(2)}">
                         ₨${cheap.totalCost.toLocaleString()}
                     </div>
                 </div>
@@ -152,7 +159,7 @@ function createDestinationCard(destination, rank) {
                         <div class="package-label">🔵 Balanced</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted);">Best experience</div>
                     </div>
-                    <div class="package-cost ${!availablePackages.moderate ? 'exceed' : ''}">
+                    <div class="package-cost ${!availablePackages.moderate ? 'exceed' : ''}" data-usd-cost="${(moderate.totalCost / 278.5).toFixed(2)}">
                         ₨${moderate.totalCost.toLocaleString()}
                     </div>
                 </div>
@@ -162,7 +169,7 @@ function createDestinationCard(destination, rank) {
                         <div class="package-label">🟣 Premium</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted);">Max comfort within budget</div>
                     </div>
-                    <div class="package-cost ${!availablePackages.luxury ? 'exceed' : ''}">
+                    <div class="package-cost ${!availablePackages.luxury ? 'exceed' : ''}" data-usd-cost="${(luxury.totalCost / 278.5).toFixed(2)}">
                         ₨${luxury.totalCost.toLocaleString()}
                     </div>
                 </div>
@@ -173,19 +180,19 @@ function createDestinationCard(destination, rank) {
                 <div style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px;">
                     <div class="destination-info">
                         <div class="destination-info-label">🚌 Transport</div>
-                        <div class="destination-info-value">₨${(costBreakdown.transport || 0).toLocaleString()}</div>
+                        <div class="destination-info-value" data-usd-cost="${(costBreakdown.transport / 278.5).toFixed(2)}">₨${(costBreakdown.transport || 0).toLocaleString()}</div>
                     </div>
                     <div class="destination-info">
                         <div class="destination-info-label">🍽️ Food</div>
-                        <div class="destination-info-value">₨${(costBreakdown.food || 0).toLocaleString()}</div>
+                        <div class="destination-info-value" data-usd-cost="${(costBreakdown.food / 278.5).toFixed(2)}">₨${(costBreakdown.food || 0).toLocaleString()}</div>
                     </div>
                     <div class="destination-info">
                         <div class="destination-info-label">🚕 Local Transport</div>
-                        <div class="destination-info-value">₨${(costBreakdown.localTransport || 0).toLocaleString()}</div>
+                        <div class="destination-info-value" data-usd-cost="${(costBreakdown.localTransport / 278.5).toFixed(2)}">₨${(costBreakdown.localTransport || 0).toLocaleString()}</div>
                     </div>
                     <div class="destination-info">
                         <div class="destination-info-label">🎟️ Activities</div>
-                        <div class="destination-info-value">₨${(costBreakdown.activities || 0).toLocaleString()}</div>
+                        <div class="destination-info-value" data-usd-cost="${(costBreakdown.activities / 278.5).toFixed(2)}">₨${(costBreakdown.activities || 0).toLocaleString()}</div>
                     </div>
                 </div>
             </div>

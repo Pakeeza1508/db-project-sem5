@@ -2,30 +2,56 @@
 let currentCurrency = 'USD';
 let exchangeRates = {};
 let originalCosts = {};
+let destinationCosts = {}; // Store costs for each destination
 
 // Fetch exchange rates
 async function fetchExchangeRates() {
     try {
+        // Try to fetch from our database first
+        const response = await fetch('/.netlify/functions/getExchangeRates');
+        const data = await response.json();
+        
+        if (data.success && data.rates) {
+            exchangeRates = data.rates;
+            console.log('Exchange rates loaded from database:', exchangeRates);
+            return;
+        }
+    } catch (error) {
+        console.error('Failed to fetch exchange rates from database:', error);
+    }
+
+    // Fallback: Try external API
+    try {
         const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
         const data = await response.json();
         exchangeRates = data.rates;
-        console.log('Exchange rates loaded:', exchangeRates);
+        console.log('Exchange rates loaded from external API:', exchangeRates);
+        return;
     } catch (error) {
-        console.error('Failed to fetch exchange rates:', error);
-        // Fallback rates
-        exchangeRates = {
-            USD: 1,
-            EUR: 0.92,
-            GBP: 0.79,
-            INR: 83.12,
-            JPY: 149.50,
-            AUD: 1.53,
-            CAD: 1.36,
-            CHF: 0.88,
-            CNY: 7.24,
-            AED: 3.67
-        };
+        console.error('Failed to fetch from external API:', error);
     }
+
+    // Final fallback: Use hardcoded rates
+    console.warn('Using fallback hardcoded exchange rates');
+    exchangeRates = {
+        USD: 1,
+        EUR: 0.92,
+        GBP: 0.79,
+        INR: 83.12,
+        JPY: 149.50,
+        AUD: 1.53,
+        CAD: 1.36,
+        CHF: 0.88,
+        CNY: 7.24,
+        AED: 3.67,
+        PKR: 278.50,
+        SAR: 3.75,
+        QAR: 3.64,
+        BDT: 110.50,
+        SGD: 1.35,
+        MYR: 4.70,
+        THB: 36.20
+    };
 }
 
 // Currency symbols
@@ -39,7 +65,10 @@ const currencySymbols = {
     CAD: 'C$',
     CHF: 'CHF ',
     CNY: '¥',
-    AED: 'AED '
+    AED: 'AED ',
+    PKR: '₨',
+    SAR: 'SAR ',
+    QAR: 'QAR '
 };
 
 // Convert amount from USD to target currency
@@ -49,8 +78,8 @@ function convertCurrency(usdAmount, targetCurrency) {
     const converted = usdAmount * rate;
 
     // Format based on currency
-    if (targetCurrency === 'JPY' || targetCurrency === 'INR') {
-        return Math.round(converted); // No decimals for JPY and INR
+    if (targetCurrency === 'JPY' || targetCurrency === 'INR' || targetCurrency === 'PKR') {
+        return Math.round(converted); // No decimals for JPY, INR, and PKR
     }
     return Math.round(converted * 100) / 100; // 2 decimals for others
 }
@@ -59,7 +88,7 @@ function convertCurrency(usdAmount, targetCurrency) {
 function formatCurrency(amount, currency) {
     const symbol = currencySymbols[currency] || currency + ' ';
 
-    if (currency === 'JPY' || currency === 'INR') {
+    if (currency === 'JPY' || currency === 'INR' || currency === 'PKR') {
         return `${symbol}${Math.round(amount).toLocaleString()}`;
     }
     return `${symbol}${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -184,15 +213,18 @@ async function initCurrencyConverter() {
             </label>
             <select id="currency-select" class="currency-dropdown">
                 <option value="USD" selected>USD ($)</option>
+                <option value="PKR">PKR (₨)</option>
+                <option value="INR">INR (₹)</option>
                 <option value="EUR">EUR (€)</option>
                 <option value="GBP">GBP (£)</option>
-                <option value="INR">INR (₹)</option>
                 <option value="JPY">JPY (¥)</option>
                 <option value="AUD">AUD (A$)</option>
                 <option value="CAD">CAD (C$)</option>
                 <option value="CHF">CHF</option>
                 <option value="CNY">CNY (¥)</option>
                 <option value="AED">AED</option>
+                <option value="SAR">SAR</option>
+                <option value="QAR">QAR</option>
             </select>
         `;
 
