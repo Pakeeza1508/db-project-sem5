@@ -93,6 +93,18 @@ async function searchLocations(query) {
 
         // Display results on map
         displayLocationResults(results);
+
+        // Save search to history
+        if (results.length > 0 && window.saveSearchToHistory) {
+            saveSearchToHistory(
+                'location',
+                query,
+                { searchType: 'map-location' },
+                results.map(r => r.displayName),
+                results.length
+            );
+        }
+
         return results;
     } catch (error) {
         console.error('Location search failed:', error);

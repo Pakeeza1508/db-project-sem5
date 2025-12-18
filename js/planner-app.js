@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
         initAlertSystem();
     }
 
+    // Initialize search history
+    if (window.initSearchHistory) {
+        initSearchHistory();
+    }
+
     // Initialize destination map
     let destinationMapInitialized = false;
     const showDestinationMapBtn = document.getElementById('show-destination-map-btn');
@@ -56,6 +61,29 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Clear flag
         sessionStorage.removeItem('fromBudgetSearch');
+        
+        // Scroll to form
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Check for prefilled data from search history
+    if (sessionStorage.getItem('fromHistory') === 'true') {
+        const destination = sessionStorage.getItem('prefilledDestination');
+        const days = sessionStorage.getItem('prefilledDays');
+        const style = sessionStorage.getItem('prefilledStyle');
+        const budget = sessionStorage.getItem('prefilledBudget');
+        
+        if (destination) document.getElementById('destination').value = destination;
+        if (days) document.getElementById('travel-days').value = days;
+        if (style) document.getElementById('travel-style').value = style;
+        if (budget) document.getElementById('budget').value = budget;
+        
+        // Clear flags
+        sessionStorage.removeItem('fromHistory');
+        sessionStorage.removeItem('prefilledDestination');
+        sessionStorage.removeItem('prefilledDays');
+        sessionStorage.removeItem('prefilledStyle');
+        sessionStorage.removeItem('prefilledBudget');
         
         // Scroll to form
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -217,6 +245,23 @@ async function handleFormSubmit(e) {
 
         // Update weather display
         updateWeatherDisplay(weatherData);
+
+        // Save search to history
+        if (window.saveSearchToHistory) {
+            saveSearchToHistory(
+                'planner',
+                destination,
+                {
+                    destination: name || destination,
+                    days: travelDays,
+                    style: travelStyle,
+                    budget: budget,
+                    preferences: preferences
+                },
+                null,
+                1
+            );
+        }
 
         // Show results
         document.getElementById('form-section').style.display = 'none';

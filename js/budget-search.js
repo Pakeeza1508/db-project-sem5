@@ -73,6 +73,22 @@ async function handleBudgetSearch(e) {
             throw new Error(data.error || 'Failed to find destinations');
         }
 
+        // Save search to history
+        if (window.saveSearchToHistory) {
+            saveSearchToHistory(
+                'budget-search',
+                `${startingCity} - ${budget} PKR`,
+                {
+                    budget: budget,
+                    days: days,
+                    startingCity: startingCity,
+                    travelType: travelType
+                },
+                data.recommendations.map(r => r.destination),
+                data.recommendations.length
+            );
+        }
+
         // Display results
         displayResults(data);
 

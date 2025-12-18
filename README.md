@@ -15,9 +15,10 @@ LINK:- https://wanderly-ai.netlify.app/
 *   **💱 Currency Converter**: Instantly convert costs between major global currencies (USD, EUR, GBP, JPY, etc.).
 *   **🗺️ Interactive Map**: Search exact locations with Leaflet + OpenStreetMap integration. Select destinations via map click or search.
 *   **📍 Location Database**: Stores searched locations in MongoDB for analytics and improved recommendations.
-*   **� Smart Alerts System**: Get notified when trip prices drop by 5% or more. Seasonal event alerts for festivals and best times to visit.
+*   **🔔 Smart Alerts System**: Get notified when trip prices drop by 5% or more. Seasonal event alerts for festivals and best times to visit.
 *   **📊 Price Tracking**: Historical price data with trends, min/max pricing, and savings calculations.
-*   **�📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
+*   **🕐 Search History**: Track all searches (budget, planner, locations) with statistics and one-click re-run.
+*   **📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
 
 ## 🛠️ Tech Stack
 

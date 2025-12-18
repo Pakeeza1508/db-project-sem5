@@ -476,11 +476,13 @@
     <script src="js/budget-currency.js"></script>
     <script src="js/map-integration.js"></script>
     <script src="js/alert-system.js"></script>
+    <script src="js/search-history.js"></script>
     <script>
-        // Initialize auth and alerts on page load
+        // Initialize auth, alerts, and search history on page load
         document.addEventListener('DOMContentLoaded', () => {
             updateNavbarAuth();
             initAlertSystem();
+            initSearchHistory();
         });
     </script>
     <script src="js/budget-search.js"></script>
