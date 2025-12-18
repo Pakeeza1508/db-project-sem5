@@ -1,4 +1,4 @@
-// Seed city costs to MongoDB - Run once via /netlify/functions/seedCityCosts
+// Seed city costs to MongoDB - Run once via /.netlify/functions/seedCityCosts
 const { getDb } = require('./_mongo');
 
 const pakistaniCities = [

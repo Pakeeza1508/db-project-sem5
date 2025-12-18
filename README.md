@@ -9,8 +9,9 @@ LINK:- https://wanderly-ai.netlify.app/
 
 *   **🤖 AI-Powered Itineraries**: Generates detailed daily schedules based on your travel style, budget, and preferences using Google's Gemini AI.
 *   **☀️ Real-Time Weather**: Fetches current weather conditions for your destination using OpenWeatherMap.
-*   **🏨 Smart Recommendations**: Suggests hotels and activities tailored to your specific needs.
-*   **💰 Cost Estimation**: Provides a breakdown of estimated costs for accommodation, food, transport, and activities.
+*   **💼 Budget-First Search**: Enter budget, days, starting city, and travel type to get 3 destination options with transparent cost breakdowns.
+*   **🏨 Smart Recommendations**: Suggests activities and logistics tailored to your trip style.
+*   **💰 Cost Estimation**: Breaks down transport, food, local transport, and activities (backed by seeded city cost data).
 *   **💱 Currency Converter**: Instantly convert costs between major global currencies (USD, EUR, GBP, JPY, etc.).
 *   **🗺️ Interactive Map**: Visualizes your destination and key points of interest.
 *   **📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
@@ -19,6 +20,7 @@ LINK:- https://wanderly-ai.netlify.app/
 
 *   **Frontend**: HTML5, CSS3 (Custom Properties, Glassmorphism), JavaScript (ES6+)
 *   **AI Engine**: Google Gemini 2.0 Flash
+*   **Database**: MongoDB (Atlas or local)
 *   **APIs**:
     *   OpenWeatherMap (Weather & Geocoding)
     *   OpenTripMap (Attractions)
@@ -53,6 +55,25 @@ LINK:- https://wanderly-ai.netlify.app/
     ```
     This will start a local server (usually at `http://localhost:8888`) where the frontend and backend functions work together.
 
+### Seed the Database (Required for Budget Search)
+
+The budget search and seasonal alerts use seeded city cost data stored in MongoDB.
+
+1.  Create a `.env` in the project root:
+    ```bash
+    MONGODB_URI=mongodb://localhost:27017
+    MONGODB_DB=wanderly
+    GOOGLE_API_KEY=your_gemini_key
+    OPENWEATHER_KEY=your_openweather_key
+    ```
+    Alternatively, use your MongoDB Atlas connection string for `MONGODB_URI`.
+
+2.  With `netlify dev` running, open these URLs once to seed:
+    - Seed cities: `http://localhost:8888/.netlify/functions/seedCityCosts`
+    - Seed trending destinations: `http://localhost:8888/.netlify/functions/seedTrendingDestinations`
+
+If you see a message like “Cities already seeded”, your database is ready.
+
 ## ☁️ Deployment
 
 This project is optimized for **Netlify**.
@@ -62,6 +83,12 @@ This project is optimized for **Netlify**.
 3.  Add your API keys:
     *   `GOOGLE_API_KEY`: Your Gemini API key
     *   `OPENWEATHER_KEY`: Your OpenWeatherMap API key
+    *   `MONGODB_URI`: Your MongoDB connection string (Atlas recommended)
+    *   `MONGODB_DB`: Database name (e.g., `wanderly`)
+
+4.  After deploy, run these once (replace with your site domain):
+    - `https://<your-site>/.netlify/functions/seedCityCosts`
+    - `https://<your-site>/.netlify/functions/seedTrendingDestinations`
 
 ## 🔒 Security
 
