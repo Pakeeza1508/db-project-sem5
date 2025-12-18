@@ -6,6 +6,7 @@
     <title>Wanderly - Next Gen Travel Planner</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/planner-styles.css" />
+      <link rel="stylesheet" href="css/testimonials.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -145,6 +146,24 @@
         </div>
       </div>
     </section>
+    <!-- TESTIMONIALS SECTION -->
+    <section class="testimonials-section" style="padding: 80px 5%; background: rgba(0, 0, 0, 0.2);">
+      <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.5rem; color: var(--text);">
+        <i class="fa-solid fa-comments"></i> Traveler Experiences
+      </h2>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">
+        See what our community has to say about their adventures
+      </p>
+      
+      <div style="text-align: center; margin-bottom: 30px;">
+        <button class="add-testimonial-btn" onclick="showAddTestimonialModal()">
+          <i class="fa-solid fa-plus"></i> Share Your Experience
+        </button>
+      </div>
+
+      <div id="testimonials-container"></div>
+    </section>
+
 
     <!-- SMART FEATURES SECTION -->
     <section class="features-section">
@@ -1230,10 +1249,15 @@
       // (Because we changed Journey to a Grid layout, that script was crashing the page)
     </script>
     <script src="js/auth.js"></script>
+      <script src="js/testimonials.js"></script>
     <script>
-      // Initialize auth on page load
+      // Initialize auth and testimonials on page load
       document.addEventListener('DOMContentLoaded', () => {
         updateNavbarAuth();
+              // Load featured testimonials
+              if (window.loadTestimonials) {
+                loadTestimonials('testimonials-container', { featured: false, limit: 6 });
+              }
       });
     </script>
     <script src="js/chat-widget.js"></script>

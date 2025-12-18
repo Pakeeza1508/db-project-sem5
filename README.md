@@ -19,6 +19,7 @@ LINK:- https://wanderly-ai.netlify.app/
 *   **📊 Price Tracking**: Historical price data with trends, min/max pricing, and savings calculations.
 *   **🕐 Search History**: Track all searches (budget, planner, locations) with statistics and one-click re-run.
 *   **🧭 Nearby Suggestions**: Discover popular destinations near your selected location with smart ranking (proximity + popularity + preferences).
+*   **💬 Community Testimonials**: Share travel experiences, edit/delete testimonials, like others' stories, approval system.
 *   **📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
 
 ## 🛠️ Tech Stack
