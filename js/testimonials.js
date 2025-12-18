@@ -68,9 +68,12 @@ function displayTestimonials(testimonials, containerId = 'testimonials-container
  */
 function createTestimonialCard(testimonial) {
     const userId = localStorage.getItem('userId') || 'anonymous';
+    const userName = testimonial.userName || testimonial.name || 'Traveler';
+    const destination = testimonial.destination || 'Unknown destination';
+    const rating = Number(testimonial.rating) || 5;
     const isOwner = testimonial.userId === userId;
-    const stars = '⭐'.repeat(testimonial.rating);
-    const avatar = testimonial.userAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonial.userName)}&background=3b82f6&color=fff&size=80`;
+    const stars = '⭐'.repeat(Math.max(1, Math.min(5, rating)));
+    const avatar = testimonial.userAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userName)}&background=3b82f6&color=fff&size=80`;
     const liked = testimonial.likedBy && testimonial.likedBy.includes(userId);
     
     const tripDateText = testimonial.tripDate 
@@ -83,12 +86,12 @@ function createTestimonialCard(testimonial) {
             ${!testimonial.approved ? '<div class="pending-badge">⏳ Pending Approval</div>' : ''}
             
             <div class="testimonial-header">
-                <img src="${avatar}" alt="${testimonial.userName}" class="testimonial-avatar">
+                <img src="${avatar}" alt="${userName}" class="testimonial-avatar">
                 <div class="testimonial-user-info">
-                    <h4 class="testimonial-user-name">${testimonial.userName}</h4>
+                    <h4 class="testimonial-user-name">${userName}</h4>
                     <div class="testimonial-meta">
                         <span class="testimonial-destination">
-                            <i class="fa-solid fa-location-dot"></i> ${testimonial.destination}
+                            <i class="fa-solid fa-location-dot"></i> ${destination}
                         </span>
                         ${tripDateText ? `<span class="testimonial-date">${tripDateText}</span>` : ''}
                     </div>

@@ -146,24 +146,6 @@
         </div>
       </div>
     </section>
-    <!-- TESTIMONIALS SECTION -->
-    <section class="testimonials-section" style="padding: 80px 5%; background: rgba(0, 0, 0, 0.2);">
-      <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.5rem; color: var(--text);">
-        <i class="fa-solid fa-comments"></i> Traveler Experiences
-      </h2>
-      <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">
-        See what our community has to say about their adventures
-      </p>
-      
-      <div style="text-align: center; margin-bottom: 30px;">
-        <button class="add-testimonial-btn" onclick="showAddTestimonialModal()">
-          <i class="fa-solid fa-plus"></i> Share Your Experience
-        </button>
-      </div>
-
-      <div id="testimonials-container"></div>
-    </section>
-
 
     <!-- SMART FEATURES SECTION -->
     <section class="features-section">
@@ -229,8 +211,6 @@
       </div>
     </section>
 
-    <!-- Divider Line -->
-    <div class="section-divider"></div>
     <!-- TRENDING DESTINATIONS -->
     <section
       class="trending-section glass"
@@ -496,221 +476,37 @@
       </div>
     </section>
 
-    <!-- TESTIMONIALS SECTION -->
-    <section class="testimonials-section">
-      <h2 class="section-title">What Our Travelers Say</h2>
-      <p class="section-subtitle">
-        Real experiences shared by our happy explorers
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- TESTIMONIALS SECTION - User Reviews -->
+    <section class="testimonials-section" style="padding: 80px 5%; background: rgba(0, 0, 0, 0.2); margin: 60px 0;">
+      <h2 style="text-align: center; margin-bottom: 20px; font-size: 2.5rem; color: var(--text);">
+        <i class="fa-solid fa-comments"></i> What Our Travelers Say
+      </h2>
+      <p style="text-align: center; color: var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">
+        Real reviews from real travelers who planned their trips with Wanderly
       </p>
-
-      <div class="testimonial-carousel">
-        <button class="carousel-btn prev">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
-
-        <div class="testimonial-track">
-          <!-- Sample testimonial -->
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/women/32.jpg"
-              alt="Alice"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "Wanderly made planning my Europe trip effortless! Loved the AI
-              recommendations."
-            </p>
-            <h4 class="testimonial-name">Alice M.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i
-                class="fa-solid fa-star-half-stroke"
-                style="color: #facc15"
-              ></i>
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/women/45.jpg"
-              alt="Sophia"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "Absolutely loved the AI itinerary! Everything was so
-              well-organized."
-            </p>
-            <h4 class="testimonial-name">Sophia L.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/men/52.jpg"
-              alt="Michael"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "Saved so much time planning our trip. The recommendations were
-              spot on!"
-            </p>
-            <h4 class="testimonial-name">Michael P.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-regular fa-star" style="color: #facc15"></i>
-              <i class="fa-regular fa-star" style="color: #facc15"></i>
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/women/22.jpg"
-              alt="Emma"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "The AI travel planner gave me exactly what I wanted. Highly
-              recommend!"
-            </p>
-            <h4 class="testimonial-name">Emma K.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i
-                class="fa-solid fa-star-half-stroke"
-                style="color: #facc15"
-              ></i>
-              <i class="fa-regular fa-star" style="color: #facc15"></i>
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/men/33.jpg"
-              alt="David"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "Loved the suggested attractions and the seamless itinerary.
-              Perfect!"
-            </p>
-            <h4 class="testimonial-name">David R.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-regular fa-star" style="color: #facc15"></i>
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/women/28.jpg"
-              alt="Olivia"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "This travel planner is a game-changer! The AI suggestions were
-              amazing."
-            </p>
-            <h4 class="testimonial-name">Olivia W.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i
-                class="fa-solid fa-star-half-stroke"
-                style="color: #facc15"
-              ></i>
-            </div>
-          </div>
-
-          <div class="testimonial-card">
-            <img
-              src="https://randomuser.me/api/portraits/men/41.jpg"
-              alt="John"
-              class="avatar"
-            />
-            <p class="testimonial-text">
-              "The itineraries were perfect and saved me hours of planning.
-              Highly recommend!"
-            </p>
-            <h4 class="testimonial-name">John D.</h4>
-            <div class="testimonial-rating">
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-solid fa-star" style="color: #facc15"></i>
-              <i class="fa-regular fa-star" style="color: #facc15"></i>
-            </div>
-          </div>
-
-          <!-- More testimonials can be dynamically added here -->
-        </div>
-
-        <button class="carousel-btn next">
-          <i class="fa-solid fa-chevron-right"></i>
+      
+      <div style="text-align: center; margin-bottom: 30px;">
+        <button class="add-testimonial-btn" onclick="showAddTestimonialModal()">
+          <i class="fa-solid fa-plus"></i> Share Your Experience
         </button>
       </div>
 
-      <div style="text-align: center; margin-top: 30px">
-        <button id="add-testimonial-btn" class="btn btn-primary">
-          Add Your Testimonial
-        </button>
-      </div>
-
-      <!-- Hidden Form Modal -->
-      <div id="testimonial-modal" class="testimonial-modal">
-        <div class="modal-content glass">
-          <span class="close-modal">&times;</span>
-          <h3>Add Your Testimonial</h3>
-          <form id="testimonial-form">
-            <input type="text" name="name" placeholder="Your Name" required />
-            <input
-              type="url"
-              name="avatar"
-              placeholder="Avatar Image URL (optional)"
-            />
-            <textarea
-              name="text"
-              placeholder="Your testimonial"
-              required
-            ></textarea>
-            <select name="rating">
-              <option value="5">★★★★★ 5 Stars</option>
-              <option value="4">★★★★ 4 Stars</option>
-              <option value="3">★★★ 3 Stars</option>
-              <option value="2">★★ 2 Stars</option>
-              <option value="1">★ 1 Star</option>
-            </select>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-      </div>
+      <div id="testimonials-container"></div>
     </section>
 
-    <!-- JOURNEY INSPIRATIONS SECTION -->
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- FEATURED TRIP IDEAS SECTION -->
     <section class="journey-section glass">
       <div class="container">
-        <h2 class="section-title">Journey Inspirations from Travelers</h2>
+        <h2 class="section-title"><i class="fa-solid fa-map-marked-alt"></i> Featured Trip Ideas</h2>
         <p class="section-subtitle">
-          Dive into unique trip itineraries crafted by our global travelers.
-          Find your next adventure and share your own journey with fellow
-          explorers.
+          Explore curated itineraries created by travelers around the world.
+          Get inspired for your next adventure!
         </p>
 
         <div class="journey-wrapper">
@@ -1010,6 +806,11 @@
           
           const { destinations } = await response.json();
           
+          if (!destinations || destinations.length === 0) {
+            console.log('No trending destinations in database yet');
+            return; // Keep hardcoded destinations as fallback
+          }
+          
           // Clear existing hardcoded destinations
           track.innerHTML = '';
           
@@ -1021,10 +822,10 @@
             card.target = "_blank";
             
             card.innerHTML = `
-              <img src="${dest.imageUrl}" alt="${dest.name}"/>
+              <img src="${dest.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'}" alt="${dest.name}"/>
               <div class="trend-overlay">
                 <h3>${dest.name}</h3>
-                <p>${dest.country}</p>
+                <p>${dest.region}</p>
               </div>
             `;
             track.appendChild(card);
@@ -1033,8 +834,10 @@
           // Refresh cards reference
           cards = document.querySelectorAll(".trend-card");
           index = 0;
+          updateTrendCarousel(); // Update carousel after loading
         } catch (error) {
           console.error('Error loading trending destinations:', error);
+          // Keep hardcoded destinations as fallback on error
         }
       }
 
@@ -1072,79 +875,8 @@
         }, 4000);
       }
 
-      // --- 3. TESTIMONIALS CAROUSEL + DATABASE ---
-      const tTrack = document.querySelector(".testimonial-track");
-      let tCards = document.querySelectorAll(".testimonial-card");
-      const tPrev = document.querySelector(".testimonial-carousel .prev");
-      const tNext = document.querySelector(".testimonial-carousel .next");
-      let tIndex = 0;
-
-      // Fetch testimonials from database on page load
-      async function loadTestimonials() {
-        try {
-          const response = await fetch('/.netlify/functions/getTestimonials');
-          if (!response.ok) throw new Error('Failed to fetch testimonials');
-          
-          const { testimonials } = await response.json();
-          
-          // Clear existing sample testimonials
-          tTrack.innerHTML = '';
-          
-          // Add testimonials from database
-          testimonials.forEach(test => {
-            const card = document.createElement("div");
-            card.className = "testimonial-card";
-            
-            // Generate star rating HTML
-            let starsHTML = "";
-            for (let i = 1; i <= 5; i++) {
-              starsHTML +=
-                i <= test.rating
-                  ? `<i class="fa-solid fa-star" style="color: #facc15"></i>`
-                  : `<i class="fa-regular fa-star" style="color: #facc15"></i>`;
-            }
-            
-            card.innerHTML = `
-              <img src="${test.avatar}" alt="${test.name}" class="avatar"/>
-              <p class="testimonial-text">"${test.text}"</p>
-              <h4 class="testimonial-name">${test.name}</h4>
-              <div class="testimonial-rating">${starsHTML}</div>
-            `;
-            tTrack.appendChild(card);
-          });
-          
-          // Refresh cards reference
-          tCards = document.querySelectorAll(".testimonial-card");
-          tIndex = 0;
-        } catch (error) {
-          console.error('Error loading testimonials:', error);
-        }
-      }
-
-      function updateCarousel() {
-        if (tCards.length === 0) return;
-        const cardWidth = tCards[0].offsetWidth + 20;
-        tTrack.style.transform = `translateX(${-tIndex * cardWidth}px)`;
-      }
-
-      if (tTrack) {
-        // Load testimonials from database
-        loadTestimonials();
-        
-        // Set up carousel navigation
-        tNext.addEventListener("click", () => {
-          if (tIndex < tCards.length - 1) {
-            tIndex++;
-            updateCarousel();
-          }
-        });
-        tPrev.addEventListener("click", () => {
-          if (tIndex > 0) {
-            tIndex--;
-            updateCarousel();
-          }
-        });
-      }
+      // --- 3. OLD TESTIMONIALS CAROUSEL REMOVED ---
+      // Now using testimonials.js module loaded at bottom of page
 
       // --- 4. MODAL LOGIC ---
       const modal = document.getElementById("testimonial-modal");

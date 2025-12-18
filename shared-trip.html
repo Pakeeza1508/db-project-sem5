@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Trip - Wanderly</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/planner-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+
+        .shared-trip-container {
+            max-width: 900px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        .trip-header-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .trip-title {
+            color: var(--text);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .trip-meta-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .meta-badge {
+            padding: 10px 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .shared-by {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .shared-by strong {
+            color: var(--text);
+        }
+
+        .trip-section {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: var(--text);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .weather-info {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .weather-item {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .weather-item label {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .weather-item strong {
+            color: var(--text);
+            font-size: 1.3rem;
+        }
+
+        .cost-breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .cost-item {
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .cost-item.total-cost {
+            grid-column: 1 / -1;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .cost-label {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .cost-value {
+            color: var(--text);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .itinerary-content {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .itinerary-content h5 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            margin: 25px 0 15px 0;
+        }
+
+        .itinerary-content h5:first-child {
+            margin-top: 0;
+        }
+
+        .itinerary-content p {
+            margin: 10px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .error-message i {
+            font-size: 4rem;
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+
+        .error-message h2 {
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--text-muted);
+        }
+
+        .loading-state i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .trip-title {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navigation Bar -->
+    <header class="planner-header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i class="fa-solid fa-plane-departure"></i>
+                <span>Wanderly</span>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fa-solid fa-home"></i> Home
+                </a>
+                <a href="budget-search.html" class="nav-link">
+                    <i class="fa-solid fa-wallet"></i> Budget Search
+                </a>
+                <a href="planner.html" class="nav-link">
+                    <i class="fa-solid fa-map"></i> Plan Trip
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="shared-trip-container">
+        <div class="loading-state">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <h2>Loading shared trip...</h2>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="shared-trip-container" style="display: none;">
+        <div class="error-message">
+            <i class="fa-solid fa-exclamation-circle"></i>
+            <h2>Trip Not Found</h2>
+            <p>This trip may have been removed or the link is invalid.</p>
+            <a href="index.html" class="btn-action btn-primary" style="margin-top: 20px;">
+                <i class="fa-solid fa-home"></i> Go to Home
+            </a>
+        </div>
+    </div>
+
+    <!-- Trip Content -->
+    <div id="trip-content" class="shared-trip-container" style="display: none;">
+        <!-- Trip Header -->
+        <div class="trip-header-card">
+            <h1 class="trip-title">
+                <i class="fa-solid fa-map-marked-alt"></i>
+                <span id="trip-destination">Loading...</span>
+            </h1>
+            
+            <div class="trip-meta-badges" id="trip-meta">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="shared-by">
+                Shared by <strong id="shared-by-name">Traveler</strong>
+            </div>
+        </div>
+
+        <!-- Weather Section -->
+        <div id="weather-section" class="trip-section" style="display: none;">
+            <h3 class="section-title">
+                <i class="fa-solid fa-cloud-sun"></i>
+                Weather Information
+            </h3>
+            <div class="weather-info" id="weather-info">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Cost Breakdown -->
+        <div id="cost-section" class="trip-section" style="display: none;">
+            <h3 class="section-title">
+                <i class="fa-solid fa-dollar-sign"></i>
+                Cost Breakdown
+            </h3>
+            <div class="cost-breakdown-grid" id="cost-breakdown">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Itinerary -->
+        <div class="trip-section">
+            <h3 class="section-title">
+                <i class="fa-solid fa-list-check"></i>
+                Trip Itinerary
+            </h3>
+            <div class="itinerary-content" id="itinerary-content">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-buttons">
+            <a href="planner.html" class="btn-action btn-primary">
+                <i class="fa-solid fa-plus"></i>
+                Plan My Own Trip
+            </a>
+            <button class="btn-action btn-secondary" onclick="copyShareLink()">
+                <i class="fa-solid fa-link"></i>
+                Copy Link
+            </button>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/saved-trips.js"></script>
+    <script>
+        async function loadSharedTrip() {
+            // Get token from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const shareToken = urlParams.get('token');
+
+            if (!shareToken) {
+                showError();
+                return;
+            }
+
+            try {
+                const trip = await SavedTrips.loadSharedTrip(shareToken);
+
+                if (!trip) {
+                    showError();
+                    return;
+                }
+
+                // Show content
+                document.getElementById('loading-state').style.display = 'none';
+                document.getElementById('trip-content').style.display = 'block';
+
+                // Populate trip data
+                document.getElementById('trip-destination').textContent = trip.destination;
+                document.getElementById('shared-by-name').textContent = trip.userName || 'Anonymous Traveler';
+
+                // Meta badges
+                const metaHTML = `
+                    <span class="meta-badge">
+                        <i class="fa-solid fa-calendar-days"></i> ${trip.days} days
+                    </span>
+                    <span class="meta-badge">
+                        <i class="fa-solid fa-plane"></i> ${trip.travelStyle}
+                    </span>
+                    <span class="meta-badge">
+                        <i class="fa-solid fa-wallet"></i> ${trip.budget}
+                    </span>
+                `;
+                document.getElementById('trip-meta').innerHTML = metaHTML;
+
+                // Weather
+                if (trip.weatherInfo) {
+                    document.getElementById('weather-section').style.display = 'block';
+                    const weatherHTML = `
+                        <div class="weather-item">
+                            <label>Temperature</label>
+                            <strong>${trip.weatherInfo.temperature}°C</strong>
+                        </div>
+                        <div class="weather-item">
+                            <label>Conditions</label>
+                            <strong>${trip.weatherInfo.description}</strong>
+                        </div>
+                    `;
+                    document.getElementById('weather-info').innerHTML = weatherHTML;
+                }
+
+                // Cost breakdown
+                if (trip.costBreakdown) {
+                    document.getElementById('cost-section').style.display = 'block';
+                    let costHTML = '';
+                    
+                    if (trip.costBreakdown.accommodation) {
+                        costHTML += `
+                            <div class="cost-item">
+                                <span class="cost-label"><i class="fa-solid fa-hotel"></i> Accommodation</span>
+                                <div class="cost-value">PKR ${trip.costBreakdown.accommodation.toLocaleString()}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    if (trip.costBreakdown.transportation) {
+                        costHTML += `
+                            <div class="cost-item">
+                                <span class="cost-label"><i class="fa-solid fa-car"></i> Transportation</span>
+                                <div class="cost-value">PKR ${trip.costBreakdown.transportation.toLocaleString()}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    if (trip.costBreakdown.food) {
+                        costHTML += `
+                            <div class="cost-item">
+                                <span class="cost-label"><i class="fa-solid fa-utensils"></i> Food & Dining</span>
+                                <div class="cost-value">PKR ${trip.costBreakdown.food.toLocaleString()}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    if (trip.costBreakdown.activities) {
+                        costHTML += `
+                            <div class="cost-item">
+                                <span class="cost-label"><i class="fa-solid fa-ticket"></i> Activities</span>
+                                <div class="cost-value">PKR ${trip.costBreakdown.activities.toLocaleString()}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    if (trip.costBreakdown.total) {
+                        costHTML += `
+                            <div class="cost-item total-cost">
+                                <span class="cost-label"><i class="fa-solid fa-coins"></i> Total Estimated Cost</span>
+                                <div class="cost-value">PKR ${trip.costBreakdown.total.toLocaleString()}</div>
+                            </div>
+                        `;
+                    }
+                    
+                    document.getElementById('cost-breakdown').innerHTML = costHTML;
+                }
+
+                // Itinerary
+                const itineraryHTML = formatItinerary(trip.tripPlan);
+                document.getElementById('itinerary-content').innerHTML = itineraryHTML;
+
+            } catch (error) {
+                console.error('Error loading shared trip:', error);
+                showError();
+            }
+        }
+
+        function formatItinerary(planText) {
+            if (!planText) return '<p>No itinerary available</p>';
+            
+            const lines = planText.split('\n').filter(line => line.trim());
+            return lines.map(line => {
+                line = line.trim();
+                // Bold headers (Day X, ###)
+                if (line.startsWith('Day ') || line.startsWith('###')) {
+                    return `<h5>${line.replace(/###/g, '')}</h5>`;
+                }
+                return `<p>${line}</p>`;
+            }).join('');
+        }
+
+        function showError() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'block';
+        }
+
+        function copyShareLink() {
+            const url = window.location.href;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('✓ Link copied to clipboard!');
+                }).catch(() => {
+                    fallbackCopy(url);
+                });
+            } else {
+                fallbackCopy(url);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                alert('✓ Link copied to clipboard!');
+            } catch (err) {
+                alert('Failed to copy link');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Load trip on page load
+        document.addEventListener('DOMContentLoaded', loadSharedTrip);
+    </script>
+</body>
+</html>

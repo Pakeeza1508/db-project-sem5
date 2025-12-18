@@ -1,0 +1,42 @@
+/* Message Toast Notifications */
+.message-toast {
+    position: fixed;
+    bottom: -100px;
+    right: 30px;
+    padding: 16px 24px;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 500;
+    z-index: 10000;
+    transition: bottom 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 400px;
+}
+
+.message-toast.show {
+    bottom: 30px;
+}
+
+.message-toast.success {
+    border-left: 4px solid #10b981;
+}
+
+.message-toast.error {
+    border-left: 4px solid #ef4444;
+}
+
+.message-toast.info {
+    border-left: 4px solid #3b82f6;
+}
+
+@media (max-width: 768px) {
+    .message-toast {
+        right: 15px;
+        left: 15px;
+        max-width: calc(100% - 30px);
+    }
+}

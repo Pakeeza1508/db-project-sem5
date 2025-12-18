@@ -16,7 +16,11 @@ async function connectToDatabase() {
         return { client: cachedClient, db: cachedDb };
     }
 
-    const client = new MongoClient(uri);
+    // Fail fast if Mongo is unreachable to avoid 30s Netlify timeouts
+    const client = new MongoClient(uri, {
+        serverSelectionTimeoutMS: 8000,
+        connectTimeoutMS: 8000
+    });
 
     await client.connect();
     const db = client.db(dbName);
@@ -32,4 +36,9 @@ async function getDb() {
     return db;
 }
 
-module.exports = { getDb, connectToDatabase };
+async function getCollection(name) {
+    const db = await getDb();
+    return db.collection(name);
+}
+
+module.exports = { getDb, getCollection, connectToDatabase };

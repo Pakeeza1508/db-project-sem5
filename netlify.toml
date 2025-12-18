@@ -6,6 +6,5 @@
   framework = "#static"
 
 # Scheduled function to check for price drops daily
-[[functions]]
-  name = "checkPriceDrops"
+[functions."checkPriceDrops"]
   schedule = "0 0 * * *"  # Run daily at midnight (UTC)
