@@ -100,12 +100,21 @@ function displayResults(data) {
     grid.innerHTML = '';
 
     recommendations.forEach((destination, index) => {
-        const card = createDestinationCard(destination, index + 1);
+        const card = createDestinationCard(destination, index + 1, input);
         grid.appendChild(card);
+        
+        // Track price for this destination
+        if (window.trackPrice && destination.bestPackage) {
+            const pkg = destination[destination.bestPackage];
+            trackPrice(destination.city, input.days, input.travelType, pkg.totalCost, destination.costBreakdown);
+        }
     });
 
     // Show results container
     document.getElementById('results-container').classList.add('show');
+
+    // Load seasonal alerts for displayed destinations
+    loadSeasonalAlertsForDestinations(recommendations);
 
     // Initialize budget currency converter with exchange rates
     setTimeout(() => {
@@ -115,18 +124,46 @@ function displayResults(data) {
     }, 500);
 }
 
-function createDestinationCard(destination, rank) {
+/**
+ * Load seasonal alerts for displayed destinations
+ */
+async function loadSeasonalAlertsForDestinations(destinations) {
+    for (const destination of destinations) {
+        try {
+            const response = await fetch(`/.netlify/functions/getSeasonalRecommendations?city=${destination.city}`);
+            const data = await response.json();
+            
+            if (data.success && data.events.length > 0) {
+                // Show seasonal event badge on card
+                displaySeasonalEventBadge(destination.city, data.events);
+            }
+        } catch (error) {
+            console.error('Failed to load seasonal alerts:', error);
+        }
+    }
+}
+
+function createDestinationCard(destination, rank, inputData) {
     const card = document.createElement('div');
     card.className = 'destination-card';
     card.style.animation = `slideUp 0.4s ease ${rank * 0.1}s both`;
+    card.dataset.city = destination.city; // Add data attribute for seasonal alerts
 
     const { city, region, attractions, weather, rating, score, cheap, moderate, luxury, availablePackages, bestMonths, avoidMonths, seasonalWarning, costBreakdown, travelTimeHours } = destination;
 
     // Determine best package recommendation
     let bestPackage = null;
-    if (availablePackages.cheap) bestPackage = cheap;
-    else if (availablePackages.moderate) bestPackage = moderate;
-    else if (availablePackages.luxury) bestPackage = luxury;
+    let bestPackagePrice = 0;
+    if (availablePackages.cheap) {
+        bestPackage = cheap;
+        bestPackagePrice = cheap.totalCost;
+    } else if (availablePackages.moderate) {
+        bestPackage = moderate;
+        bestPackagePrice = moderate.totalCost;
+    } else if (availablePackages.luxury) {
+        bestPackage = luxury;
+        bestPackagePrice = luxury.totalCost;
+    }
 
     // Seasonal warning HTML
     const seasonalHTML = seasonalWarning ? `
@@ -251,9 +288,15 @@ function createDestinationCard(destination, rank) {
             `}
 
             <div class="destination-actions">
-                <button class="btn-view-plan" onclick="generatePlan('${city}', ${3})">
+                <button class="btn-view-plan" onclick="generatePlan('${city}', ${inputData?.days || 3})">
                     <i class="fa-solid fa-map"></i> Generate Plan
                 </button>
+                ${bestPackagePrice > 0 ? `
+                    <button class="subscribe-alert-btn" onclick="subscribeToDestinationAlert('${city}', ${bestPackagePrice}, ${inputData?.days || 3}, '${inputData?.travelType || 'Solo'}')">
+                        <i class="fa-solid fa-bell"></i> Get Price Alerts
+                    </button>
+                ` : ''}
+                <div class="seasonal-events-container" id="seasonal-events-${city.replace(/\s+/g, '-')}"></div>
             </div>
         </div>
     `;
@@ -294,3 +337,100 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+/**
+ * Subscribe to price alerts for a destination
+ */
+async function subscribeToDestinationAlert(destination, currentPrice, days, travelType) {
+    if (window.subscribeToPriceAlert) {
+        const alertId = await subscribeToPriceAlert(
+            destination,
+            currentPrice,
+            document.getElementById('total-budget')?.value || 0,
+            days,
+            travelType
+        );
+        
+        if (alertId) {
+            // Disable button after subscription
+            event.target.disabled = true;
+            event.target.innerHTML = '<i class="fa-solid fa-check"></i> Subscribed';
+            event.target.style.background = 'linear-gradient(135deg, #64748b, #475569)';
+        }
+    }
+}
+
+/**
+ * Display seasonal event badge on destination card
+ */
+function displaySeasonalEventBadge(city, events) {
+    const containerId = `seasonal-events-${city.replace(/\s+/g, '-')}`;
+    const container = document.getElementById(containerId);
+    
+    if (!container || events.length === 0) return;
+
+    const highPriorityEvents = events.filter(e => e.priority === 'high').slice(0, 2);
+    
+    container.innerHTML = highPriorityEvents.map(event => `
+        <div class="seasonal-event-badge">
+            <span class="event-icon">${event.icon}</span>
+            <div class="event-content">
+                <div class="event-name">${event.eventName}</div>
+                <div class="event-details">${event.peakMonth} • ${event.eventType}</div>
+            </div>
+        </div>
+    `).join('');
+
+    // Add seasonal event styles if not already added
+    if (!document.getElementById('seasonal-event-styles')) {
+        const seasonalStyle = document.createElement('style');
+        seasonalStyle.id = 'seasonal-event-styles';
+        seasonalStyle.textContent = `
+            .seasonal-events-container {
+                margin-top: 15px;
+            }
+
+            .seasonal-event-badge {
+                display: flex;
+                gap: 10px;
+                background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.15));
+                border: 1px solid rgba(139, 92, 246, 0.4);
+                border-radius: 8px;
+                padding: 10px;
+                margin-bottom: 8px;
+                animation: pulse 2s infinite;
+            }
+
+            .event-icon {
+                font-size: 1.8rem;
+                flex-shrink: 0;
+            }
+
+            .event-content {
+                flex: 1;
+            }
+
+            .event-name {
+                color: var(--text);
+                font-weight: 600;
+                font-size: 0.9rem;
+                margin-bottom: 3px;
+            }
+
+            .event-details {
+                color: var(--text-muted);
+                font-size: 0.75rem;
+            }
+
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.8; }
+            }
+        `;
+        document.head.appendChild(seasonalStyle);
+    }
+}
+
+// Make functions globally accessible
+window.subscribeToDestinationAlert = subscribeToDestinationAlert;
+window.displaySeasonalEventBadge = displaySeasonalEventBadge;

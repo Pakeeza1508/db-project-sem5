@@ -11,6 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const backBtn = document.getElementById('back-btn');
     const saveTripBtn = document.getElementById('save-trip-btn');
 
+    // Initialize alert system
+    if (window.initAlertSystem) {
+        initAlertSystem();
+    }
+
     // Initialize destination map
     let destinationMapInitialized = false;
     const showDestinationMapBtn = document.getElementById('show-destination-map-btn');

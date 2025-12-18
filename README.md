@@ -15,7 +15,9 @@ LINK:- https://wanderly-ai.netlify.app/
 *   **💱 Currency Converter**: Instantly convert costs between major global currencies (USD, EUR, GBP, JPY, etc.).
 *   **🗺️ Interactive Map**: Search exact locations with Leaflet + OpenStreetMap integration. Select destinations via map click or search.
 *   **📍 Location Database**: Stores searched locations in MongoDB for analytics and improved recommendations.
-*   **📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
+*   **� Smart Alerts System**: Get notified when trip prices drop by 5% or more. Seasonal event alerts for festivals and best times to visit.
+*   **📊 Price Tracking**: Historical price data with trends, min/max pricing, and savings calculations.
+*   **�📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
 
 ## 🛠️ Tech Stack
 
@@ -73,7 +75,8 @@ The budget search uses seeded city cost data, and currency conversion uses excha
 2.  With `netlify dev` running, open these URLs **once** to seed:
     - Seed cities: `http://localhost:8888/.netlify/functions/seedCityCosts`
     - Seed trending destinations: `http://localhost:8888/.netlify/functions/seedTrendingDestinations`
-    - **Seed exchange rates**: `http://localhost:8888/.netlify/functions/seedExchangeRates` (NEW)
+    - **Seed exchange rates**: `http://localhost:8888/.netlify/functions/seedExchangeRates`
+    - **Seed seasonal events**: `http://localhost:8888/.netlify/functions/seedSeasonalEvents` (NEW)
 
 If you see a message like "Cities already seeded", your database is ready.
 
@@ -96,7 +99,13 @@ This project is optimized for **Netlify**.
 3.  After deploy, run these once (replace with your site domain):
     - `https://<your-site>/.netlify/functions/seedCityCosts`
     - `https://<your-site>/.netlify/functions/seedTrendingDestinations`
-    - `https://<your-site>/.netlify/functions/seedExchangeRates` (NEW)
+    - `https://<your-site>/.netlify/functions/seedExchangeRates`
+    - `https://<your-site>/.netlify/functions/seedSeasonalEvents` (NEW)
+
+4.  **Enable Scheduled Functions** (for price drop alerts):
+    - In Netlify dashboard, ensure scheduled functions are enabled
+    - The `checkPriceDrops` function runs daily at midnight UTC
+    - Check logs: Site Settings > Functions > checkPriceDrops
 
 ## 🔒 Security
 
