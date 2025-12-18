@@ -2,6 +2,44 @@
 document.addEventListener('DOMContentLoaded', () => {
     const budgetForm = document.getElementById('budget-form');
     budgetForm.addEventListener('submit', handleBudgetSearch);
+
+    // Initialize map toggle button
+    const toggleMapBtn = document.getElementById('toggle-map-btn');
+    const mapSection = document.getElementById('map-section');
+    let mapInitialized = false;
+
+    if (toggleMapBtn && mapSection) {
+        toggleMapBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (mapSection.style.display === 'none') {
+                mapSection.style.display = 'block';
+                toggleMapBtn.innerHTML = '<i class="fa-solid fa-map"></i> Hide Map';
+
+                // Initialize map on first show
+                if (!mapInitialized) {
+                    try {
+                        await initializeMap('map', 30, 70, 4); // Center on South Asia
+                        addLocationSearchInput('map-container');
+                        mapInitialized = true;
+                    } catch (error) {
+                        console.error('Map initialization failed:', error);
+                        mapSection.style.display = 'none';
+                        toggleMapBtn.innerHTML = '<i class="fa-solid fa-map"></i> Show Map';
+                        toggleMapBtn.textContent = 'Map loading failed. Please try again.';
+                    }
+                }
+            } else {
+                mapSection.style.display = 'none';
+                toggleMapBtn.innerHTML = '<i class="fa-solid fa-map"></i> Show Map';
+            }
+        });
+    }
+
+    // Listen for location selection event
+    window.addEventListener('locationSelected', (e) => {
+        const { name, lat, lng } = e.detail;
+        console.log('Location selected:', name, lat, lng);
+    });
 });
 
 async function handleBudgetSearch(e) {

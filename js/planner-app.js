@@ -11,6 +11,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const backBtn = document.getElementById('back-btn');
     const saveTripBtn = document.getElementById('save-trip-btn');
 
+    // Initialize destination map
+    let destinationMapInitialized = false;
+    const showDestinationMapBtn = document.getElementById('show-destination-map-btn');
+    const closeDestinationMapBtn = document.getElementById('close-destination-map-btn');
+    const destinationMapSection = document.getElementById('destination-map-section');
+
+    if (showDestinationMapBtn && closeDestinationMapBtn && destinationMapSection) {
+        showDestinationMapBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            destinationMapSection.classList.add('show');
+            
+            // Initialize map on first show
+            if (!destinationMapInitialized) {
+                try {
+                    await initializeMap('destination-map', 30, 70, 4); // Center on South Asia
+                    addLocationSearchInput('destination-map-container');
+                    destinationMapInitialized = true;
+                } catch (error) {
+                    console.error('Destination map initialization failed:', error);
+                    destinationMapSection.classList.remove('show');
+                }
+            }
+        });
+
+        closeDestinationMapBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            destinationMapSection.classList.remove('show');
+        });
+    }
+
     // Check for prefilled data from budget search
     if (sessionStorage.getItem('fromBudgetSearch') === 'true') {
         const destination = sessionStorage.getItem('prefilledDestination');

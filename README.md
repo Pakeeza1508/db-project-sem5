@@ -13,7 +13,8 @@ LINK:- https://wanderly-ai.netlify.app/
 *   **🏨 Smart Recommendations**: Suggests activities and logistics tailored to your trip style.
 *   **💰 Cost Estimation**: Breaks down transport, food, local transport, and activities (backed by seeded city cost data).
 *   **💱 Currency Converter**: Instantly convert costs between major global currencies (USD, EUR, GBP, JPY, etc.).
-*   **🗺️ Interactive Map**: Visualizes your destination and key points of interest.
+*   **🗺️ Interactive Map**: Search exact locations with Leaflet + OpenStreetMap integration. Select destinations via map click or search.
+*   **📍 Location Database**: Stores searched locations in MongoDB for analytics and improved recommendations.
 *   **📱 Responsive Design**: Beautiful, glassmorphism-inspired UI that works perfectly on desktop and mobile.
 
 ## 🛠️ Tech Stack
@@ -25,6 +26,7 @@ LINK:- https://wanderly-ai.netlify.app/
     *   OpenWeatherMap (Weather & Geocoding)
     *   OpenTripMap (Attractions)
     *   Unsplash (Dynamic Images)
+    *   Leaflet + OpenStreetMap (Interactive Maps)
 *   **Backend / Serverless**: Netlify Functions (Node.js)
 
 ## 🚀 Getting Started
