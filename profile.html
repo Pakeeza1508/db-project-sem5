@@ -154,6 +154,238 @@
             margin-bottom: 25px;
         }
 
+        /* Saved Trips Styles */
+        .saved-trips-container {
+            min-height: 200px;
+        }
+
+        .saved-trips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .trip-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .trip-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .trip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .trip-header h3 {
+            color: var(--text);
+            font-size: 1.3rem;
+            margin: 0;
+            flex: 1;
+        }
+
+        .trip-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .trip-badge.shared {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .trip-badge.private {
+            background: rgba(148, 163, 184, 0.2);
+            color: #94a3b8;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+        }
+
+        .trip-details {
+            margin-bottom: 20px;
+        }
+
+        .trip-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .trip-meta span {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .trip-date {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .trip-actions {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            color: var(--primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-action.delete-trip {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .btn-action.delete-trip:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .no-trips {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .no-trips p {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .no-trips .subtitle {
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .trip-stats {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Modal Styles */
+        .modal .trip-plan-content {
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .modal .trip-plan-content h5 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin: 20px 0 10px 0;
+        }
+
+        .modal .trip-plan-content p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+
+        .modal-content.large {
+            max-width: 900px;
+        }
+
+        .modal-header {
+            margin-bottom: 25px;
+        }
+
+        .trip-meta-modal {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .trip-meta-modal span {
+            padding: 8px 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .modal-body > div {
+            margin-bottom: 25px;
+        }
+
+        .modal-body h4 {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cost-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .cost-item {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cost-item.total {
+            grid-column: 1 / -1;
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .cost-item span {
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cost-item strong {
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+
+        .weather-section p {
+            color: var(--text-muted);
+            margin: 8px 0;
+        }
+
+        .weather-section strong {
+            color: var(--text);
+        }
+
         @media (max-width: 768px) {
             .profile-header {
                 flex-direction: column;
@@ -171,6 +403,19 @@
 
             .filter-tabs {
                 flex-wrap: wrap;
+            }
+
+            .saved-trips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trip-actions {
+                flex-direction: column;
+            }
+
+            .trip-meta-modal {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
@@ -224,16 +469,16 @@
                     
                     <div class="profile-stats">
                         <div class="stat-item">
+                            <span class="stat-value" id="stat-trips">0</span>
+                            <span class="stat-label">Saved Trips</span>
+                        </div>
+                        <div class="stat-item">
                             <span class="stat-value" id="stat-total">0</span>
-                            <span class="stat-label">Total</span>
+                            <span class="stat-label">Testimonials</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-value" id="stat-approved">0</span>
                             <span class="stat-label">Approved</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="stat-pending">0</span>
-                            <span class="stat-label">Pending</span>
                         </div>
                         <div class="stat-item">
                             <span class="stat-value" id="stat-featured">0</span>
@@ -241,6 +486,20 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- My Saved Trips Section -->
+            <div class="profile-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-bookmark"></i> My Saved Trips
+                    </h2>
+                    <div class="trip-stats">
+                        <span id="saved-trips-count">0 trips</span>
+                    </div>
+                </div>
+
+                <div id="saved-trips-container" class="saved-trips-container"></div>
             </div>
 
             <!-- My Testimonials Section -->
@@ -278,6 +537,7 @@
 
     <script src="js/auth.js"></script>
     <script src="js/testimonials.js"></script>
+    <script src="js/saved-trips.js"></script>
     <script>
         let allTestimonials = [];
         let currentFilter = 'all';
@@ -308,7 +568,37 @@
 
             // Load user's testimonials
             await loadUserTestimonials(userId);
+
+            // Load user's saved trips
+            await loadUserSavedTrips();
         });
+
+        async function loadUserSavedTrips() {
+            if (!window.SavedTrips) {
+                console.error('SavedTrips module not loaded');
+                return;
+            }
+
+            try {
+                const { trips, stats } = await SavedTrips.loadSavedTrips();
+                
+                // Update trip count
+                document.getElementById('stat-trips').textContent = stats.total || 0;
+                document.getElementById('saved-trips-count').textContent = 
+                    `${stats.total || 0} trip${stats.total !== 1 ? 's' : ''}`;
+                
+                // Display trips
+                SavedTrips.displaySavedTrips('saved-trips-container', trips);
+            } catch (error) {
+                console.error('Failed to load saved trips:', error);
+                document.getElementById('saved-trips-container').innerHTML = `
+                    <div class="no-trips">
+                        <p>❌ Failed to load saved trips</p>
+                        <p class="subtitle">Please try refreshing the page</p>
+                    </div>
+                `;
+            }
+        }
 
         async function loadUserTestimonials(userId) {
             try {

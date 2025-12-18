@@ -843,29 +843,41 @@ async function handleSaveTrip() {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
 
     try {
-        const token = localStorage.getItem('token');
-        const headers = {
-            'Content-Type': 'application/json'
-        };
-        if (token) {
-            headers['Authorization'] = `Bearer ${token}`;
-        }
-        
-        const response = await fetch('/.netlify/functions/savePlan', {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify(fullTripResult)
-        });
+        // Use new SavedTrips module
+        if (window.SavedTrips) {
+            const tripData = {
+                destination: fullTripResult.destination,
+                days: fullTripResult.travelDays || fullTripResult.days,
+                travelStyle: fullTripResult.travelStyle,
+                budget: fullTripResult.budget,
+                preferences: fullTripResult.preferences || '',
+                tripPlan: fullTripResult.itinerary ? formatItineraryText(fullTripResult.itinerary) : fullTripResult.rawText || '',
+                weatherInfo: fullTripResult.weather ? {
+                    temperature: fullTripResult.weather.temperature,
+                    description: fullTripResult.weather.description
+                } : null,
+                costBreakdown: fullTripResult.cost || null,
+                nearbyPlaces: fullTripResult.nearby || []
+            };
 
-        if (response.ok) {
-            const result = await response.json();
-            alert(`✅ Trip saved to My Trips!\n\nYou can view it in the "My Trips" section.`);
+            const savedTrip = await SavedTrips.saveTrip(tripData);
             
-            // Reset button for next trip
-            btn.innerHTML = '<i class="fa-solid fa-save"></i> Save to My Trips';
-            btn.disabled = false;
+            if (savedTrip) {
+                // Update button to show saved state
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved!';
+                btn.style.background = '#10b981';
+                
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Trip';
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 2000);
+            } else {
+                throw new Error('Failed to save trip');
+            }
         } else {
-            throw new Error('Failed to save');
+            throw new Error('SavedTrips module not loaded');
         }
     } catch (e) {
         console.error('Error saving trip:', e);
@@ -873,6 +885,27 @@ async function handleSaveTrip() {
         btn.innerHTML = originalHTML;
         btn.disabled = false;
     }
+}
+
+// Helper function to format itinerary as text
+function formatItineraryText(itinerary) {
+    if (!itinerary || !Array.isArray(itinerary)) return '';
+    
+    return itinerary.map((day, index) => {
+        let text = `### Day ${day.day || (index + 1)}: ${day.title || 'Activities'}\n\n`;
+        
+        if (day.activities && Array.isArray(day.activities)) {
+            day.activities.forEach(activity => {
+                text += `${activity.time || ''} - ${activity.title || activity.name || ''}\n`;
+                if (activity.description) {
+                    text += `${activity.description}\n`;
+                }
+                text += '\n';
+            });
+        }
+        
+        return text;
+    }).join('\n');
 }
 
 // Load trip data for editing
