@@ -822,10 +822,10 @@
             card.target = "_blank";
             
             card.innerHTML = `
-              <img src="${dest.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'}" alt="${dest.name}"/>
+              <img src="${dest.imageUrl || dest.image || 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'}" alt="${dest.name}"/>
               <div class="trend-overlay">
                 <h3>${dest.name}</h3>
-                <p>${dest.region}</p>
+                <p>${dest.country || dest.region || ''}</p>
               </div>
             `;
             track.appendChild(card);
