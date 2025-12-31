@@ -158,24 +158,41 @@
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
                             AI Trip Planner
                         </h1>
-                        <p class="form-subtitle">Plan your dream trip with personalized AI-powered itineraries</p>
+                        <p class="form-subtitle">Start with your budget - we'll help you find the perfect destination!</p>
                     </div>
 
                     <form id="trip-form" class="trip-form">
-                        <!-- Destination Field -->
+                        <!-- Budget Field - Now First Priority -->
+                        <div class="form-group">
+                            <label for="budget" class="form-label">
+                                <i class="fa-solid fa-wallet"></i>
+                                Budget Range
+                            </label>
+                            <select id="budget" class="form-select" required>
+                                <option value="">Select your budget</option>
+                                <option value="Budget">Budget ($50-100/day)</option>
+                                <option value="Mid-range" selected>Mid-range ($100-250/day)</option>
+                                <option value="Luxury">Luxury ($250+/day)</option>
+                            </select>
+                            <small style="color: var(--text-muted); margin-top: 8px; display: block;">
+                                💡 We'll recommend destinations that fit your budget
+                            </small>
+                        </div>
+
+                        <!-- Destination Field - Now Optional -->
                         <div class="form-group">
                             <label for="destination" class="form-label">
                                 <i class="fa-solid fa-location-dot"></i>
-                                Destination
+                                Destination <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">(Optional)</span>
                             </label>
                             <div class="input-wrapper">
                                 <input type="text" id="destination" class="form-input"
-                                    placeholder="Where do you want to go? (e.g., Paris, Tokyo, New York)" required
+                                    placeholder="Where do you want to go? (Leave empty for nearby suggestions)" 
                                     autocomplete="off">
                                 <div id="destination-suggestions" class="suggestions-dropdown"></div>
                             </div>
                             <small style="color: var(--text-muted); margin-top: 8px; display: block;">
-                                💡 Or use the <button type="button" id="show-destination-map-btn" style="background: none; border: none; color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 600; padding: 0;">map selector</button> to choose exact location
+                                💡 If left empty, we'll suggest destinations near you within your budget. Or use the <button type="button" id="show-destination-map-btn" style="background: none; border: none; color: var(--primary); cursor: pointer; text-decoration: underline; font-weight: 600; padding: 0;">map selector</button>
                             </small>
                         </div>
 
@@ -226,20 +243,6 @@
                             <button type="button" class="map-close-btn" id="close-destination-map-btn">
                                 <i class="fa-solid fa-times"></i> Hide Map
                             </button>
-                        </div>
-
-                        <!-- Budget Field -->
-                        <div class="form-group">
-                            <label for="budget" class="form-label">
-                                <i class="fa-solid fa-wallet"></i>
-                                Budget Range
-                            </label>
-                            <select id="budget" class="form-select" required>
-                                <option value="">Select budget</option>
-                                <option value="Budget">Budget ($50-100/day)</option>
-                                <option value="Mid-range" selected>Mid-range ($100-250/day)</option>
-                                <option value="Luxury">Luxury ($250+/day)</option>
-                            </select>
                         </div>
 
                         <!-- Additional Preferences -->
@@ -323,6 +326,32 @@
                                 <span class="overview-label">Budget:</span>
                                 <span class="overview-value" id="overview-budget">--</span>
                             </div>
+                        </div>
+                        <button class="btn btn-secondary" id="toggle-map-view-btn" style="width: 100%; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-map"></i>
+                            View on Map
+                        </button>
+                    </div>
+
+                    <!-- Map View Card -->
+                    <div class="card glass map-view-card full-width" id="map-view-card" style="display: none;">
+                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 class="card-title">
+                                <i class="fa-solid fa-map-marked-alt"></i>
+                                Trip Map View
+                            </h3>
+                            <button class="btn btn-secondary" id="close-map-view-btn" style="padding: 8px 16px;">
+                                <i class="fa-solid fa-times"></i> Close Map
+                            </button>
+                        </div>
+                        <div id="trip-map-container" style="border-radius: 12px; overflow: hidden; margin-top: 15px;">
+                            <div id="trip-map" style="width: 100%; height: 500px; border-radius: 12px;"></div>
+                        </div>
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(99, 102, 241, 0.1); border-radius: 8px;">
+                            <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">
+                                <i class="fa-solid fa-info-circle" style="color: var(--primary);"></i> 
+                                Map shows your destination and key locations from your itinerary
+                            </p>
                         </div>
                     </div>
 

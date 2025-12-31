@@ -133,7 +133,6 @@ function updateNavbarAuth() {
                 <span>${user.name}</span>
                 <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem;"></i>
             </button>
-            
             <div id="user-dropdown-menu" style="
                 display: none;
                 position: absolute;

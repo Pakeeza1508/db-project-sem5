@@ -50,7 +50,22 @@ compareBtn.addEventListener('click', async () => {
     alert('Select at least 2 trips to compare');
     return;
   }
-  await loadComparison();
+  
+  // Show loading state
+  const originalText = compareBtn.innerHTML;
+  compareBtn.disabled = true;
+  compareBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+  
+  try {
+    await loadComparison();
+  } catch (err) {
+    console.error('Comparison error:', err);
+    alert('Failed to load comparison. Please try again.');
+  } finally {
+    // Restore button state
+    compareBtn.innerHTML = originalText;
+    compareBtn.disabled = selectedIds.size < 2;
+  }
 });
 
 init();
@@ -71,7 +86,31 @@ async function init() {
     }
   } catch (e) {
     console.error('Failed to load trips', e);
-    tripListEl.innerHTML = '<div class="card" style="grid-column: 1 / -1; color: var(--text);">Could not load trips.</div>';
+    tripListEl.innerHTML = `
+      <div class="card" style="grid-column: 1 / -1; color: var(--text);">
+        <h3 style="margin: 0 0 8px; color: var(--text);">
+          <i class="fa-solid fa-info-circle" style="color: #f59e0b; margin-right: 8px;"></i>
+          No Trips Found
+        </h3>
+        <p style="color: var(--text-muted); margin: 0 0 12px; font-size: 0.95rem;">
+          You haven't saved any trips yet. Create your first trip using the AI Trip Planner to start comparing!
+        </p>
+        <a href="planner.html" style="
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          background: var(--primary);
+          color: white;
+          border-radius: 6px;
+          text-decoration: none;
+          font-weight: 600;
+          transition: all 0.3s;
+        " onmouseover="this.style.background='var(--secondary)'" onmouseout="this.style.background='var(--primary)'">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Create Your First Trip
+        </a>
+      </div>
+    `;
   }
 }
 
@@ -121,16 +160,23 @@ function renderList() {
 }
 
 async function loadComparison() {
-  try {
-    const idsParam = Array.from(selectedIds).join(',');
-    const res = await fetch(`/.netlify/functions/getTripsByIds?ids=${idsParam}`);
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error || 'Failed to load comparison');
-    renderComparison(data.trips || []);
-  } catch (e) {
-    console.error('Comparison failed', e);
-    alert('Could not load comparison');
+  const idsParam = Array.from(selectedIds).join(',');
+  const res = await fetch(`/.netlify/functions/getTripsByIds?ids=${idsParam}`);
+  
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
   }
+  
+  const data = await res.json();
+  if (!data.success) {
+    throw new Error(data.error || 'Failed to load comparison');
+  }
+  
+  if (!data.trips || data.trips.length === 0) {
+    throw new Error('No trips returned for comparison');
+  }
+  
+  renderComparison(data.trips);
 }
 
 function renderComparison(trips) {
@@ -190,6 +236,11 @@ function renderComparison(trips) {
     <div><strong>Shortest Trip:</strong> ${withMetrics.find(t => t.daysNum === minDays)?.destination || 'n/a'}</div>
     <div><strong>Overlap (${overlap.length}):</strong> ${overlap.slice(0,6).join(', ') || 'None'}</div>
   `;
+  
+  // Scroll to comparison section smoothly
+  setTimeout(() => {
+    compareSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
 
 function parseCost(val) {

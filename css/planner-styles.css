@@ -61,7 +61,7 @@ body {
 
 .planner-main {
   flex: 1;
-  padding: 20px;
+  padding: 40px 20px 20px 20px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -76,7 +76,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  margin-bottom: 30px;
+  margin-bottom: 0;
 }
 
 .header-content {
@@ -2140,4 +2140,63 @@ body {
   .attractions-grid {
     grid-template-columns: 1fr;
   }
+}
+/* Map View Card Styles */
+.map-view-card {
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.map-view-card .card-header {
+  margin-bottom: 0;
+}
+
+#trip-map-container {
+  position: relative;
+  background: #f1f5f9;
+}
+
+#trip-map {
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Leaflet custom marker fix */
+.custom-div-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Leaflet popup custom styling */
+.leaflet-popup-content-wrapper {
+  background: rgba(30, 41, 59, 0.95) !important;
+  backdrop-filter: blur(10px);
+  color: var(--text) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+  color: var(--text) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(30, 41, 59, 0.95) !important;
+}
+
+/* Button hover effects */
+#toggle-map-view-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }

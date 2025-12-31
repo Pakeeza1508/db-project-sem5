@@ -116,6 +116,37 @@ document.addEventListener('DOMContentLoaded', () => {
         saveTripBtn.addEventListener('click', handleSaveTrip);
     }
 
+    // Map View Toggle
+    const toggleMapViewBtn = document.getElementById('toggle-map-view-btn');
+    const closeMapViewBtn = document.getElementById('close-map-view-btn');
+    const mapViewCard = document.getElementById('map-view-card');
+    let tripMapInitialized = false;
+
+    if (toggleMapViewBtn && closeMapViewBtn && mapViewCard) {
+        toggleMapViewBtn.addEventListener('click', async () => {
+            mapViewCard.style.display = 'block';
+            
+            // Scroll to map view
+            mapViewCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Initialize and display trip on map
+            if (!tripMapInitialized && currentTripData) {
+                try {
+                    await initializeTripMap();
+                    tripMapInitialized = true;
+                } catch (error) {
+                    console.error('Trip map initialization failed:', error);
+                    alert('Failed to load map. Please try again.');
+                    mapViewCard.style.display = 'none';
+                }
+            }
+        });
+
+        closeMapViewBtn.addEventListener('click', () => {
+            mapViewCard.style.display = 'none';
+        });
+    }
+
     // Destination autocomplete
     let debounceTimer;
     destinationInput.addEventListener('input', (e) => {
@@ -200,39 +231,67 @@ async function fetchDestinationSuggestions(query) {
 async function handleFormSubmit(e) {
     e.preventDefault();
 
-    const destination = document.getElementById('destination').value.trim();
+    let destination = document.getElementById('destination').value.trim();
     const travelDays = document.getElementById('travel-days').value;
     const travelStyle = document.getElementById('travel-style').value;
     const budget = document.getElementById('budget').value;
     const preferences = document.getElementById('preferences').value.trim();
 
-    if (!destination || !travelDays || !travelStyle || !budget) {
+    if (!travelDays || !travelStyle || !budget) {
         alert('Please fill in all required fields');
         return;
     }
-
-    // Store trip data
-    currentTripData = {
-        destination,
-        travelDays,
-        travelStyle,
-        budget,
-        preferences
-    };
 
     // Show loader
     document.getElementById('trip-form').style.display = 'none';
     document.getElementById('form-loader').style.display = 'flex';
 
     try {
-        // Get coordinates for weather
-        const geoData = await getCoordinates(destination);
+        let geoData;
+        
+        // If no destination provided, use current location and suggest destinations
+        if (!destination) {
+            // Get user's current location
+            const userLocation = await getUserCurrentLocation();
+            
+            if (!userLocation) {
+                throw new Error('Could not determine your location. Please enter a destination or enable location services.');
+            }
+
+            // Get nearby destinations based on budget
+            const nearbyDestinations = await getNearbyDestinationsForBudget(
+                userLocation.lat, 
+                userLocation.lon, 
+                budget, 
+                travelDays
+            );
+
+            if (nearbyDestinations && nearbyDestinations.length > 0) {
+                // Pick the best matching destination
+                destination = nearbyDestinations[0].destination;
+                geoData = await getCoordinates(destination);
+            } else {
+                throw new Error('No destinations found within your budget. Please try a different budget or enter a specific destination.');
+            }
+        } else {
+            // Get coordinates for the specified destination
+            geoData = await getCoordinates(destination);
+        }
 
         if (!geoData) {
             throw new Error('Location not found');
         }
 
         const { lat, lon, name, country } = geoData;
+
+        // Store trip data
+        currentTripData = {
+            destination: name || destination,
+            travelDays,
+            travelStyle,
+            budget,
+            preferences
+        };
 
         // Fetch weather
         const weatherData = await fetchWeather(lat, lon);
@@ -250,7 +309,7 @@ async function handleFormSubmit(e) {
         if (window.saveSearchToHistory) {
             saveSearchToHistory(
                 'planner',
-                destination,
+                name || destination,
                 {
                     destination: name || destination,
                     days: travelDays,
@@ -295,6 +354,74 @@ async function handleFormSubmit(e) {
         alert(`Failed to generate trip plan: ${error.message}`);
         document.getElementById('trip-form').style.display = 'block';
         document.getElementById('form-loader').style.display = 'none';
+    }
+}
+
+// Get user's current location using browser geolocation
+async function getUserCurrentLocation() {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject(new Error('Geolocation not supported'));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                
+                try {
+                    // Reverse geocode to get location name
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                    const data = await response.json();
+                    
+                    resolve({
+                        lat: lat,
+                        lon: lon,
+                        name: data.address?.city || data.address?.town || data.address?.state || 'Your Location',
+                        country: data.address?.country || ''
+                    });
+                } catch (error) {
+                    resolve({ lat, lon, name: 'Your Location', country: '' });
+                }
+            },
+            (error) => {
+                console.warn('Geolocation error:', error);
+                resolve(null); // Don't reject, just return null
+            },
+            { timeout: 5000, enableHighAccuracy: false }
+        );
+    });
+}
+
+// Get nearby destinations that match the budget
+async function getNearbyDestinationsForBudget(lat, lon, budget, days) {
+    try {
+        // Get user's location name first
+        const reverseGeo = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+        const locationData = await reverseGeo.json();
+        const startingCity = locationData.address?.city || locationData.address?.town || locationData.address?.state || 'Your Location';
+
+        // Convert budget range to numeric value
+        let budgetValue;
+        if (budget === 'Budget') budgetValue = 75 * days; // $75/day average
+        else if (budget === 'Mid-range') budgetValue = 175 * days; // $175/day average
+        else budgetValue = 300 * days; // $300/day average for luxury
+
+        // Call the budget search API
+        const response = await fetch(
+            `/.netlify/functions/getDestinationsByBudget?budget=${budgetValue}&days=${days}&startingCity=${encodeURIComponent(startingCity)}&travelType=flight`
+        );
+        
+        if (!response.ok) {
+            return null;
+        }
+
+        const data = await response.json();
+        return data.recommendations || [];
+    } catch (error) {
+        console.error('Error fetching nearby destinations:', error);
+        return null;
     }
 }
 
@@ -1100,4 +1227,204 @@ function displayAttractions(attractions) {
             `).join('')}
         </div>
     `;
+}
+
+// Initialize trip map with destination and itinerary points
+async function initializeTripMap() {
+    if (!currentTripData || !fullTripResult) {
+        console.error('No trip data available for map');
+        return;
+    }
+
+    // Load Leaflet if not already loaded
+    await loadLeaflet();
+
+    const destination = currentTripData.destination;
+    
+    // Get coordinates for destination
+    const geoData = await getCoordinates(destination);
+    if (!geoData) {
+        throw new Error('Could not find coordinates for destination');
+    }
+
+    const { lat, lon, name } = geoData;
+
+    // Create map instance
+    const mapContainer = document.getElementById('trip-map');
+    if (!mapContainer) return;
+
+    // Clear any existing map
+    mapContainer.innerHTML = '';
+    
+    const tripMap = window.L.map('trip-map').setView([lat, lon], 12);
+
+    // Add OpenStreetMap tile layer
+    window.L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19,
+        minZoom: 3
+    }).addTo(tripMap);
+
+    // Add main destination marker
+    const mainMarker = window.L.marker([lat, lon], {
+        icon: window.L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div style="
+                background: linear-gradient(135deg, #6366f1, #a855f7);
+                width: 40px;
+                height: 40px;
+                border-radius: 50% 50% 50% 0;
+                transform: rotate(-45deg);
+                border: 3px solid white;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            ">
+                <i class="fa-solid fa-location-dot" style="
+                    color: white;
+                    font-size: 20px;
+                    transform: rotate(45deg);
+                "></i>
+            </div>`,
+            iconSize: [40, 40],
+            iconAnchor: [20, 40]
+        })
+    }).addTo(tripMap);
+
+    mainMarker.bindPopup(`
+        <div style="text-align: center; padding: 8px;">
+            <h3 style="margin: 0 0 5px; color: #6366f1; font-size: 1.1rem;">
+                <i class="fa-solid fa-map-location-dot"></i> ${name || destination}
+            </h3>
+            <p style="margin: 0; color: #64748b; font-size: 0.9rem;">Your destination</p>
+        </div>
+    `).openPopup();
+
+    // Add markers for hotels if available
+    if (fullTripResult.hotels && fullTripResult.hotels.length > 0) {
+        const hotelPromises = fullTripResult.hotels.slice(0, 3).map(async (hotel, index) => {
+            try {
+                const hotelGeo = await getCoordinates(`${hotel.name}, ${destination}`);
+                if (hotelGeo) {
+                    const hotelMarker = window.L.marker([hotelGeo.lat, hotelGeo.lon], {
+                        icon: window.L.divIcon({
+                            className: 'custom-div-icon',
+                            html: `<div style="
+                                background: #10b981;
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 50%;
+                                border: 2px solid white;
+                                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <i class="fa-solid fa-hotel" style="color: white; font-size: 14px;"></i>
+                            </div>`,
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 15]
+                        })
+                    }).addTo(tripMap);
+
+                    hotelMarker.bindPopup(`
+                        <div style="padding: 8px; min-width: 200px;">
+                            <h4 style="margin: 0 0 5px; color: #10b981;">
+                                <i class="fa-solid fa-hotel"></i> ${hotel.name}
+                            </h4>
+                            <p style="margin: 0 0 3px; font-size: 0.85rem; color: #64748b;">
+                                ${hotel.address || 'Hotel location'}
+                            </p>
+                            <p style="margin: 0; font-weight: 600; color: #1e293b;">
+                                ${hotel.pricePerNight || 'Price on request'}
+                            </p>
+                        </div>
+                    `);
+                }
+            } catch (error) {
+                console.log('Could not add hotel marker:', hotel.name);
+            }
+        });
+
+        await Promise.all(hotelPromises);
+    }
+
+    // Add markers for key activities from itinerary
+    if (fullTripResult.itinerary && fullTripResult.itinerary.length > 0) {
+        const activityPromises = [];
+        
+        fullTripResult.itinerary.forEach((day, dayIndex) => {
+            if (day.activities && day.activities.length > 0) {
+                // Add first 2 activities per day
+                day.activities.slice(0, 2).forEach((activity, actIndex) => {
+                    if (activity.activity) {
+                        activityPromises.push(
+                            (async () => {
+                                try {
+                                    const actGeo = await getCoordinates(`${activity.activity}, ${destination}`);
+                                    if (actGeo) {
+                                        const actMarker = window.L.marker([actGeo.lat, actGeo.lon], {
+                                            icon: window.L.divIcon({
+                                                className: 'custom-div-icon',
+                                                html: `<div style="
+                                                    background: #f59e0b;
+                                                    width: 28px;
+                                                    height: 28px;
+                                                    border-radius: 50%;
+                                                    border: 2px solid white;
+                                                    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;
+                                                    font-weight: bold;
+                                                    color: white;
+                                                    font-size: 12px;
+                                                ">
+                                                    ${dayIndex + 1}
+                                                </div>`,
+                                                iconSize: [28, 28],
+                                                iconAnchor: [14, 14]
+                                            })
+                                        }).addTo(tripMap);
+
+                                        actMarker.bindPopup(`
+                                            <div style="padding: 8px; min-width: 180px;">
+                                                <h4 style="margin: 0 0 5px; color: #f59e0b;">
+                                                    Day ${dayIndex + 1} Activity
+                                                </h4>
+                                                <p style="margin: 0; font-size: 0.9rem; color: #1e293b;">
+                                                    ${activity.activity}
+                                                </p>
+                                                ${activity.description ? `
+                                                    <p style="margin: 5px 0 0; font-size: 0.8rem; color: #64748b;">
+                                                        ${activity.description}
+                                                    </p>
+                                                ` : ''}
+                                            </div>
+                                        `);
+                                    }
+                                } catch (error) {
+                                    console.log('Could not add activity marker');
+                                }
+                            })()
+                        );
+                    }
+                });
+            }
+        });
+
+        // Wait for some activity markers to load (not all to avoid delays)
+        await Promise.race([
+            Promise.all(activityPromises.slice(0, 5)),
+            new Promise(resolve => setTimeout(resolve, 3000))
+        ]);
+    }
+
+    // Fit map bounds to show all markers
+    setTimeout(() => {
+        tripMap.invalidateSize();
+    }, 300);
+
+    console.log('✅ Trip map initialized with destination and key locations');
 }
