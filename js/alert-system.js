@@ -1,10 +1,9 @@
 /**
  * Alert System Module
- * Handles notifications for price drops and seasonal events
+ * Handles AI-powered personalized notifications for users
  */
 
 let userAlerts = [];
-let seasonalAlerts = [];
 let unreadCount = 0;
 
 /**
@@ -14,14 +13,11 @@ async function initAlertSystem() {
     // Add notification bell to header
     addNotificationBell();
     
-    // Load user's alerts
+    // Load user's personalized notifications
     await loadUserAlerts();
     
-    // Check for seasonal alerts based on browsing
-    await checkSeasonalAlerts();
-    
     // Update badge count
-    updateAlertBadge();
+    updateBadge(unreadCount);
 }
 
 /**
@@ -92,7 +88,7 @@ function toggleAlertDropdown() {
 }
 
 /**
- * Load user's alert subscriptions
+ * Load user's personalized notifications
  */
 async function loadUserAlerts() {
     try {
@@ -100,36 +96,18 @@ async function loadUserAlerts() {
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const userId = user.id || 'anonymous';
         
-        const response = await fetch(`/.netlify/functions/subscribeToAlerts?userId=${userId}`);
+        // Load AI-powered personalized notifications
+        const response = await fetch(`/.netlify/functions/getNotifications?userId=${userId}`);
         const data = await response.json();
         
         if (data.success) {
-            userAlerts = data.alerts.filter(a => a.triggered && !a.read);
-            unreadCount = userAlerts.length;
+            userAlerts = data.notifications || [];
+            unreadCount = userAlerts.filter(n => !n.read).length;
         }
     } catch (error) {
-        console.error('Failed to load alerts:', error);
-    }
-}
-
-/**
- * Check for seasonal alerts based on current month and popular destinations
- */
-async function checkSeasonalAlerts() {
-    try {
-        const currentMonth = new Date().toLocaleDateString('en-US', { month: 'long' });
-        
-        // Get all seasonal events for current month
-        const response = await fetch(`/.netlify/functions/getSeasonalRecommendations?month=${currentMonth}`);
-        const data = await response.json();
-        
-        if (data.success && data.events.length > 0) {
-            // Filter high priority events
-            seasonalAlerts = data.events.filter(e => e.priority === 'high').slice(0, 3);
-            unreadCount += seasonalAlerts.length;
-        }
-    } catch (error) {
-        console.error('Failed to load seasonal alerts:', error);
+        console.error('Failed to load notifications:', error);
+        userAlerts = [];
+        unreadCount = 0;
     }
 }
 
@@ -140,7 +118,7 @@ function displayAlerts() {
     const alertList = document.getElementById('alert-list');
     if (!alertList) return;
 
-    const allAlerts = [...userAlerts, ...seasonalAlerts];
+    const allAlerts = userAlerts;
 
     if (allAlerts.length === 0) {
         alertList.innerHTML = `
@@ -149,60 +127,75 @@ function displayAlerts() {
                 <p>No new notifications</p>
             </div>
         `;
+        updateBadge(0);
         return;
     }
 
-    alertList.innerHTML = allAlerts.map(alert => {
-        if (alert.notifications && alert.notifications.length > 0) {
-            // Price drop alert
-            const notification = alert.notifications[alert.notifications.length - 1];
-            return `
-                <div class="alert-item price-drop">
-                    <div class="alert-icon">💰</div>
-                    <div class="alert-content">
-                        <div class="alert-title">Price Drop Alert!</div>
-                        <div class="alert-message">${notification.message}</div>
-                        <div class="alert-details">
-                            <span class="old-price">PKR ${notification.oldPrice}</span>
-                            <i class="fa-solid fa-arrow-right"></i>
-                            <span class="new-price">PKR ${notification.newPrice}</span>
-                            <span class="savings">Save PKR ${notification.savings}</span>
-                        </div>
-                        <div class="alert-time">${formatTimeAgo(notification.triggeredAt)}</div>
-                    </div>
+    alertList.innerHTML = allAlerts.map((alert, index) => {
+        const iconMap = {
+            'star': 'fa-star',
+            'lightbulb': 'fa-lightbulb',
+            'balance-scale': 'fa-balance-scale',
+            'map-location-dot': 'fa-map-location-dot',
+            'wand-magic-sparkles': 'fa-wand-magic-sparkles',
+            'fire': 'fa-fire',
+            'bell': 'fa-bell'
+        };
+        
+        const iconClass = iconMap[alert.icon] || 'fa-bell';
+        const priorityColors = {
+            'high': '#ef4444',
+            'medium': '#f59e0b',
+            'low': '#6366f1'
+        };
+        const priorityColor = priorityColors[alert.priority] || '#6366f1';
+
+        return `
+            <div class="alert-item ${alert.read ? 'read' : ''}" data-index="${index}">
+                <div class="alert-icon" style="color: ${priorityColor}">
+                    <i class="fa-solid ${iconClass}"></i>
                 </div>
-            `;
-        } else if (alert.eventName) {
-            // Seasonal event alert
-            return `
-                <div class="alert-item seasonal">
-                    <div class="alert-icon">${alert.icon}</div>
-                    <div class="alert-content">
-                        <div class="alert-title">${alert.eventName}</div>
-                        <div class="alert-message">${alert.alertMessage}</div>
-                        <div class="alert-location">
-                            <i class="fa-solid fa-location-dot"></i>
-                            ${alert.city}, ${alert.country}
-                        </div>
-                        <div class="alert-meta">
-                            ${alert.eventType} • ${alert.peakMonth}
-                        </div>
-                    </div>
+                <div class="alert-content">
+                    <div class="alert-title">${alert.title}</div>
+                    <div class="alert-message">${alert.message}</div>
+                    ${alert.action ? `
+                        <a href="${alert.action}" class="alert-action">
+                            ${alert.actionText || 'View'} <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    ` : ''}
+                    <div class="alert-time">${formatTimestamp(alert.timestamp)}</div>
                 </div>
-            `;
-        }
+            </div>
+        `;
     }).join('');
+
+    updateBadge(unreadCount);
+}
+
+/**
+ * Format timestamp to relative time
+ */
+function formatTimestamp(timestamp) {
+    const now = new Date();
+    const then = new Date(timestamp);
+    const seconds = Math.floor((now - then) / 1000);
+    
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+    return then.toLocaleDateString();
 }
 
 /**
  * Update alert badge count
  */
-function updateAlertBadge() {
+function updateBadge(count) {
     const badge = document.getElementById('alert-badge');
     if (!badge) return;
 
-    if (unreadCount > 0) {
-        badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+    if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : count;
         badge.style.display = 'inline-block';
     } else {
         badge.style.display = 'none';
@@ -213,10 +206,10 @@ function updateAlertBadge() {
  * Mark all alerts as read
  */
 function markAllRead() {
+    // Mark all notifications as read
+    userAlerts.forEach(alert => alert.read = true);
     unreadCount = 0;
-    updateAlertBadge();
-    userAlerts = [];
-    seasonalAlerts = [];
+    updateBadge(0);
     displayAlerts();
 }
 
@@ -429,12 +422,63 @@ function addAlertStyles() {
             background: rgba(255, 255, 255, 0.03);
         }
 
+        .alert-item.read {
+            opacity: 0.6;
+        }
+
         .alert-icon {
-            font-size: 2rem;
+            font-size: 1.5rem;
             flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 10px;
         }
 
         .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .alert-message {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .alert-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 6px;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .alert-action:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateX(3px);
+        }
+
+        .alert-action i {
+            font-size: 0.75rem;
+        }
             flex: 1;
         }
 
