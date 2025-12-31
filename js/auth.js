@@ -12,6 +12,12 @@ function getUser() {
     return userStr ? JSON.parse(userStr) : null;
 }
 
+// Get userId safely
+function getUserId() {
+    const user = getUser();
+    return user ? user.id : null;
+}
+
 // Check if user is logged in
 function isLoggedIn() {
     return !!getToken();

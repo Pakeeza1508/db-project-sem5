@@ -10,7 +10,8 @@ let nearbySuggestionsCache = {};
  */
 async function fetchNearbyDestinations(destination, lat = null, lng = null, radius = 300, limit = 5) {
     try {
-        const userId = localStorage.getItem('userId') || 'anonymous';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
         
         // Check cache first
         const cacheKey = `${destination || `${lat},${lng}`}_${radius}_${limit}`;

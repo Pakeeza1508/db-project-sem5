@@ -97,7 +97,8 @@ function toggleAlertDropdown() {
 async function loadUserAlerts() {
     try {
         // Get user ID from localStorage (if logged in)
-        const userId = localStorage.getItem('userId') || 'anonymous';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
         
         const response = await fetch(`/.netlify/functions/subscribeToAlerts?userId=${userId}`);
         const data = await response.json();
@@ -224,8 +225,9 @@ function markAllRead() {
  */
 async function subscribeToPriceAlert(destination, currentPrice, budget, days, travelType) {
     try {
-        const userId = localStorage.getItem('userId') || 'anonymous';
-        const email = localStorage.getItem('userEmail') || null;
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
+        const email = user.email || null;
 
         const response = await fetch('/.netlify/functions/subscribeToAlerts', {
             method: 'POST',

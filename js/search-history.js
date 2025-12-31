@@ -121,7 +121,8 @@ function toggleSearchHistory() {
  */
 async function loadSearchHistory() {
     try {
-        const userId = localStorage.getItem('userId') || 'anonymous';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
         
         const response = await fetch(`/.netlify/functions/searchHistory?userId=${userId}&limit=50`);
         const data = await response.json();
@@ -289,7 +290,8 @@ function displaySearchStats(stats) {
  */
 async function saveSearchToHistory(searchType, query, filters, results = null, resultCount = 0) {
     try {
-        const userId = localStorage.getItem('userId') || 'anonymous';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
 
         await fetch('/.netlify/functions/searchHistory', {
             method: 'POST',
@@ -320,7 +322,8 @@ async function clearAllHistory() {
     }
 
     try {
-        const userId = localStorage.getItem('userId') || 'anonymous';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
         
         const response = await fetch(`/.netlify/functions/searchHistory?userId=${userId}`, {
             method: 'DELETE'
@@ -349,7 +352,8 @@ async function clearAllHistory() {
  */
 async function deleteSearch(searchId) {
     try {
-        const userId = localStorage.getItem('userId') || 'anonymous';
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user.id || 'anonymous';
         
         const response = await fetch(`/.netlify/functions/searchHistory?userId=${userId}&searchId=${searchId}`, {
             method: 'DELETE'
