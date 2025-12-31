@@ -252,16 +252,13 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Store token and user info
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', JSON.stringify(data.user));
-
                     // Show success message
                     successMsg.style.display = 'block';
+                    successMsg.innerHTML = '<i class="fa-solid fa-check-circle"></i> Account created successfully! Redirecting to login...';
 
-                    // Redirect to planner after 1.5s
+                    // Redirect to login after 1.5s (without storing token)
                     setTimeout(() => {
-                        window.location.href = 'planner.html';
+                        window.location.href = 'login.html';
                     }, 1500);
                 } else {
                     // Show error
