@@ -67,7 +67,9 @@ function displayTestimonials(testimonials, containerId = 'testimonials-container
  * Create testimonial card HTML
  */
 function createTestimonialCard(testimonial) {
-    const userId = localStorage.getItem('userId') || 'anonymous';
+    // Get current user ID properly
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id || 'anonymous';
     const userName = testimonial.userName || testimonial.name || 'Traveler';
     const destination = testimonial.destination || 'Unknown destination';
     const rating = Number(testimonial.rating) || 5;
@@ -133,7 +135,10 @@ function createTestimonialCard(testimonial) {
  * Show add testimonial modal
  */
 function showAddTestimonialModal() {
-    const userId = localStorage.getItem('userId');
+    // Get user from proper localStorage structure
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id;
+    
     if (!userId || userId === 'anonymous') {
         if (window.showToast) {
             showToast('Please log in to share your testimonial', 'error');
@@ -143,8 +148,8 @@ function showAddTestimonialModal() {
         return;
     }
 
-    const userName = localStorage.getItem('userName') || 'Traveler';
-    const userEmail = localStorage.getItem('userEmail') || '';
+    const userName = user.name || 'Traveler';
+    const userEmail = user.email || '';
 
     const modal = createModal('add-testimonial-modal', 'Share Your Experience', `
         <form id="add-testimonial-form" class="testimonial-form">
@@ -230,9 +235,11 @@ function selectRating(rating) {
  * Submit testimonial
  */
 async function submitTestimonial() {
-    const userId = localStorage.getItem('userId');
-    const userName = localStorage.getItem('userName') || 'Traveler';
-    const userEmail = localStorage.getItem('userEmail') || '';
+    // Get user from proper localStorage structure
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id;
+    const userName = user.name || 'Traveler';
+    const userEmail = user.email || '';
 
     const destination = document.getElementById('testimonial-destination').value.trim();
     const tripDate = document.getElementById('testimonial-trip-date').value;
@@ -394,7 +401,9 @@ function selectEditRating(rating) {
  * Update testimonial
  */
 async function updateTestimonial() {
-    const userId = localStorage.getItem('userId');
+    // Get user from proper localStorage structure
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id;
     const testimonialId = document.getElementById('edit-testimonial-id').value;
     const destination = document.getElementById('edit-testimonial-destination').value.trim();
     const tripDate = document.getElementById('edit-testimonial-trip-date').value;
@@ -451,7 +460,9 @@ async function deleteTestimonial(testimonialId) {
         return;
     }
 
-    const userId = localStorage.getItem('userId');
+    // Get user from proper localStorage structure
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id;
 
     try {
         const response = await fetch(`/.netlify/functions/testimonials?testimonialId=${testimonialId}&userId=${userId}`, {
@@ -485,7 +496,10 @@ async function deleteTestimonial(testimonialId) {
  * Toggle like on testimonial
  */
 async function toggleLikeTestimonial(testimonialId) {
-    const userId = localStorage.getItem('userId');
+    // Get user from proper localStorage structure
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = user.id;
+    
     if (!userId || userId === 'anonymous') {
         if (window.showToast) {
             showToast('Please log in to like testimonials', 'error');
