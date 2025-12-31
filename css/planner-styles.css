@@ -1,7 +1,7 @@
 :root {
-  --primary: #6366f1;
-  --secondary: #a855f7;
-  --accent: #ec4899;
+  --primary: #2563eb;
+  --secondary: #0ea5e9;
+  --accent: #f59e0b;
   --background: #0f172a;
   --surface: #1e293b;
   --text: #f8fafc;
@@ -99,10 +99,7 @@ body {
 
 .logo i {
   font-size: 1.5rem;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--accent);
 }
 
 .header-nav {
@@ -277,7 +274,7 @@ body {
 
 /* Buttons */
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 12px;
@@ -292,8 +289,9 @@ body {
 }
 
 .btn-primary:hover {
+  background: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
 }
 
 .btn-large {
@@ -520,10 +518,10 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
+  background: var(--primary);
   border-radius: 16px;
   margin-top: 12px;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 .cost-total span {
@@ -648,7 +646,7 @@ body {
 }
 
 .day-header {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  background: var(--primary);
   padding: 24px;
   display: flex;
   align-items: center;
@@ -1171,10 +1169,7 @@ body {
 .feature-icon {
   font-size: 2.5rem;
   margin-bottom: 18px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--primary);
 }
 
 /* Divider Line */
@@ -2042,8 +2037,8 @@ body {
 }
 
 .attraction-card {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  background: rgba(37, 99, 235, 0.05);
+  border: 1px solid rgba(37, 99, 235, 0.2);
   border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
