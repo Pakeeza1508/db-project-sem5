@@ -119,3 +119,5 @@ This project uses **Netlify Functions** to proxy API requests. This ensures that
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
+<!-- netlify deploy --prod -->
+<!-- https://budget-friendly.netlify.app -->

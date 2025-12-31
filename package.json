@@ -4,6 +4,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.0.0",
     "jspdf": "^2.5.1",
-    "html2canvas": "^1.4.1"
+    "html2canvas": "^1.4.1",
+    "node-fetch": "^3.3.2"
   }
 }
