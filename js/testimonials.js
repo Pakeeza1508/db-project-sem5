@@ -586,6 +586,35 @@ function formatTimeAgo(date) {
     return new Date(date).toLocaleDateString();
 }
 
+/**
+ * Show toast notification
+ */
+function showToast(message, type = 'success') {
+    // Remove any existing toasts
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.innerHTML = `
+        <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 10);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
 // Export functions
 window.loadTestimonials = loadTestimonials;
 window.showAddTestimonialModal = showAddTestimonialModal;
@@ -595,3 +624,4 @@ window.toggleLikeTestimonial = toggleLikeTestimonial;
 window.selectRating = selectRating;
 window.selectEditRating = selectEditRating;
 window.closeModal = closeModal;
+window.showToast = showToast;

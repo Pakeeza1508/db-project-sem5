@@ -274,9 +274,15 @@
     max-width: 600px;
     width: 90%;
     max-height: 90vh;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     z-index: 1;
+    scrollbar-width: none;
+}
+
+.testimonial-modal-content::-webkit-scrollbar {
+    display: none;
 }
 
 .testimonial-modal-header {
@@ -316,6 +322,11 @@
     padding: 25px;
     max-height: calc(90vh - 80px);
     overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.testimonial-modal-body::-webkit-scrollbar {
+    display: none;
 }
 
 /* Form */
@@ -459,6 +470,55 @@
     }
     to {
         opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Toast Notification */
+.toast-notification {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(100px);
+    transition: all 0.3s ease;
+}
+
+.toast-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-notification.toast-success {
+    border-left: 4px solid #22c55e;
+}
+
+.toast-notification.toast-error {
+    border-left: 4px solid #ef4444;
+}
+
+.toast-notification i {
+    font-size: 1.2rem;
+}
+
+.toast-notification.toast-success i {
+    color: #22c55e;
+}
+
+.toast-notification.toast-error i {
+    color: #ef4444;
+}
         transform: translateY(0);
     }
 }
