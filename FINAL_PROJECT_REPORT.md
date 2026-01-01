@@ -19,6 +19,27 @@
 - **Assets:** css/ (global + planner + testimonials + saved-trips), js/ (feature-specific modules), images via Unsplash/remote.
 - **State:** localStorage for auth token and user object `{ id, name, email }`.
 
+### Architecture Diagram (Mermaid)
+```mermaid
+flowchart LR
+	Browser[Browser (HTML/CSS/JS)] -->|HTTPS| Netlify[Netlify CDN + Functions]
+	Netlify -->|CRUD, Auth, Planner| MongoDB[(MongoDB Atlas)]
+	Netlify -->|Maps/Geo| GoogleAPI[Google Maps/Geocoding]
+	Netlify -->|Weather| OpenWeather[OpenWeather]
+	Netlify -->|Images| Unsplash[Unsplash]
+	Netlify -->|AI| Gemini[Google Gemini]
+
+	Browser -->|JWT in localStorage| Netlify
+	subgraph Frontend Assets
+		CSS[css/*.css]
+		JS[js/*.js]
+		HTML[*.html]
+	end
+	Browser --> CSS
+	Browser --> JS
+	Browser --> HTML
+```
+
 ## 4) Backend (Netlify Functions)
 - **Location:** netlify/functions/*.js
 - **Core endpoints:** auth (signup/login/verifyToken), trips (saveTrip, getTrips, getTripById, updateTrip, deleteTrip, getTripsByIds), planner (savePlan, searchTrips, searchLocations, getDestinationsByBudget, getTrendingDestinations, getNearbyDestinations, getDestinationImages), analytics (getStats, getTripStats, getNotifications), testimonials (testimonials, likeTestimonial, addTestimonial via same handler), caching helpers (getCached*), alerts (subscribeToAlerts, checkPriceDrops, trackPriceHistory), seeds (seed* scripts for dummy data and costs/exchange rates).
