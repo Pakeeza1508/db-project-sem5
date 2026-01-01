@@ -1,9 +1,22 @@
 # Wanderly Trip Planner – Final Project Report
 
 ## 1) Project Overview
-- **Purpose:** AI-assisted budget-friendly travel planner with trip creation, comparisons, maps, saved trips, testimonials, and alerts.
-- **Stack:** HTML/CSS/JS frontend, Netlify Functions (Node.js) backend, MongoDB Atlas.
-- **Status:** Deployed on Netlify; data stored in MongoDB Atlas; JWT auth in place.
+- **What it is:** AI-assisted budget-friendly travel planner that lets students and travelers search, plan, compare, and save trips with live maps and recommendations.
+- **Why it matters:** Speeds up trip planning, keeps budgets under control, and centralizes saved trips, alerts, and testimonials for social proof.
+- **How it works (high level):**
+	- Frontend (HTML/CSS/JS) served by Netlify CDN.
+	- Netlify Functions (Node.js) handle auth, trip CRUD, planner AI calls, analytics, alerts, and testimonials.
+	- MongoDB Atlas stores users, trips, search history, testimonials, alerts, and destination data.
+	- External APIs: Maps/Geocoding (Google), Weather (OpenWeather), Images (Unsplash), AI (Gemini).
+- **Status:** Deployed on Netlify; MongoDB Atlas live; JWT auth in place.
+
+### How a user flows through the app
+1) Sign up / log in → JWT saved in localStorage.
+2) Plan a trip by budget or destination → AI/logic generates options and map markers.
+3) Compare and refine results → save a trip or export/share.
+4) Browse/search history and analytics on the profile page.
+5) Share experiences via testimonials; like others’ posts (after approval).
+6) Optional alerts for price/weather reminders.
 
 ## 2) Key Features
 - Trip planner (budget-first, destination optional) with Leaflet map view.
@@ -21,23 +34,22 @@
 
 ### Architecture Diagram (Mermaid)
 ```mermaid
-flowchart LR
-	Browser[Browser (HTML/CSS/JS)] -->|HTTPS| Netlify[Netlify CDN + Functions]
-	Netlify -->|CRUD, Auth, Planner| MongoDB[(MongoDB Atlas)]
-	Netlify -->|Maps/Geo| GoogleAPI[Google Maps/Geocoding]
-	Netlify -->|Weather| OpenWeather[OpenWeather]
-	Netlify -->|Images| Unsplash[Unsplash]
-	Netlify -->|AI| Gemini[Google Gemini]
-
-	Browser -->|JWT in localStorage| Netlify
+graph TD
+	B[Browser<br>(HTML/CSS/JS)] -->|HTTPS| N[Netlify CDN + Functions]
+	N -->|CRUD, Auth, Planner| M[(MongoDB Atlas)]
+	N -->|Maps/Geo| G[Google Maps/Geocoding]
+	N -->|Weather| W[OpenWeather]
+	N -->|Images| U[Unsplash]
+	N -->|AI| A[Gemini]
+	B -->|JWT in localStorage| N
 	subgraph Frontend Assets
-		CSS[css/*.css]
-		JS[js/*.js]
-		HTML[*.html]
+		C[css/*.css]
+		J[js/*.js]
+		H[*.html]
 	end
-	Browser --> CSS
-	Browser --> JS
-	Browser --> HTML
+	B --> C
+	B --> J
+	B --> H
 ```
 
 ## 4) Backend (Netlify Functions)
