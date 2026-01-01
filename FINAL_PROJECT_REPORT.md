@@ -34,8 +34,8 @@
 
 ### Architecture Diagram (Mermaid)
 ```mermaid
-graph TD
-	B[Browser<br>(HTML/CSS/JS)] -->|HTTPS| N[Netlify CDN + Functions]
+flowchart TD
+	B[Browser (HTML/CSS/JS)] -->|HTTPS| N[Netlify CDN + Functions]
 	N -->|CRUD, Auth, Planner| M[(MongoDB Atlas)]
 	N -->|Maps/Geo| G[Google Maps/Geocoding]
 	N -->|Weather| W[OpenWeather]
