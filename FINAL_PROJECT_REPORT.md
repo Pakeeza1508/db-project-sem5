@@ -33,23 +33,24 @@
 - **State:** localStorage for auth token and user object `{ id, name, email }`.
 
 ### Architecture Diagram (Mermaid)
-```mermaid
-flowchart TD
-	B[Browser (HTML/CSS/JS)] -->|HTTPS| N[Netlify CDN + Functions]
-	N -->|CRUD, Auth, Planner| M[(MongoDB Atlas)]
-	N -->|Maps/Geo| G[Google Maps/Geocoding]
-	N -->|Weather| W[OpenWeather]
-	N -->|Images| U[Unsplash]
-	N -->|AI| A[Gemini]
-	B -->|JWT in localStorage| N
-	subgraph Frontend Assets
-		C[css/*.css]
-		J[js/*.js]
-		H[*.html]
-	end
-	B --> C
-	B --> J
-	B --> H
+```
+Browser (HTML/CSS/JS)
+	| HTTPS + JWT in localStorage
+	v
+Netlify CDN + Functions (Node.js)
+	| CRUD/Auth/Planner calls
+	v
+MongoDB Atlas
+
+Netlify Functions -> Google Maps/Geocoding (maps/geo)
+Netlify Functions -> OpenWeather (weather)
+Netlify Functions -> Unsplash (images)
+Netlify Functions -> Gemini (AI)
+
+Frontend Assets served by CDN:
+  - css/*.css
+  - js/*.js
+  - *.html
 ```
 
 ## 4) Backend (Netlify Functions)
