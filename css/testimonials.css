@@ -1,11 +1,75 @@
 /* Testimonials Styles */
 
-/* Testimonials Container */
-#testimonials-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 24px;
+/* Gallery Wrapper */
+.testimonials-gallery-wrapper {
+    position: relative;
     margin-top: 30px;
+}
+
+/* Testimonials Container - Horizontal Scroll */
+#testimonials-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbar */
+#testimonials-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+#testimonials-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#testimonials-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+}
+
+#testimonials-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Gallery Navigation Buttons */
+.gallery-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    background: rgba(15, 23, 42, 0.7);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    z-index: 10;
+    font-size: 1.2rem;
+}
+
+.gallery-nav-btn:hover {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.6);
+    color: #3b82f6;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-nav-btn.prev {
+    left: -24px;
+}
+
+.gallery-nav-btn.next {
+    right: -24px;
 }
 
 /* Testimonial Card */
@@ -18,6 +82,10 @@
     transition: all 0.3s;
     position: relative;
     animation: slideUp 0.4s ease;
+    flex: 0 0 calc(33.333% - 14px);
+    min-width: 350px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
 }
 
 .testimonial-card:hover {

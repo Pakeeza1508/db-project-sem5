@@ -27,6 +27,7 @@ async function loadTestimonials(containerId = 'testimonials-container', options 
 
         if (data.success) {
             displayTestimonials(data.testimonials, containerId);
+            initGalleryNavigation(containerId);
             return data;
         } else {
             throw new Error(data.error);
@@ -41,6 +42,40 @@ async function loadTestimonials(containerId = 'testimonials-container', options 
         `;
         return null;
     }
+}
+
+/**
+ * Initialize gallery navigation for horizontal scrolling
+ */
+function initGalleryNavigation(containerId = 'testimonials-container') {
+    const gallery = document.getElementById(containerId);
+    if (!gallery) return;
+
+    const wrapper = gallery.closest('.testimonials-gallery-wrapper');
+    if (!wrapper) return;
+
+    const prevBtn = wrapper.querySelector('.gallery-nav-btn.prev');
+    const nextBtn = wrapper.querySelector('.gallery-nav-btn.next');
+    if (!prevBtn || !nextBtn) return;
+
+    const scrollDistance = 400; // pixels per click
+
+    prevBtn.addEventListener('click', () => {
+        gallery.scrollBy({ left: -scrollDistance, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+        gallery.scrollBy({ left: scrollDistance, behavior: 'smooth' });
+    });
+
+    // Update button visibility based on scroll position
+    const updateButtonVisibility = () => {
+        prevBtn.style.opacity = gallery.scrollLeft > 0 ? '1' : '0.5';
+        nextBtn.style.opacity = gallery.scrollLeft < gallery.scrollWidth - gallery.clientWidth - 10 ? '1' : '0.5';
+    };
+
+    gallery.addEventListener('scroll', updateButtonVisibility);
+    updateButtonVisibility();
 }
 
 /**
