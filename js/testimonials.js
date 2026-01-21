@@ -317,10 +317,12 @@ async function submitTestimonial() {
         if (data.success) {
             closeModal('add-testimonial-modal');
             if (window.showToast) {
-                showToast('Testimonial submitted! Pending approval.', 'success');
+                showToast('Testimonial submitted successfully!', 'success');
             }
-            // Reload testimonials
-            setTimeout(() => loadTestimonials(), 500);
+            // Reload testimonials to show new one at the front
+            setTimeout(() => {
+                loadTestimonials('testimonials-container', { featured: false, limit: 500 });
+            }, 500);
         } else {
             throw new Error(data.error);
         }
