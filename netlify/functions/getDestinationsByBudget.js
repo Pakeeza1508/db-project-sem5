@@ -35,8 +35,10 @@ exports.handler = async (event) => {
 
         const db = await getDb();
 
-        // Get all cities
-        const cities = await db.collection('cities').find({}).toArray();
+        // Get all cities EXCEPT the starting city
+        const cities = await db.collection('cities').find({
+            name: { $ne: startingCity } // Exclude starting city
+        }).toArray();
 
         if (cities.length === 0) {
             return {
@@ -47,15 +49,36 @@ exports.handler = async (event) => {
             };
         }
 
+        // Get starting city info for distance calculation
+        const startCity = await db.collection('cities').findOne({ name: startingCity });
+        const startRegion = startCity?.region || 'Central';
+
         // Calculate cost for each city and create score
         const cityScores = cities.map(city => {
-            // Simple region-based travel time estimate (hours)
-            const regionTimeMap = { North: 10, Central: 4, South: 6, West: 8 };
-            const travelHours = regionTimeMap[city.region] || 6;
-            const travelDays = Math.ceil(travelHours / 6); // Assume 6 hours driving = 1 travel day
+            // Calculate travel time based on region proximity
+            let travelHours = 6; // default
+            
+            // Same region = shorter travel
+            if (city.region === startRegion) {
+                travelHours = 2; // 2 hours within same region
+            } else {
+                // Different regions - estimate based on regions
+                const regionDistances = {
+                    'Central-North': 5,
+                    'Central-South': 18,
+                    'Central-West': 7,
+                    'North-South': 20,
+                    'North-West': 12,
+                    'South-West': 8
+                };
+                const key = [startRegion, city.region].sort().join('-');
+                travelHours = regionDistances[key] || 8;
+            }
+            
+            const travelDays = Math.ceil(travelHours / 8); // 8 hours driving = 1 travel day
 
-            // For 1-day trips, only recommend Lahore & nearby cities (Central region)
-            const isSameDayPossible = city.region === "Central" || city.name === "Lahore";
+            // For 1-day trips, same region OR <3 hours away
+            const isSameDayPossible = travelHours <= 3;
             
             // Base per-day misc costs (no hotels): local transport + activities
             const localTransportPerDay = city.localTransportPerDay || 600;
@@ -138,14 +161,25 @@ exports.handler = async (event) => {
             const budgetMatchScore = Math.max(0, 100 - Math.abs((cheapOption.totalCost - budgetAmount) / budgetAmount * 100));
             const weatherScore = city.rating * 10; // 0-50
             const ratingScore = city.rating * 10; // 0-50
-            const travelTimeScore = Math.max(0, 10 - Math.min(10, Math.round(travelHours / 2))); // 0-10
             
-            // Boost score for same-day trips if only 1 day
-            let finalScore = (budgetMatchScore * 0.5) + (weatherScore * 0.2) + (ratingScore * 0.2) + (travelTimeScore * 10 * 0.1);
-            if (numDays === 1 && isSameDayPossible) {
-                finalScore = finalScore * 1.5; // 50% boost for doable same-day trips
-            } else if (numDays === 1 && !isSameDayPossible) {
-                finalScore = finalScore * 0.5; // Reduce score for distant places on 1-day trips
+            // Travel time score: closer = higher score (0-100)
+            const travelTimeScore = Math.max(0, 100 - (travelHours * 5));
+            
+            // Scoring weights - travel time is MORE important now
+            let finalScore = (budgetMatchScore * 0.3) + (weatherScore * 0.15) + (ratingScore * 0.15) + (travelTimeScore * 0.4);
+            
+            // For 1-day trips: ONLY show same-day possible cities
+            if (numDays === 1) {
+                if (isSameDayPossible) {
+                    finalScore = finalScore * 1.3; // Boost for feasible 1-day trips
+                } else {
+                    finalScore = finalScore * 0.1; // Heavily penalize distant cities for 1-day trips
+                }
+            }
+            
+            // For multi-day trips: slightly prefer closer destinations
+            if (numDays >= 2 && numDays <= 3 && travelHours > 10) {
+                finalScore = finalScore * 0.7; // Reduce score for very distant places on short trips
             }
 
             return {
