@@ -150,7 +150,7 @@ exports.handler = async (event) => {
                 rating: parseInt(rating),
                 title: title || null,
                 content: content.trim(),
-                approved: false, // Requires admin approval
+                approved: true, // Auto-approve all testimonials
                 featured: false,
                 likes: 0,
                 likedBy: [],
