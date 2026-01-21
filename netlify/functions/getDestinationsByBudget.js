@@ -74,9 +74,9 @@ exports.handler = async (event) => {
         // Dynamic distance range based on trip duration
         let maxDistanceKm;
         if (numDays === 1) {
-            maxDistanceKm = 100; // 1 day = max 100km (2-3 hours drive)
+            maxDistanceKm = 150; // 1 day = max 150km (2-3 hours drive)
         } else if (numDays === 2) {
-            maxDistanceKm = 200; // 2 days = max 200km (4-5 hours)
+            maxDistanceKm = 250; // 2 days = max 250km (4-5 hours)
         } else if (numDays === 3) {
             maxDistanceKm = 400; // 3 days = max 400km (8 hours)
         } else {
