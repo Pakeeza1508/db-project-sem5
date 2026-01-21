@@ -1,5 +1,29 @@
 const { getCollection } = require('./_mongo');
 
+// Hardcoded GPS coordinates for Pakistani cities as fallback
+const cityCoordinates = {
+    'Lahore': { lat: 31.5497, lng: 74.3436 },
+    'Islamabad': { lat: 33.6844, lng: 73.0479 },
+    'Karachi': { lat: 24.8607, lng: 67.0011 },
+    'Rawalpindi': { lat: 33.5651, lng: 73.0169 },
+    'Faisalabad': { lat: 31.4180, lng: 73.0790 },
+    'Multan': { lat: 30.1575, lng: 71.5249 },
+    'Peshawar': { lat: 34.0151, lng: 71.5249 },
+    'Quetta': { lat: 30.1798, lng: 66.9750 },
+    'Sialkot': { lat: 32.4927, lng: 74.5319 },
+    'Gujranwala': { lat: 32.1877, lng: 74.1945 },
+    'Murree': { lat: 33.9070, lng: 73.3903 },
+    'Nathia Gali': { lat: 34.0778, lng: 73.3914 },
+    'Hunza': { lat: 36.3167, lng: 74.6500 },
+    'Skardu': { lat: 35.2978, lng: 75.6339 },
+    'Naran': { lat: 34.9089, lng: 73.6556 },
+    'Kaghan': { lat: 34.7904, lng: 73.4892 },
+    'Swat': { lat: 35.2227, lng: 72.4258 },
+    'Abbottabad': { lat: 34.1495, lng: 73.2167 },
+    'Gilgit': { lat: 35.9208, lng: 74.3144 },
+    'Chitral': { lat: 35.8513, lng: 71.7864 }
+};
+
 /**
  * Get nearby popular destinations based on location
  * Uses Haversine formula to calculate distances
@@ -61,15 +85,33 @@ exports.handler = async (event) => {
                 centerLat = city.coordinates.lat;
                 centerLng = city.coordinates.lng;
                 centerName = city.name;
+            } else if (cityCoordinates[destination]) {
+                // Fallback to hardcoded coordinates
+                centerLat = cityCoordinates[destination].lat;
+                centerLng = cityCoordinates[destination].lng;
+                centerName = destination;
+                console.log(`Using fallback coordinates for ${destination}`);
             } else {
-                return {
-                    statusCode: 404,
-                    headers,
-                    body: JSON.stringify({ 
-                        success: false,
-                        error: 'Destination coordinates not found' 
-                    })
-                };
+                // If not found, try to find partial match in hardcoded list
+                const matchingCity = Object.keys(cityCoordinates).find(city => 
+                    city.toLowerCase().includes(destination.toLowerCase()) ||
+                    destination.toLowerCase().includes(city.toLowerCase())
+                );
+                if (matchingCity) {
+                    centerLat = cityCoordinates[matchingCity].lat;
+                    centerLng = cityCoordinates[matchingCity].lng;
+                    centerName = matchingCity;
+                    console.log(`Using partial match coordinates for ${matchingCity}`);
+                } else {
+                    return {
+                        statusCode: 404,
+                        headers,
+                        body: JSON.stringify({ 
+                            success: false,
+                            error: 'Destination coordinates not found' 
+                        })
+                    };
+                }
             }
         }
 
