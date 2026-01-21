@@ -316,20 +316,32 @@ async function submitTestimonial() {
 
         if (data.success) {
             closeModal('add-testimonial-modal');
+            
+            // Clear form
+            document.getElementById('add-testimonial-form').reset();
+            document.getElementById('testimonial-rating').value = '';
+            document.querySelectorAll('.rating-star').forEach(s => s.classList.remove('selected'));
+            
             if (window.showToast) {
                 showToast('Testimonial submitted successfully!', 'success');
             }
-            // Reload testimonials to show new one at the front
+            
+            // Reload testimonials - wait longer to ensure DB is updated
             setTimeout(() => {
+                console.log('Reloading testimonials from DB...');
+                const container = document.getElementById('testimonials-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align:center;padding:40px;"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>';
+                }
                 loadTestimonials('testimonials-container', { featured: false, limit: 500 });
-            }, 500);
+            }, 1000);
         } else {
-            throw new Error(data.error);
+            throw new Error(data.error || 'Failed to submit');
         }
     } catch (error) {
         console.error('Submit testimonial error:', error);
         if (window.showToast) {
-            showToast('Failed to submit testimonial', 'error');
+            showToast('Failed to submit testimonial: ' + error.message, 'error');
         }
     }
 }
