@@ -1,0 +1,81 @@
+/* More Destinations Actions */
+.more-destinations-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 30px;
+    margin-top: 20px;
+    background: rgba(30, 41, 59, 0.5);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-show-more,
+.btn-show-different {
+    padding: 14px 32px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 240px;
+    justify-content: center;
+}
+
+.btn-show-more {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+}
+
+.btn-show-more:hover {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+.btn-show-different {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.btn-show-different:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
+.btn-show-more:disabled,
+.btn-show-different:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.destinations-info {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .more-destinations-actions {
+        padding: 20px;
+    }
+    
+    .btn-show-more,
+    .btn-show-different {
+        width: 100%;
+        min-width: unset;
+    }
+}

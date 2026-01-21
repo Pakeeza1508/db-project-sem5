@@ -103,7 +103,7 @@ async function handleBudgetSearch(e) {
 }
 
 function displayResults(data) {
-    const { input, recommendations } = data;
+    const { input, recommendations, totalCitiesAnalyzed } = data;
 
     // Update heading
     document.getElementById('results-heading').innerHTML = 
@@ -125,6 +125,24 @@ function displayResults(data) {
             trackPrice(destination.city, input.days, input.travelType, pkg.totalCost, destination.costBreakdown);
         }
     });
+
+    // Add "Show More" and "Show Different" buttons if more destinations available
+    if (totalCitiesAnalyzed > 3) {
+        const moreActionsDiv = document.createElement('div');
+        moreActionsDiv.className = 'more-destinations-actions';
+        moreActionsDiv.innerHTML = `
+            <button class="btn-show-more" onclick="showMoreDestinations()">
+                <i class="fa-solid fa-plus"></i> Show More Destinations
+            </button>
+            <button class="btn-show-different" onclick="showDifferentDestinations()">
+                <i class="fa-solid fa-shuffle"></i> Show Different Options
+            </button>
+            <div class="destinations-info">
+                Found ${totalCitiesAnalyzed} destinations within range
+            </div>
+        `;
+        grid.appendChild(moreActionsDiv);
+    }
 
     // Show results container
     document.getElementById('results-container').classList.add('show');
@@ -473,3 +491,138 @@ function displaySeasonalEventBadge(city, events) {
 // Make functions globally accessible
 window.subscribeToDestinationAlert = subscribeToDestinationAlert;
 window.displaySeasonalEventBadge = displaySeasonalEventBadge;
+// Store current search state for "Show More" functionality
+let currentSearchParams = null;
+let currentAllResults = [];
+let currentDisplayedCount = 3;
+
+/**
+ * Show more destinations from current search (next 3)
+ */
+window.showMoreDestinations = async function() {
+    if (!currentSearchParams) {
+        console.error('No search params available');
+        return;
+    }
+
+    // If we don't have all results cached, fetch them
+    if (currentAllResults.length === 0) {
+        const button = document.querySelector('.btn-show-more');
+        if (button) {
+            button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+            button.disabled = true;
+        }
+
+        try {
+            const { budget, days, startingCity, travelType } = currentSearchParams;
+            const response = await fetch(`/.netlify/functions/getDestinationsByBudget?budget=${budget}&days=${days}&startingCity=${encodeURIComponent(startingCity)}&travelType=${travelType}&limit=20`);
+            const data = await response.json();
+            
+            if (data.success) {
+                currentAllResults = data.recommendations;
+            }
+        } catch (error) {
+            console.error('Error fetching more destinations:', error);
+            return;
+        }
+    }
+
+    // Get next batch (3 more)
+    const nextBatch = currentAllResults.slice(currentDisplayedCount, currentDisplayedCount + 3);
+    
+    if (nextBatch.length === 0) {
+        alert('No more destinations available in this range!');
+        return;
+    }
+
+    // Append new cards to grid
+    const grid = document.getElementById('results-grid');
+    const moreActionsDiv = grid.querySelector('.more-destinations-actions');
+    
+    nextBatch.forEach((destination, index) => {
+        const card = createDestinationCard(destination, currentDisplayedCount + index + 1, currentSearchParams);
+        if (moreActionsDiv) {
+            grid.insertBefore(card, moreActionsDiv);
+        } else {
+            grid.appendChild(card);
+        }
+    });
+
+    currentDisplayedCount += nextBatch.length;
+
+    // Update info text
+    const infoDiv = document.querySelector('.destinations-info');
+    if (infoDiv) {
+        infoDiv.textContent = `Showing ${currentDisplayedCount} of ${currentAllResults.length} destinations`;
+    }
+
+    // Hide "Show More" button if no more results
+    if (currentDisplayedCount >= currentAllResults.length) {
+        const button = document.querySelector('.btn-show-more');
+        if (button) {
+            button.style.display = 'none';
+        }
+    }
+};
+
+/**
+ * Show different destinations (alternative recommendations)
+ */
+window.showDifferentDestinations = async function() {
+    if (!currentSearchParams) {
+        console.error('No search params available');
+        return;
+    }
+
+    const button = document.querySelector('.btn-show-different');
+    if (button) {
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+        button.disabled = true;
+    }
+
+    try {
+        const { budget, days, startingCity, travelType } = currentSearchParams;
+        
+        // Fetch with offset to get different results
+        const response = await fetch(`/.netlify/functions/getDestinationsByBudget?budget=${budget}&days=${days}&startingCity=${encodeURIComponent(startingCity)}&travelType=${travelType}&offset=${currentDisplayedCount}`);
+        const data = await response.json();
+        
+        if (data.success && data.recommendations.length > 0) {
+            // Replace current results with new ones
+            currentDisplayedCount = 3; // Reset
+            displayResults(data);
+            
+            // Store new results
+            currentAllResults = data.recommendations;
+        } else {
+            alert('No alternative destinations found. Try adjusting your budget or days!');
+        }
+    } catch (error) {
+        console.error('Error fetching different destinations:', error);
+        alert('Failed to load alternative destinations');
+    } finally {
+        if (button) {
+            button.innerHTML = '<i class="fa-solid fa-shuffle"></i> Show Different Options';
+            button.disabled = false;
+        }
+    }
+};
+
+// Store search params when search is performed
+const originalSearchBudget = searchBudget;
+async function searchBudget(event) {
+    // Reset state
+    currentDisplayedCount = 3;
+    currentAllResults = [];
+    
+    // Store search params
+    const budget = document.getElementById('total-budget').value;
+    const days = document.getElementById('trip-days').value;
+    const startingCity = document.getElementById('starting-city').value;
+    const travelType = document.getElementById('travel-type').value;
+    
+    currentSearchParams = { budget, days, startingCity, travelType };
+    
+    // Call original function
+    return originalSearchBudget.call(this, event);
+}
