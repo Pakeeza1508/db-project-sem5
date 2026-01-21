@@ -54,13 +54,13 @@ exports.handler = async (event) => {
         // If only destination name provided, find coordinates
         if (!lat || !lng) {
             const city = await citiesCollection.findOne({ 
-                destination: { $regex: new RegExp(destination, 'i') } 
+                name: { $regex: new RegExp(destination, 'i') } 
             });
             
             if (city && city.coordinates) {
                 centerLat = city.coordinates.lat;
                 centerLng = city.coordinates.lng;
-                centerName = city.destination;
+                centerName = city.name;
             } else {
                 return {
                     statusCode: 404,
@@ -99,7 +99,7 @@ exports.handler = async (event) => {
                 // Exclude the center destination itself
                 return city.distance > 0 && 
                        city.distance <= radius &&
-                       city.destination.toLowerCase() !== centerName.toLowerCase();
+                       city.name.toLowerCase() !== centerName.toLowerCase();
             })
             .sort((a, b) => a.distance - b.distance);
 
@@ -109,7 +109,7 @@ exports.handler = async (event) => {
         // Enhance cities with popularity scores
         const enhancedCities = nearbyCities.map(city => {
             const popularity = popularityData.find(
-                p => p._id.toLowerCase() === city.destination.toLowerCase()
+                p => p._id.toLowerCase() === city.name.toLowerCase()
             );
             
             return {
@@ -142,7 +142,8 @@ exports.handler = async (event) => {
         const userPreferences = userTopDestinations.map(d => d._id.toLowerCase());
         const personalizedSuggestions = suggestions.map(city => ({
             ...city,
-            matchesPreferences: userPreferences.includes(city.destination.toLowerCase())
+            destination: city.name, // ensure destination field for frontend
+            matchesPreferences: userPreferences.includes(city.name.toLowerCase())
         }));
 
         return {
