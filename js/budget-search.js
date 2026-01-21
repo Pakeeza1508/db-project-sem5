@@ -150,12 +150,6 @@ function displayResults(data) {
     // Load seasonal alerts for displayed destinations
     loadSeasonalAlertsForDestinations(recommendations);
 
-    // Initialize budget currency converter with exchange rates
-    setTimeout(() => {
-        if (window.initBudgetCurrencyConverter) {
-            window.initBudgetCurrencyConverter();
-        }
-    }, 500);
 }
 
 /**
