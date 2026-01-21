@@ -16,6 +16,8 @@ const pakistaniCities = [
         region: "North",
         bestMonths: ["March", "April", "October", "November"],
         avoidMonths: ["June", "July", "August"],
+        localTransportPerDay: 600,
+        activitiesPerDay: 800,
         seasonalWarning: "Avoid June-August: Extreme heat (40°C+). Best in spring and autumn."
     },
     {
@@ -258,7 +260,365 @@ const pakistaniCities = [
         attractions: "Sports goods, Tanda Dam",
         weather: "Hot summers",
         region: "Central"
-    }
+    },
+    {
+        name: "Nathia Gali",
+        avgPerDay: 4200,
+        busFare: 700,
+        hotelCheap: 2500,
+        hotelModerate: 5000,
+        hotelLuxury: 9500,
+        foodAvg: 1400,
+        rating: 4.5,
+        attractions: "Pine forests, hiking trails, Mukshpuri Top",
+        weather: "Cool, misty",
+        region: "North",
+        bestMonths: ["May", "June", "September", "October"],
+        avoidMonths: ["January", "February"],
+        localTransportPerDay: 500,
+        activitiesPerDay: 1000,
+        seasonalWarning: "Avoid winter: Heavy snowfall. Best in summer for hiking."
+    },
+    {
+        name: "Kalash Valley",
+        avgPerDay: 5000,
+        busFare: 2200,
+        hotelCheap: 2800,
+        hotelModerate: 5500,
+        hotelLuxury: 10000,
+        foodAvg: 1500,
+        rating: 4.8,
+        attractions: "Unique Kalash culture, festivals, valleys",
+        weather: "Cool mountain climate",
+        region: "North",
+        bestMonths: ["May", "August", "December"],
+        avoidMonths: ["January", "February"],
+        localTransportPerDay: 800,
+        activitiesPerDay: 1200,
+        seasonalWarning: "Visit during Chilam Joshi (May) or Winter Solstice festivals."
+    },
+    {
+        name: "Neelum Valley",
+        avgPerDay: 4500,
+        busFare: 1500,
+        hotelCheap: 2800,
+        hotelModerate: 5200,
+        hotelLuxury: 9800,
+        foodAvg: 1400,
+        rating: 4.7,
+        attractions: "Keran, Arang Kel, Sharda, Ratti Gali Lake",
+        weather: "Cool, scenic rivers",
+        region: "North",
+        bestMonths: ["April", "May", "June", "September"],
+        avoidMonths: ["December", "January", "February"],
+        localTransportPerDay: 700,
+        activitiesPerDay: 1100,
+        seasonalWarning: "Avoid winter: Heavy snowfall, roads closed. Best spring-summer."
+    },
+    {
+        name: "Fairy Meadows",
+        avgPerDay: 6000,
+        busFare: 3000,
+        hotelCheap: 3500,
+        hotelModerate: 6500,
+        hotelLuxury: 12000,
+        foodAvg: 1800,
+        rating: 5.0,
+        attractions: "Nanga Parbat base camp, hiking, camping",
+        weather: "Cool, alpine meadows",
+        region: "North",
+        bestMonths: ["June", "July", "August", "September"],
+        avoidMonths: ["October", "November", "December", "January"],
+        localTransportPerDay: 1000,
+        activitiesPerDay: 1500,
+        seasonalWarning: "Only accessible May-Sep. Requires jeep ride + trek."
+    },
+    {
+        name: "Kumrat Valley",
+        avgPerDay: 4300,
+        busFare: 1400,
+        hotelCheap: 2600,
+        hotelModerate: 5000,
+        hotelLuxury: 9500,
+        foodAvg: 1300,
+        rating: 4.6,
+        attractions: "Jahaz Banda, Kund Banda waterfall, forests",
+        weather: "Cool, lush green",
+        region: "North",
+        bestMonths: ["May", "June", "July", "August"],
+        avoidMonths: ["November", "December", "January"],
+        localTransportPerDay: 600,
+        activitiesPerDay: 1000,
+        seasonalWarning: "Best in summer. Road can be rough, 4x4 recommended."
+    },
+    {
+        name: "Malam Jabba",
+        avgPerDay: 5500,
+        busFare: 1300,
+        hotelCheap: 3500,
+        hotelModerate: 6500,
+        hotelLuxury: 12000,
+        foodAvg: 1700,
+        rating: 4.6,
+        attractions: "Ski resort, chairlift, zip-lining",
+        weather: "Cold winters, mild summers",
+        region: "North",
+        bestMonths: ["December", "January", "February"],
+        avoidMonths: ["July", "August"],
+        localTransportPerDay: 800,
+        activitiesPerDay: 2000,
+        seasonalWarning: "Visit winter for skiing. Summer for scenic views."
+    },
+    {
+        name: "Hingol National Park",
+        avgPerDay: 4000,
+        busFare: 2000,
+        hotelCheap: 2000,
+        hotelModerate: 4500,
+        hotelLuxury: 8500,
+        foodAvg: 1200,
+        rating: 4.3,
+        attractions: "Princess of Hope, Sphinx, mud volcanoes",
+        weather: "Hot, desert",
+        region: "South",
+        bestMonths: ["November", "December", "January", "February"],
+        avoidMonths: ["May", "June", "July"],
+        localTransportPerDay: 800,
+        activitiesPerDay: 900,
+        seasonalWarning: "Avoid summer: Extreme heat. Best in winter."
+    },
+    {
+        name: "Gorakh Hill Station",
+        avgPerDay: 3800,
+        busFare: 1800,
+        hotelCheap: 2200,
+        hotelModerate: 4500,
+        hotelLuxury: 8000,
+        foodAvg: 1100,
+        rating: 4.2,
+        attractions: "Sindh's hill station, cool climate, camping",
+        weather: "Cool, scenic",
+        region: "South",
+        bestMonths: ["November", "December", "January", "February"],
+        avoidMonths: ["June", "July"],
+        localTransportPerDay: 600,
+        activitiesPerDay: 800,
+        seasonalWarning: "Only accessible Oct-March. Brings own supplies."
+    },
+    {
+        name: "Ziarat",
+        avgPerDay: 3600,
+        busFare: 1700,
+        hotelCheap: 2000,
+        hotelModerate: 4000,
+        hotelLuxury: 7500,
+        foodAvg: 1000,
+        rating: 4.3,
+        attractions: "Juniper forests, Quaid's Residency",
+        weather: "Cool, mountain air",
+        region: "West",
+        bestMonths: ["April", "May", "September", "October"],
+        avoidMonths: ["December", "January"],
+        localTransportPerDay: 500,
+        activitiesPerDay: 700,
+        seasonalWarning: "Avoid winter: Heavy snow. Best spring-autumn."
+    },
+    {
+        name: "Khunjerab Pass",
+        avgPerDay: 6500,
+        busFare: 3500,
+        hotelCheap: 3800,
+        hotelModerate: 7000,
+        hotelLuxury: 13000,
+        foodAvg: 2000,
+        rating: 4.9,
+        attractions: "Pak-China border, highest paved road, wildlife",
+        weather: "Very cold, high altitude",
+        region: "North",
+        bestMonths: ["May", "June", "July", "August", "September"],
+        avoidMonths: ["October", "November", "December", "January", "February"],
+        localTransportPerDay: 1200,
+        activitiesPerDay: 1500,
+        seasonalWarning: "Only accessible May-Sep. Pass closed rest of year."    },
+    {
+        name: "Karachi",
+        avgPerDay: 3500,
+        busFare: 1500,
+        hotelCheap: 1800,
+        hotelModerate: 4000,
+        hotelLuxury: 9000,
+        foodAvg: 1200,
+        rating: 4.1,
+        attractions: "Beaches, Mohatta Palace, Markets, Sea View",
+        weather: "Hot, tropical",
+        region: "South",
+        bestMonths: ["November", "December", "January", "February"],
+        avoidMonths: ["May", "June", "July", "August"],
+        localTransportPerDay: 800,
+        activitiesPerDay: 600,
+        seasonalWarning: "Summer unbearable (50°C+). Best Nov-Feb. Great seafood & beach culture."
+    },
+    {
+        name: "Multan",
+        avgPerDay: 3200,
+        busFare: 600,
+        hotelCheap: 1500,
+        hotelModerate: 3500,
+        hotelLuxury: 8000,
+        foodAvg: 1000,
+        rating: 4.2,
+        attractions: "Sufi Shrines, Fort, Ancient City, Crafts",
+        weather: "Hot summers, mild winters",
+        region: "Central",
+        bestMonths: ["October", "November", "December", "February", "March"],
+        avoidMonths: ["May", "June", "July", "August"],
+        localTransportPerDay: 500,
+        activitiesPerDay: 600,
+        seasonalWarning: "Avoid May-August: Extreme heat. Ancient city with rich spiritual culture."
+    },
+    {
+        name: "Peshawar",
+        avgPerDay: 3100,
+        busFare: 800,
+        hotelCheap: 1600,
+        hotelModerate: 3500,
+        hotelLuxury: 7800,
+        foodAvg: 1000,
+        rating: 4.0,
+        attractions: "Bazaars, Qissa Khwani, Peshawar Museum, Food Street",
+        weather: "Cold winters, hot summers",
+        region: "North",
+        bestMonths: ["October", "November", "February", "March", "April"],
+        avoidMonths: ["June", "July", "August"],
+        localTransportPerDay: 600,
+        activitiesPerDay: 700,
+        seasonalWarning: "Best Oct-April. Legendary bazaars & Pashto culture. Famous for food."
+    },
+    {
+        name: "Quetta",
+        avgPerDay: 3000,
+        busFare: 1200,
+        hotelCheap: 1400,
+        hotelModerate: 3000,
+        hotelLuxury: 7000,
+        foodAvg: 900,
+        rating: 3.9,
+        attractions: "Hanna Lake, Mountain views, Fruit gardens, Historical fort",
+        weather: "Cool mountain, dry desert",
+        region: "West",
+        bestMonths: ["September", "October", "November", "March", "April", "May"],
+        avoidMonths: ["June", "July", "August", "December"],
+        localTransportPerDay: 400,
+        activitiesPerDay: 600,
+        seasonalWarning: "Avoid June-August: Very hot. Spring & autumn best. Gateway to Balochistan."
+    },
+    {
+        name: "Gwadar",
+        avgPerDay: 3800,
+        busFare: 2000,
+        hotelCheap: 2000,
+        hotelModerate: 4500,
+        hotelLuxury: 10000,
+        foodAvg: 1300,
+        rating: 4.3,
+        attractions: "Beach, Sleeping Giant Rock, Fishing port, Sea sports",
+        weather: "Hot, coastal, windy",
+        region: "West",
+        bestMonths: ["November", "December", "January", "February"],
+        avoidMonths: ["May", "June", "July", "August"],
+        localTransportPerDay: 700,
+        activitiesPerDay: 800,
+        seasonalWarning: "Seasonal port city. Nov-Feb best for beach activities. Emerging tourist destination."
+    },
+    {
+        name: "Saidu Swat",
+        avgPerDay: 4200,
+        busFare: 1000,
+        hotelCheap: 2500,
+        hotelModerate: 5000,
+        hotelLuxury: 10000,
+        foodAvg: 1400,
+        rating: 4.6,
+        attractions: "Valley views, Mingora bazaar, Swat Museum, Adventure sports",
+        weather: "Cool, scenic valley",
+        region: "North",
+        bestMonths: ["March", "April", "May", "September", "October"],
+        avoidMonths: ["July", "August"],
+        localTransportPerDay: 700,
+        activitiesPerDay: 900,
+        seasonalWarning: "Peak crowds Mar-May. Great for hiking & water sports. Historically significant."
+    },
+    {
+        name: "Chitral",
+        avgPerDay: 4500,
+        busFare: 1800,
+        hotelCheap: 2500,
+        hotelModerate: 5500,
+        hotelLuxury: 11000,
+        foodAvg: 1500,
+        rating: 4.7,
+        attractions: "Hindu Kush, Tirich Mir, Polo grounds, Kalash valleys",
+        weather: "Alpine, very cold winters",
+        region: "North",
+        bestMonths: ["April", "May", "June", "September", "October"],
+        avoidMonths: ["December", "January", "February"],
+        localTransportPerDay: 800,
+        activitiesPerDay: 1000,
+        seasonalWarning: "Remote mountain region. Apr-Oct accessible. Trekking paradise. Kalash culture unique."
+    },
+    {
+        name: "Bahria Town Rawalpindi",
+        avgPerDay: 3500,
+        busFare: 300,
+        hotelCheap: 2000,
+        hotelModerate: 4500,
+        hotelLuxury: 9000,
+        foodAvg: 1300,
+        rating: 4.2,
+        attractions: "Lake City, Lakeside Mall, Sports clubs, Residential community",
+        weather: "Mild year-round",
+        region: "Central",
+        bestMonths: ["October", "November", "December", "February", "March"],
+        avoidMonths: ["June", "July"],
+        localTransportPerDay: 500,
+        activitiesPerDay: 700,
+        seasonalWarning: "Modern planned community 20km from Lahore. Perfect for family weekend getaway."
+    },
+    {
+        name: "Kalam Swat",
+        avgPerDay: 4700,
+        busFare: 1500,
+        hotelCheap: 3000,
+        hotelModerate: 5500,
+        hotelLuxury: 11000,
+        foodAvg: 1600,
+        rating: 4.8,
+        attractions: "Alpine meadows, Ushu Forest, Mountain streams, Hiking",
+        weather: "Cold, alpine",
+        region: "North",
+        bestMonths: ["May", "June", "July", "August", "September"],
+        avoidMonths: ["November", "December", "January", "February"],
+        localTransportPerDay: 900,
+        activitiesPerDay: 1100,
+        seasonalWarning: "End of Swat Valley. Extreme weather winter. Paradise for trekkers May-Sep."
+    },
+    {
+        name: "Sialkot",
+        avgPerDay: 2800,
+        busFare: 400,
+        hotelCheap: 1200,
+        hotelModerate: 2800,
+        hotelLuxury: 6500,
+        foodAvg: 800,
+        rating: 3.8,
+        attractions: "Sports manufacturing hub, Tanda Dam, Historical sites",
+        weather: "Hot summers, cold winters",
+        region: "Central",
+        bestMonths: ["October", "November", "December", "February", "March"],
+        avoidMonths: ["May", "June", "July"],
+        localTransportPerDay: 400,
+        activitiesPerDay: 500,
+        seasonalWarning: "Industrial city. Budget-friendly option. Sports goods available at factory rates."    }
 ];
 
 exports.handler = async (event) => {
@@ -272,31 +632,39 @@ exports.handler = async (event) => {
     try {
         const db = await getDb();
         
-        // Check if cities already exist
-        const existingCount = await db.collection('cities').countDocuments();
+        // Check which cities already exist
+        const existingCities = await db.collection('cities').find({}, { projection: { name: 1 } }).toArray();
+        const existingNames = new Set(existingCities.map(c => c.name));
         
-        if (existingCount > 0) {
+        // Filter to only new cities that don't exist
+        const newCities = pakistaniCities.filter(city => !existingNames.has(city.name));
+        
+        if (newCities.length === 0) {
             return {
                 statusCode: 200,
                 body: JSON.stringify({
                     success: true,
-                    message: `Cities already seeded (${existingCount} cities found)`,
-                    count: existingCount
+                    message: `All cities already seeded (${existingCities.length} cities found in DB)`,
+                    totalInDb: existingCities.length,
+                    newAdded: 0
                 })
             };
         }
 
-        // Insert cities
-        const result = await db.collection('cities').insertMany(pakistaniCities);
+        // Insert only new cities
+        const result = await db.collection('cities').insertMany(newCities);
         
-        console.log(`✅ Seeded ${result.insertedCount} cities to database`);
+        console.log(`✅ Added ${result.insertedCount} new cities to database. Total now: ${existingCities.length + result.insertedCount}`);
 
         return {
             statusCode: 200,
             body: JSON.stringify({
                 success: true,
-                message: `Successfully seeded ${result.insertedCount} cities`,
-                cities: result.insertedCount
+                message: `Successfully added ${result.insertedCount} new cities`,
+                newAdded: result.insertedCount,
+                previousCount: existingCities.length,
+                totalNow: existingCities.length + result.insertedCount,
+                newCities: newCities.map(c => c.name)
             })
         };
 

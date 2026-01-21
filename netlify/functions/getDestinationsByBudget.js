@@ -52,56 +52,86 @@ exports.handler = async (event) => {
             // Simple region-based travel time estimate (hours)
             const regionTimeMap = { North: 10, Central: 4, South: 6, West: 8 };
             const travelHours = regionTimeMap[city.region] || 6;
+            const travelDays = Math.ceil(travelHours / 6); // Assume 6 hours driving = 1 travel day
 
+            // For 1-day trips, only recommend Lahore & nearby cities (Central region)
+            const isSameDayPossible = city.region === "Central" || city.name === "Lahore";
+            
             // Base per-day misc costs (no hotels): local transport + activities
             const localTransportPerDay = city.localTransportPerDay || 600;
             const activitiesPerDay = city.activitiesPerDay || 800;
-            // Calculate total cost for trip
+            
+            // Calculate how many nights they can afford based on budget
             const travelCost = city.busFare * 2; // to & from
-            const foodCost = city.foodAvg * numDays;
-            const miscCost = (localTransportPerDay + activitiesPerDay) * numDays;
+            const remainingBudget = budgetAmount - travelCost;
+            
+            // Calculate stay duration for different hotel types
+            const calculateStayDuration = (hotelCost) => {
+                if (remainingBudget <= 0) return 0;
+                const dailyCost = hotelCost + city.foodAvg + localTransportPerDay + activitiesPerDay;
+                return Math.floor(remainingBudget / dailyCost);
+            };
+            
+            const cheapNights = calculateStayDuration(city.hotelCheap);
+            const moderateNights = calculateStayDuration(city.hotelModerate);
+            const luxuryNights = calculateStayDuration(city.hotelLuxury);
 
-            // Three package options
+            // Three package options based on what they can actually afford
             const cheapOption = {
                 name: city.name,
                 packageType: 'Cheap',
-                totalCost: travelCost + foodCost + miscCost * 0.9,
+                nights: cheapNights,
+                hotelPerNight: city.hotelCheap,
+                totalCost: travelCost + (city.hotelCheap * cheapNights) + (city.foodAvg * cheapNights) + (localTransportPerDay * cheapNights) + (activitiesPerDay * cheapNights),
                 breakdown: {
-                    travel: travelCost,
-                    food: foodCost,
-                    localTransport: Math.round(localTransportPerDay * numDays * 0.9),
-                    activities: Math.round(activitiesPerDay * numDays * 0.9)
+                    travel: Math.round(travelCost),
+                    hotel: Math.round(city.hotelCheap * cheapNights),
+                    food: Math.round(city.foodAvg * cheapNights),
+                    localTransport: Math.round(localTransportPerDay * cheapNights),
+                    activities: Math.round(activitiesPerDay * cheapNights)
                 },
-                dailyAvg: Math.round((travelCost + foodCost + miscCost * 0.9) / numDays),
-                withinBudget: (travelCost + foodCost + miscCost * 0.9) <= budgetAmount
+                dailyAvg: Math.round((city.hotelCheap + city.foodAvg + localTransportPerDay + activitiesPerDay)),
+                afffordableNights: cheapNights,
+                recommendation: cheapNights > 0 ? `Stay ${cheapNights} nights with budget hotel` : 'Not affordable with this budget',
+                withinBudget: (travelCost + (city.hotelCheap * cheapNights) + (city.foodAvg * cheapNights) + (localTransportPerDay * cheapNights) + (activitiesPerDay * cheapNights)) <= budgetAmount
             };
 
             const moderateOption = {
                 name: city.name,
                 packageType: 'Moderate',
-                totalCost: travelCost + foodCost + miscCost,
+                nights: moderateNights,
+                hotelPerNight: city.hotelModerate,
+                totalCost: travelCost + (city.hotelModerate * moderateNights) + (city.foodAvg * moderateNights) + (localTransportPerDay * moderateNights) + (activitiesPerDay * moderateNights),
                 breakdown: {
-                    travel: travelCost,
-                    food: foodCost,
-                    localTransport: localTransportPerDay * numDays,
-                    activities: activitiesPerDay * numDays
+                    travel: Math.round(travelCost),
+                    hotel: Math.round(city.hotelModerate * moderateNights),
+                    food: Math.round(city.foodAvg * moderateNights),
+                    localTransport: Math.round(localTransportPerDay * moderateNights),
+                    activities: Math.round(activitiesPerDay * moderateNights)
                 },
-                dailyAvg: Math.round((travelCost + foodCost + miscCost) / numDays),
-                withinBudget: (travelCost + foodCost + miscCost) <= budgetAmount
+                dailyAvg: Math.round((city.hotelModerate + city.foodAvg + localTransportPerDay + activitiesPerDay)),
+                afffordableNights: moderateNights,
+                recommendation: moderateNights > 0 ? `Stay ${moderateNights} nights with 3-star hotel` : 'Not affordable with this budget',
+                withinBudget: (travelCost + (city.hotelModerate * moderateNights) + (city.foodAvg * moderateNights) + (localTransportPerDay * moderateNights) + (activitiesPerDay * moderateNights)) <= budgetAmount
             };
 
             const luxuryOption = {
                 name: city.name,
                 packageType: 'Premium',
-                totalCost: travelCost + foodCost + miscCost * 1.25,
+                nights: luxuryNights,
+                hotelPerNight: city.hotelLuxury,
+                totalCost: travelCost + (city.hotelLuxury * luxuryNights) + (city.foodAvg * luxuryNights) + (localTransportPerDay * luxuryNights) + (activitiesPerDay * luxuryNights),
                 breakdown: {
-                    travel: travelCost,
-                    food: foodCost,
-                    localTransport: Math.round(localTransportPerDay * numDays * 1.25),
-                    activities: Math.round(activitiesPerDay * numDays * 1.25)
+                    travel: Math.round(travelCost),
+                    hotel: Math.round(city.hotelLuxury * luxuryNights),
+                    food: Math.round(city.foodAvg * luxuryNights),
+                    localTransport: Math.round(localTransportPerDay * luxuryNights),
+                    activities: Math.round(activitiesPerDay * luxuryNights)
                 },
-                dailyAvg: Math.round((travelCost + foodCost + miscCost * 1.25) / numDays),
-                withinBudget: (travelCost + foodCost + miscCost * 1.25) <= budgetAmount
+                dailyAvg: Math.round((city.hotelLuxury + city.foodAvg + localTransportPerDay + activitiesPerDay)),
+                afffordableNights: luxuryNights,
+                recommendation: luxuryNights > 0 ? `Stay ${luxuryNights} nights with 5-star hotel` : 'Not affordable with this budget',
+                withinBudget: (travelCost + (city.hotelLuxury * luxuryNights) + (city.foodAvg * luxuryNights) + (localTransportPerDay * luxuryNights) + (activitiesPerDay * luxuryNights)) <= budgetAmount
             };
 
             // Calculate budget match score (0-100)
@@ -109,7 +139,14 @@ exports.handler = async (event) => {
             const weatherScore = city.rating * 10; // 0-50
             const ratingScore = city.rating * 10; // 0-50
             const travelTimeScore = Math.max(0, 10 - Math.min(10, Math.round(travelHours / 2))); // 0-10
-            const finalScore = (budgetMatchScore * 0.5) + (weatherScore * 0.2) + (ratingScore * 0.2) + (travelTimeScore * 10 * 0.1);
+            
+            // Boost score for same-day trips if only 1 day
+            let finalScore = (budgetMatchScore * 0.5) + (weatherScore * 0.2) + (ratingScore * 0.2) + (travelTimeScore * 10 * 0.1);
+            if (numDays === 1 && isSameDayPossible) {
+                finalScore = finalScore * 1.5; // 50% boost for doable same-day trips
+            } else if (numDays === 1 && !isSameDayPossible) {
+                finalScore = finalScore * 0.5; // Reduce score for distant places on 1-day trips
+            }
 
             return {
                 city: city.name,
@@ -129,11 +166,18 @@ exports.handler = async (event) => {
                 bestMonths: city.bestMonths || [],
                 avoidMonths: city.avoidMonths || [],
                 seasonalWarning: city.seasonalWarning || '',
+                travelInfo: {
+                    travelHours: travelHours,
+                    travelDays: travelDays,
+                    busFare: city.busFare,
+                    sameDayPossible: isSameDayPossible,
+                    bestOption: isSameDayPossible && numDays === 1 ? 'Perfect for same-day trip' : `${travelDays} travel days needed`
+                },
                 costBreakdown: {
-                    transport: travelCost,
-                    food: foodCost,
-                    localTransport: localTransportPerDay * numDays,
-                    activities: activitiesPerDay * numDays
+                    transport: Math.round(travelCost),
+                    food: `Avg ${Math.round(city.foodAvg)}/day`,
+                    localTransport: `Avg ${Math.round(localTransportPerDay)}/day`,
+                    activities: `Avg ${Math.round(activitiesPerDay)}/day`
                 },
                 travelTimeHours: travelHours
             };
@@ -145,8 +189,58 @@ exports.handler = async (event) => {
         // Get top 3 recommendations
         const topThree = cityScores.slice(0, 3);
 
-        // If location is provided, prioritize nearby destinations
-        const locationPrioritized = topThree.length > 0 ? topThree : [];
+        // Enhance with AI context and recommendations
+        let aiEnhanced = topThree;
+        try {
+            const { GoogleGenerativeAI } = require("@google/generative-ai");
+            const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY || process.env.GOOGLE_API_KEY);
+            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+
+            const aiPrompt = `You are a travel expert for Pakistan. A traveler wants to visit from ${startingCity} with ${budgetAmount} PKR for ${numDays} days (${travelType} travel).
+
+Database suggested these destinations:
+${topThree.map((d, i) => `${i+1}. ${d.city} (Score: ${d.score}, Cost: ~${Math.round(d.moderate.totalCost)} PKR)`).join('\n')}
+
+Provide:
+1. Brief validation of each suggestion (1-2 sentences each)
+2. Any practical tips for traveling from ${startingCity} (transport, timing, routes)
+3. Any alternative destinations you'd recommend for this budget and duration
+
+Keep response concise (max 150 words total). Format as JSON:
+{
+  "recommendations": [
+    {"city": "CityName", "validation": "brief comment", "tip": "practical advice"}
+  ],
+  "alternatives": "brief alternatives if any",
+  "overallAdvice": "quick summary"
+}`;
+
+            const aiResult = await model.generateContent(aiPrompt);
+            const aiText = aiResult.response.text().replace(/```json|```/g, '').trim();
+            const aiInsights = JSON.parse(aiText);
+
+            // Merge AI insights with DB results
+            aiEnhanced = topThree.map((dest, idx) => {
+                const aiRec = aiInsights.recommendations?.[idx] || {};
+                return {
+                    ...dest,
+                    aiValidation: aiRec.validation || null,
+                    aiTip: aiRec.tip || null
+                };
+            });
+
+            // Add overall AI advice
+            if (aiInsights.overallAdvice || aiInsights.alternatives) {
+                aiEnhanced.aiAdvice = {
+                    overall: aiInsights.overallAdvice,
+                    alternatives: aiInsights.alternatives
+                };
+            }
+
+        } catch (aiError) {
+            console.log('AI enhancement failed, using DB-only results:', aiError.message);
+            // Fallback to DB-only results
+        }
 
         console.log(`Budget: ${budgetAmount}PKR, Days: ${numDays}, Travel: ${travelType}, From: ${startingCity}`);
 
@@ -164,7 +258,7 @@ exports.handler = async (event) => {
                     startingCity: startingCity,
                     travelType: travelType
                 },
-                recommendations: locationPrioritized,
+                recommendations: aiEnhanced,
                 totalCitiesAnalyzed: cities.length
             })
         };

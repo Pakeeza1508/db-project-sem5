@@ -165,7 +165,7 @@ function createDestinationCard(destination, rank, inputData) {
     card.style.animation = `slideUp 0.4s ease ${rank * 0.1}s both`;
     card.dataset.city = destination.city; // Add data attribute for seasonal alerts
 
-    const { city, region, attractions, weather, rating, score, cheap, moderate, luxury, availablePackages, bestMonths, avoidMonths, seasonalWarning, costBreakdown, travelTimeHours } = destination;
+    const { city, region, attractions, weather, rating, score, cheap, moderate, luxury, availablePackages, bestMonths, avoidMonths, seasonalWarning, costBreakdown, travelTimeHours, aiValidation, aiTip } = destination;
 
     // Determine best package recommendation
     let bestPackage = null;
@@ -180,6 +180,17 @@ function createDestinationCard(destination, rank, inputData) {
         bestPackage = luxury;
         bestPackagePrice = luxury.totalCost;
     }
+
+    // AI insights HTML
+    const aiInsightsHTML = (aiValidation || aiTip) ? `
+        <div style="background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #8b5cf6;">
+            <div style="color: #c4b5fd; font-size: 0.85rem;">
+                <i class="fa-solid fa-brain"></i> <strong>AI Insight:</strong>
+                ${aiValidation ? `<p style="margin: 5px 0;">${aiValidation}</p>` : ''}
+                ${aiTip ? `<p style="margin: 5px 0; color: #a78bfa;"><i class="fa-solid fa-lightbulb"></i> ${aiTip}</p>` : ''}
+            </div>
+        </div>
+    ` : '';
 
     // Seasonal warning HTML
     const seasonalHTML = seasonalWarning ? `
@@ -213,6 +224,7 @@ function createDestinationCard(destination, rank, inputData) {
         </div>
 
         <div class="destination-body">
+            ${aiInsightsHTML}
             ${seasonalHTML}
             <div class="destination-info">
                 <div class="destination-info-label">
@@ -307,11 +319,6 @@ function createDestinationCard(destination, rank, inputData) {
                 <button class="btn-view-plan" onclick="generatePlan('${city}', ${inputData?.days || 3})">
                     <i class="fa-solid fa-map"></i> Generate Plan
                 </button>
-                ${bestPackagePrice > 0 ? `
-                    <button class="subscribe-alert-btn" onclick="subscribeToDestinationAlert('${city}', ${bestPackagePrice}, ${inputData?.days || 3}, '${inputData?.travelType || 'Solo'}')">
-                        <i class="fa-solid fa-bell"></i> Get Price Alerts
-                    </button>
-                ` : ''}
                 <div class="seasonal-events-container" id="seasonal-events-${city.replace(/\s+/g, '-')}"></div>
             </div>
         </div>
