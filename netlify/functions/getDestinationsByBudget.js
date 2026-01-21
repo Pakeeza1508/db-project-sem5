@@ -71,16 +71,16 @@ exports.handler = async (event) => {
 
         const db = await getDb();
 
-        // Dynamic distance range based on trip duration
+        // Dynamic distance range based on trip duration (generous to ensure 3 results)
         let maxDistanceKm;
         if (numDays === 1) {
-            maxDistanceKm = 150; // 1 day = max 150km (2-3 hours drive)
+            maxDistanceKm = 300; // 1 day = max 300km (relaxed)
         } else if (numDays === 2) {
-            maxDistanceKm = 250; // 2 days = max 250km (4-5 hours)
+            maxDistanceKm = 500; // 2 days = max 500km (relaxed)
         } else if (numDays === 3) {
-            maxDistanceKm = 400; // 3 days = max 400km (8 hours)
+            maxDistanceKm = 700; // 3 days = max 700km (relaxed)
         } else {
-            maxDistanceKm = 800; // 4+ days = anywhere in Pakistan
+            maxDistanceKm = 1000; // 4+ days = anywhere in Pakistan
         }
 
         // Get starting city GPS coordinates
