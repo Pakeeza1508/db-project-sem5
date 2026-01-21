@@ -13,7 +13,7 @@ async function loadTestimonials(containerId = 'testimonials-container', options 
     const {
         userId = null,
         featured = false,
-        limit = 10,
+        limit = 500,
         skip = 0
     } = options;
 
