@@ -21,10 +21,21 @@ async function loadTestimonials(containerId = 'testimonials-container', options 
         let url = `/.netlify/functions/testimonials?limit=${limit}&skip=${skip}`;
         if (userId) url += `&userId=${userId}`;
         if (featured) url += `&featured=true`;
+        
+        // Add timestamp to prevent caching
+        url += `&_t=${Date.now()}`;
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            cache: 'no-cache',
+            headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+            }
+        });
         const data = await response.json();
 
+        console.log('Testimonials loaded:', data.testimonials?.length || 0, 'total');
+        
         if (data.success) {
             displayTestimonials(data.testimonials, containerId);
             initGalleryNavigation(containerId);
