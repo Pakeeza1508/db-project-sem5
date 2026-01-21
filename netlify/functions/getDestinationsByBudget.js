@@ -1,5 +1,41 @@
-// Get destinations by budget - Backend filtering algorithm
+// Get destinations by budget - Advanced GPS + AI hybrid algorithm
 const { getDb } = require('./_mongo');
+
+// Haversine formula to calculate distance between two GPS coordinates (in km)
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+
+// Major Pakistani cities GPS coordinates
+const cityCoordinates = {
+    "Lahore": { lat: 31.5497, lng: 74.3436 },
+    "Islamabad": { lat: 33.6844, lng: 73.0479 },
+    "Karachi": { lat: 24.8607, lng: 67.0011 },
+    "Rawalpindi": { lat: 33.5651, lng: 73.0169 },
+    "Faisalabad": { lat: 31.4504, lng: 73.1350 },
+    "Multan": { lat: 30.1575, lng: 71.5249 },
+    "Gujranwala": { lat: 32.1877, lng: 74.1945 },
+    "Peshawar": { lat: 34.0151, lng: 71.5249 },
+    "Quetta": { lat: 30.1798, lng: 66.9750 },
+    "Sialkot": { lat: 32.4927, lng: 74.5319 },
+    "Murree": { lat: 33.9070, lng: 73.3943 },
+    "Naran": { lat: 34.9040, lng: 73.6533 },
+    "Hunza": { lat: 36.3167, lng: 74.6500 },
+    "Skardu": { lat: 35.2976, lng: 75.6333 },
+    "Swat": { lat: 35.2227, lng: 72.4258 },
+    "Gilgit": { lat: 35.9208, lng: 74.3080 },
+    "Nathia Gali": { lat: 34.0761, lng: 73.3901 },
+    "Sheikhupura": { lat: 31.7130, lng: 73.9851 },
+    "Gujrat": { lat: 32.5740, lng: 74.0789 },
+    "Bahawalpur": { lat: 29.3956, lng: 71.6836 }
+};
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'GET') {
@@ -35,10 +71,31 @@ exports.handler = async (event) => {
 
         const db = await getDb();
 
-        // Get all cities EXCEPT the starting city
-        const cities = await db.collection('cities').find({
-            name: { $ne: startingCity } // Exclude starting city
-        }).toArray();
+        // Dynamic distance range based on trip duration
+        let maxDistanceKm;
+        if (numDays === 1) {
+            maxDistanceKm = 100; // 1 day = max 100km (2-3 hours drive)
+        } else if (numDays === 2) {
+            maxDistanceKm = 200; // 2 days = max 200km (4-5 hours)
+        } else if (numDays === 3) {
+            maxDistanceKm = 400; // 3 days = max 400km (8 hours)
+        } else {
+            maxDistanceKm = 800; // 4+ days = anywhere in Pakistan
+        }
+
+        // Get starting city GPS coordinates
+        const startCoords = cityCoordinates[startingCity];
+        if (!startCoords) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({
+                    error: `Starting city "${startingCity}" not found in our database. Available cities: ${Object.keys(cityCoordinates).join(', ')}`
+                })
+            };
+        }
+
+        // Get all cities from database
+        const cities = await db.collection('cities').find({}).toArray();
 
         if (cities.length === 0) {
             return {
@@ -49,36 +106,37 @@ exports.handler = async (event) => {
             };
         }
 
-        // Get starting city info for distance calculation
-        const startCity = await db.collection('cities').findOne({ name: startingCity });
-        const startRegion = startCity?.region || 'Central';
+        // Calculate distance and filter cities
+        const cityScores = cities
+            .map(city => {
+                // Skip if this IS the starting city
+                if (city.name === startingCity) {
+                    return null;
+                }
 
-        // Calculate cost for each city and create score
-        const cityScores = cities.map(city => {
-            // Calculate travel time based on region proximity
-            let travelHours = 6; // default
-            
-            // Same region = shorter travel
-            if (city.region === startRegion) {
-                travelHours = 2; // 2 hours within same region
-            } else {
-                // Different regions - estimate based on regions
-                const regionDistances = {
-                    'Central-North': 5,
-                    'Central-South': 18,
-                    'Central-West': 7,
-                    'North-South': 20,
-                    'North-West': 12,
-                    'South-West': 8
-                };
-                const key = [startRegion, city.region].sort().join('-');
-                travelHours = regionDistances[key] || 8;
-            }
-            
-            const travelDays = Math.ceil(travelHours / 8); // 8 hours driving = 1 travel day
+                // Get city GPS coordinates
+                const destCoords = cityCoordinates[city.name];
+                if (!destCoords) {
+                    return null; // Skip cities without GPS data
+                }
 
-            // For 1-day trips, same region OR <3 hours away
-            const isSameDayPossible = travelHours <= 3;
+                // Calculate actual distance in km
+                const distanceKm = calculateDistance(
+                    startCoords.lat, startCoords.lng,
+                    destCoords.lat, destCoords.lng
+                );
+
+                // Skip if too far for trip duration
+                if (distanceKm > maxDistanceKm) {
+                    return null;
+                }
+
+                // Calculate travel time (assume 60 km/h average with breaks)
+                const travelHours = Math.ceil(distanceKm / 60);
+                const travelDays = Math.ceil(travelHours / 8);
+
+                // Is same-day trip possible? (<2 hours away)
+                const isSameDayPossible = travelHours <= 2;
             
             // Base per-day misc costs (no hotels): local transport + activities
             const localTransportPerDay = city.localTransportPerDay || 600;
@@ -157,65 +215,60 @@ exports.handler = async (event) => {
                 withinBudget: (travelCost + (city.hotelLuxury * luxuryNights) + (city.foodAvg * luxuryNights) + (localTransportPerDay * luxuryNights) + (activitiesPerDay * luxuryNights)) <= budgetAmount
             };
 
-            // Calculate budget match score (0-100)
-            const budgetMatchScore = Math.max(0, 100 - Math.abs((cheapOption.totalCost - budgetAmount) / budgetAmount * 100));
-            const weatherScore = city.rating * 10; // 0-50
-            const ratingScore = city.rating * 10; // 0-50
-            
-            // Travel time score: closer = higher score (0-100)
-            const travelTimeScore = Math.max(0, 100 - (travelHours * 5));
-            
-            // Scoring weights - travel time is MORE important now
-            let finalScore = (budgetMatchScore * 0.3) + (weatherScore * 0.15) + (ratingScore * 0.15) + (travelTimeScore * 0.4);
-            
-            // For 1-day trips: ONLY show same-day possible cities
-            if (numDays === 1) {
-                if (isSameDayPossible) {
-                    finalScore = finalScore * 1.3; // Boost for feasible 1-day trips
-                } else {
-                    finalScore = finalScore * 0.1; // Heavily penalize distant cities for 1-day trips
+                // Calculate budget match score (0-100)
+                const budgetMatchScore = Math.max(0, 100 - Math.abs((cheapOption.totalCost - budgetAmount) / budgetAmount * 100));
+                const weatherScore = city.rating * 10; // 0-50
+                const ratingScore = city.rating * 10; // 0-50
+                
+                // Distance score: closer = higher score (0-100)
+                const distanceScore = Math.max(0, 100 - (distanceKm / maxDistanceKm * 100));
+                
+                // Scoring weights based on distance
+                let finalScore = (budgetMatchScore * 0.35) + (weatherScore * 0.15) + (ratingScore * 0.15) + (distanceScore * 0.35);
+                
+                // Boost for same-day trips if duration is 1 day
+                if (numDays === 1 && isSameDayPossible) {
+                    finalScore = finalScore * 1.2;
                 }
-            }
-            
-            // For multi-day trips: slightly prefer closer destinations
-            if (numDays >= 2 && numDays <= 3 && travelHours > 10) {
-                finalScore = finalScore * 0.7; // Reduce score for very distant places on short trips
-            }
 
-            return {
-                city: city.name,
-                region: city.region,
-                attractions: city.attractions,
-                weather: city.weather,
-                rating: city.rating,
-                score: Math.round(finalScore),
-                cheap: cheapOption,
-                moderate: moderateOption,
-                luxury: luxuryOption,
-                availablePackages: {
-                    cheap: cheapOption.withinBudget,
-                    moderate: moderateOption.withinBudget,
-                    luxury: luxuryOption.withinBudget
-                },
-                bestMonths: city.bestMonths || [],
-                avoidMonths: city.avoidMonths || [],
-                seasonalWarning: city.seasonalWarning || '',
-                travelInfo: {
-                    travelHours: travelHours,
-                    travelDays: travelDays,
-                    busFare: city.busFare,
-                    sameDayPossible: isSameDayPossible,
-                    bestOption: isSameDayPossible && numDays === 1 ? 'Perfect for same-day trip' : `${travelDays} travel days needed`
-                },
-                costBreakdown: {
-                    transport: Math.round(travelCost),
-                    food: `Avg ${Math.round(city.foodAvg)}/day`,
-                    localTransport: `Avg ${Math.round(localTransportPerDay)}/day`,
-                    activities: `Avg ${Math.round(activitiesPerDay)}/day`
-                },
-                travelTimeHours: travelHours
-            };
-        });
+                return {
+                    city: city.name,
+                    region: city.region,
+                    attractions: city.attractions,
+                    weather: city.weather,
+                    rating: city.rating,
+                    score: Math.round(finalScore),
+                    distanceKm: Math.round(distanceKm),
+                    distanceText: `${Math.round(distanceKm)} km away`,
+                    cheap: cheapOption,
+                    moderate: moderateOption,
+                    luxury: luxuryOption,
+                    availablePackages: {
+                        cheap: cheapOption.withinBudget,
+                        moderate: moderateOption.withinBudget,
+                        luxury: luxuryOption.withinBudget
+                    },
+                    bestMonths: city.bestMonths || [],
+                    avoidMonths: city.avoidMonths || [],
+                    seasonalWarning: city.seasonalWarning || '',
+                    travelInfo: {
+                        travelHours: travelHours,
+                        travelDays: travelDays,
+                        busFare: city.busFare,
+                        sameDayPossible: isSameDayPossible,
+                        bestOption: isSameDayPossible && numDays === 1 ? 'Perfect for same-day trip' : `${travelDays} travel days needed`
+                    },
+                    costBreakdown: {
+                        transport: Math.round(travelCost),
+                        food: `Avg ${Math.round(city.foodAvg)}/day`,
+                        localTransport: `Avg ${Math.round(localTransportPerDay)}/day`,
+                        activities: `Avg ${Math.round(activitiesPerDay)}/day`
+                    },
+                    travelTimeHours: travelHours,
+                    coordinates: destCoords
+                };
+            })
+            .filter(city => city !== null); // Remove null entries (too far or same city)
 
         // Sort by score descending
         cityScores.sort((a, b) => b.score - a.score);

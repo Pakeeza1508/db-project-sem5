@@ -165,7 +165,7 @@ function createDestinationCard(destination, rank, inputData) {
     card.style.animation = `slideUp 0.4s ease ${rank * 0.1}s both`;
     card.dataset.city = destination.city; // Add data attribute for seasonal alerts
 
-    const { city, region, attractions, weather, rating, score, cheap, moderate, luxury, availablePackages, bestMonths, avoidMonths, seasonalWarning, costBreakdown, travelTimeHours, aiValidation, aiTip } = destination;
+    const { city, region, attractions, weather, rating, score, cheap, moderate, luxury, availablePackages, bestMonths, avoidMonths, seasonalWarning, costBreakdown, travelTimeHours, distanceKm, distanceText, aiValidation, aiTip } = destination;
 
     // Determine best package recommendation
     let bestPackage = null;
@@ -228,10 +228,19 @@ function createDestinationCard(destination, rank, inputData) {
             ${seasonalHTML}
             <div class="destination-info">
                 <div class="destination-info-label">
-                    <i class="fa-solid fa-star"></i> Rating & Weather
+                    <i class="fa-solid fa-star"></i> Rating & Distance
                 </div>
                 <div class="destination-info-value">
-                    ⭐ ${rating}/5 • ${weather} • ⏱️ ~${travelTimeHours}h travel
+                    ⭐ ${rating}/5 • 📍 ${distanceKm || 0} km • ⏱️ ~${travelTimeHours}h travel
+                </div>
+            </div>
+
+            <div class="destination-info">
+                <div class="destination-info-label">
+                    <i class="fa-solid fa-cloud-sun"></i> Weather
+                </div>
+                <div class="destination-info-value">
+                    ${weather}
                 </div>
             </div>
 
