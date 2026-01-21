@@ -260,9 +260,9 @@ exports.handler = async (event) => {
                     },
                     costBreakdown: {
                         transport: Math.round(travelCost),
-                        food: `Avg ${Math.round(city.foodAvg)}/day`,
-                        localTransport: `Avg ${Math.round(localTransportPerDay)}/day`,
-                        activities: `Avg ${Math.round(activitiesPerDay)}/day`
+                        food: Math.round(city.foodAvg),
+                        localTransport: Math.round(localTransportPerDay),
+                        activities: Math.round(activitiesPerDay)
                     },
                     travelTimeHours: travelHours,
                     coordinates: destCoords
