@@ -10,11 +10,13 @@ const SavedTrips = {
 
   getCurrentUser() {
     // Get from localStorage or your auth system
-    const userStr = localStorage.getItem('wanderlyUser');
+    // Check multiple possible keys
+    let userStr = localStorage.getItem('wanderlyUser') || localStorage.getItem('user') || localStorage.getItem('currentUser');
     if (userStr) {
       try {
         return JSON.parse(userStr);
       } catch (e) {
+        console.error('Failed to parse user data:', e);
         return null;
       }
     }
@@ -23,7 +25,11 @@ const SavedTrips = {
 
   // Save a trip to database
   async saveTrip(tripData) {
+    // Reinitialize to get current user
+    this.currentUser = this.getCurrentUser();
+    
     if (!this.currentUser) {
+      console.error('SavedTrips: No current user found. Available localStorage keys:', Object.keys(localStorage));
       this.showMessage('Please login to save trips', 'error');
       return false;
     }
@@ -35,7 +41,7 @@ const SavedTrips = {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          userId: this.currentUser.email || this.currentUser.id,
+          userId: this.currentUser.email || this.currentUser.id || this.currentUser._id,
           userName: this.currentUser.name || 'Anonymous',
           userEmail: this.currentUser.email || '',
           ...tripData
@@ -505,7 +511,11 @@ const SavedTrips = {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => SavedTrips.init());
+  document.addEventListener('DOMContentLoaded', () => {
+    SavedTrips.init();
+    window.SavedTrips = SavedTrips; // Expose globally
+  });
 } else {
   SavedTrips.init();
+  window.SavedTrips = SavedTrips; // Expose globally
 }
