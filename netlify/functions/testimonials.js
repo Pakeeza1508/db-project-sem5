@@ -56,7 +56,7 @@ exports.handler = async (event) => {
             }
 
             // Build query
-            let query = { approved: true }; // Only show approved by default
+            let query = {}; // Show all testimonials by default
             
             if (userId) {
                 query = { userId }; // User's own testimonials (all statuses)
