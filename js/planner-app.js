@@ -55,9 +55,41 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sessionStorage.getItem('fromBudgetSearch') === 'true') {
         const destination = sessionStorage.getItem('prefilledDestination');
         const days = sessionStorage.getItem('prefilledDays');
+        const tripBudget = sessionStorage.getItem('tripBudget');
+        const startingCity = sessionStorage.getItem('startingCity');
+        const travelType = sessionStorage.getItem('travelType');
         
         if (destination) document.getElementById('destination').value = destination;
-        if (days) document.getElementById('days').value = days;
+        if (days) document.getElementById('travel-days').value = days;
+        
+        // Hide budget field and show the actual PKR budget instead
+        const budgetGroup = document.querySelector('#budget').closest('.form-group');
+        if (budgetGroup && tripBudget) {
+            budgetGroup.style.display = 'none';
+            
+            // Create a read-only budget display
+            const budgetDisplay = document.createElement('div');
+            budgetDisplay.className = 'form-group';
+            budgetDisplay.innerHTML = `
+                <label class="form-label">
+                    <i class="fa-solid fa-wallet"></i>
+                    Your Budget
+                </label>
+                <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.3);">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">
+                        PKR ${parseInt(tripBudget).toLocaleString()}
+                    </div>
+                    <small style="color: var(--text-muted); display: block; margin-top: 5px;">
+                        ${days} days trip from ${startingCity} • ${travelType}
+                    </small>
+                </div>
+            `;
+            budgetGroup.parentNode.insertBefore(budgetDisplay, budgetGroup);
+            
+            // Store the PKR budget for use in form submission
+            document.getElementById('budget').value = 'Budget'; // Default to budget category
+            document.getElementById('budget').setAttribute('data-pkr-budget', tripBudget);
+        }
         
         // Clear flag
         sessionStorage.removeItem('fromBudgetSearch');
