@@ -2,7 +2,13 @@
 // Uses jspdf to generate downloadable trip itineraries
 
 async function loadJsPDF() {
-    if (typeof jsPDF !== 'undefined') {
+    // Prefer already loaded UMD global (used by CDN bundle)
+    if (window.jspdf && window.jspdf.jsPDF) {
+        return window.jspdf.jsPDF;
+    }
+
+    // Some bundlers expose jsPDF directly on the window
+    if (typeof jsPDF === 'function') {
         return jsPDF;
     }
     
@@ -10,7 +16,14 @@ async function loadJsPDF() {
     return new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        script.onload = () => resolve(window.jspdf.jsPDF);
+        script.onload = () => {
+            const ctor = window.jspdf && window.jspdf.jsPDF;
+            if (ctor) {
+                resolve(ctor);
+            } else {
+                reject(new Error('jsPDF failed to load'));
+            }
+        };
         script.onerror = reject;
         document.head.appendChild(script);
     });
@@ -18,7 +31,7 @@ async function loadJsPDF() {
 
 async function generateTripPDF() {
     try {
-        const { jsPDF } = await loadJsPDF();
+        const JsPDF = await loadJsPDF();
         
         // Get trip data from DOM using correct IDs
         const destination = document.getElementById('overview-destination')?.textContent || 'Unknown Destination';
@@ -38,7 +51,7 @@ async function generateTripPDF() {
         const weatherTemp = document.getElementById('weather-temp')?.textContent || 'N/A';
         
         // Create PDF
-        const pdf = new jsPDF({
+        const pdf = new JsPDF({
             orientation: 'portrait',
             unit: 'mm',
             format: 'a4'

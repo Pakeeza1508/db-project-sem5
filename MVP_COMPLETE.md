@@ -21,7 +21,7 @@ All **9 features** from your handwritten checklist are now complete! Your Wander
 ### 2. ✅ Interactive Map Integration  
 - Leaflet + OpenStreetMap tiles
 - Search with autocomplete
-- Click-to-select locations
+- Click-to-select locations 
 - Stores locations in MongoDB
 - Works on budget search and trip planner
 

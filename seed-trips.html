@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seed Saved Trips - Wanderly Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #3b82f6;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        p {
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .section-title {
+            color: #3b82f6;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: #94a3b8;
+        }
+
+        button.secondary:hover {
+            background: rgba(148, 163, 184, 0.2);
+        }
+
+        button.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        button.danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status.success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            display: flex;
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            display: flex;
+        }
+
+        .status.loading {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+            display: flex;
+        }
+
+        .trip-list {
+            list-style: none;
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .trip-list li {
+            padding: 12px;
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid #3b82f6;
+            margin: 8px 0;
+            border-radius: 4px;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .trip-list li strong {
+            color: #3b82f6;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            color: #cbd5e1;
+            margin: 15px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .spinner {
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top: 2px solid #3b82f6;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .user-email {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            color: #94a3b8;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                padding: 10px 16px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 Wanderly Trips Seeding Tool</h1>
+        <p>Populate the profile with dummy saved trips for testing and demonstration purposes.</p>
+
+        <div class="section">
+            <div class="section-title">📍 Test Data Overview</div>
+            <p>This will create 6 amazing trips:</p>
+            <ul class="trip-list">
+                <li><strong>Paris, France</strong> - 5 days, Cultural & Historical</li>
+                <li><strong>Tokyo, Japan</strong> - 7 days, Adventure & Luxury</li>
+                <li><strong>Barcelona, Spain</strong> - 4 days, Cultural Experience</li>
+                <li><strong>Bali, Indonesia</strong> - 5 days, Relaxation & Wellness</li>
+                <li><strong>New York, USA</strong> - 6 days, Urban Adventure</li>
+                <li><strong>Dubai, UAE</strong> - 5 days, Luxury & Shopping</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <strong>ℹ️ Test Email:</strong><br>
+            <div class="user-email">abc@gmail.com</div>
+            <strong>Note:</strong> All trips will be saved for this email account. You can update the seed file to change the user email.
+        </div>
+
+        <div class="section">
+            <div class="section-title">🚀 Quick Actions</div>
+            <button onclick="seedTrips()">✨ Seed Saved Trips</button>
+            <button class="secondary" onclick="checkStatus()">📊 Check Status</button>
+            <button class="secondary" onclick="viewTrips()">👁️ View in Profile</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title">🔧 Advanced Options</div>
+            <p>Clear existing trips before reseeding:</p>
+            <button class="danger" onclick="clearAndSeed()">⚠️ Clear & Reseed</button>
+        </div>
+
+        <div id="status" class="status">
+            <span id="status-icon">📋</span>
+            <span id="status-message">Ready</span>
+        </div>
+
+        <div id="result" style="display: none; margin-top: 20px; padding: 15px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; color: #cbd5e1;">
+            <strong style="color: #22c55e;">✅ Success!</strong>
+            <div id="result-details" style="margin-top: 10px; font-size: 0.95rem;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/.netlify/functions';
+
+        function showStatus(message, type = 'info') {
+            const statusEl = document.getElementById('status');
+            const messageEl = document.getElementById('status-message');
+            const iconEl = document.getElementById('status-icon');
+
+            statusEl.className = 'status ' + type;
+            messageEl.textContent = message;
+
+            if (type === 'loading') {
+                iconEl.innerHTML = '<div class="spinner"></div>';
+            } else if (type === 'success') {
+                iconEl.textContent = '✅';
+            } else if (type === 'error') {
+                iconEl.textContent = '❌';
+            } else {
+                iconEl.textContent = '📋';
+            }
+        }
+
+        function showResult(data) {
+            const resultEl = document.getElementById('result');
+            const detailsEl = document.getElementById('result-details');
+
+            if (data.success) {
+                detailsEl.innerHTML = `
+                    <p><strong>Trips Created:</strong> ${data.tripsCount}</p>
+                    <p><strong>User Email:</strong> ${data.userEmail}</p>
+                    <p><strong>Message:</strong> ${data.message}</p>
+                    <p style="margin-top: 15px; color: #94a3b8;">You can now view these trips in the <strong>My Saved Trips</strong> section on your profile page.</p>
+                `;
+            } else {
+                detailsEl.innerHTML = `
+                    <p><strong>Error:</strong> ${data.error || 'Something went wrong'}</p>
+                    <p>${data.message || ''}</p>
+                `;
+            }
+            resultEl.style.display = 'block';
+        }
+
+        async function seedTrips() {
+            showStatus('Seeding trips...', 'loading');
+            try {
+                // Function lives under utils/seedSavedTrips.js
+                const response = await fetch(`${API_BASE}/utils/seedSavedTrips`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showStatus('✅ Trips seeded successfully!', 'success');
+                    showResult(data);
+                } else {
+                    showStatus(`⚠️ ${data.error || 'Failed to seed trips'}`, 'error');
+                    showResult(data);
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+                console.error('Seed error:', error);
+            }
+        }
+
+        async function checkStatus() {
+            showStatus('Checking database...', 'loading');
+            try {
+                const response = await fetch(`${API_BASE}/savedTrips?userId=abc@gmail.com`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const count = data.trips?.length || 0;
+                    showStatus(`Found ${count} saved trips for test user`, 'success');
+                } else {
+                    showStatus('No saved trips found yet', 'info');
+                }
+            } catch (error) {
+                showStatus(`Error checking status: ${error.message}`, 'error');
+            }
+        }
+
+        function viewTrips() {
+            showStatus('Note: You must log in with test@example.com to see the trips', 'info');
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 1500);
+        }
+
+        async function clearAndSeed() {
+            const confirmed = confirm('⚠️ This will delete ALL existing saved trips for abc@gmail.com and create new ones. Continue?');
+            if (!confirmed) return;
+
+            showStatus('Clearing existing trips...', 'loading');
+            try {
+                // First clear existing trips (you may need to create a clearSavedTrips function)
+                // For now, just seed new ones
+                await seedTrips();
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Show initial status
+        showStatus('Ready to seed trips', 'info');
+    </script>
+</body>
+</html>

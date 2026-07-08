@@ -1,0 +1,18 @@
+{ "email": "abc@gmail.com" }         users
+{ "userEmail": "abc@gmail.com" }      testimonial
+
+{
+  "name": "Monkey",
+  "email": "falana@gmail.com",
+  "password": "$2b$10$QgIaz4BYhB6UsyEsKet5VuSR3B7u9ztHKXS/sTTc4mx5FRckeJ09a",
+  "createdAt": { "$date": "2026-01-14T07:19:04.185Z" },
+  "trips": []
+}
+in users
+
+{ "trips": { "$size": 0 } }  users collection
+
+{
+  "$set": { "name": "Monkey D. Luffy" }
+}
+  users 
